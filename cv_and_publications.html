@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CV & Publications - Dominic Eriksson</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #fdfdfd;
+      color: #1c1c1e;
+      margin: 0;
+      padding: 0 24px;
+      line-height: 1.6;
+      max-width: 960px;
+      margin: auto;
+    }
+
+    header {
+      background: linear-gradient(to bottom, rgba(28,28,30,0.85), rgba(28,28,30,0.5)), url('Images/ocean-1845110.jpg');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      text-align: center;
+      padding: 60px 20px;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    header p {
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin: auto;
+    }
+
+    section {
+      margin: 48px 0;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      margin-bottom: 24px;
+      color: #0071e3;
+      border-bottom: 2px solid #0071e3;
+      padding-bottom: 6px;
+    }
+
+    h3 {
+      font-size: 1.4rem;
+      margin-bottom: 16px;
+      color: #1c1c1e;
+    }
+
+    .cv-entry {
+      margin-bottom: 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+    }
+
+    .cv-year {
+      font-weight: 600;
+      color: #0071e3;
+      min-width: 120px;
+      flex-shrink: 0;
+    }
+
+    .cv-details {
+      flex: 1;
+    }
+
+    .cv-details p {
+      margin: 0;
+      color: #3a3a3c;
+    }
+
+    .cv-details .title {
+      font-weight: 600;
+      color: #1c1c1e;
+      margin-bottom: 4px;
+    }
+
+    .publication {
+      margin-bottom: 20px;
+      padding: 16px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border-left: 4px solid #0071e3;
+    }
+
+    .publication a {
+      color: #0071e3;
+      text-decoration: none;
+    }
+
+    .publication a:hover {
+      text-decoration: underline;
+    }
+
+    .download-links a {
+      display: inline-block;
+      margin-right: 16px;
+      padding: 12px 20px;
+      background-color: #0071e3;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: background 0.3s;
+      font-weight: 600;
+    }
+
+    .download-links a:hover {
+      background-color: #005bb5;
+    }
+
+    .personal-info {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 32px;
+    }
+
+    .conference-section h4 {
+      font-size: 1.2rem;
+      color: #0071e3;
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+
+    /* Print styles for PDF generation */
+    @media print {
+      body {
+        background-color: white;
+        color: black;
+        max-width: none;
+        margin: 0;
+        padding: 20px;
+        font-size: 12pt;
+        line-height: 1.4;
+      }
+
+      header {
+        background: none !important;
+        color: black !important;
+        text-shadow: none !important;
+        padding: 20px 0;
+        page-break-after: avoid;
+      }
+
+      nav {
+        display: none;
+      }
+
+      section {
+        margin: 24px 0;
+        page-break-inside: avoid;
+      }
+
+      h2 {
+        color: black !important;
+        border-bottom: 2px solid black !important;
+        page-break-after: avoid;
+      }
+
+      h3, h4 {
+        color: black !important;
+        page-break-after: avoid;
+      }
+
+      .personal-info {
+        background: none !important;
+        border: 1px solid #ccc;
+        page-break-inside: avoid;
+      }
+
+      .publication {
+        background: none !important;
+        border-left: 3px solid #ccc !important;
+        page-break-inside: avoid;
+        margin-bottom: 12px;
+      }
+
+      .cv-entry {
+        page-break-inside: avoid;
+        margin-bottom: 16px;
+      }
+
+      .cv-year {
+        color: black !important;
+      }
+
+      .download-links {
+        display: none;
+      }
+
+      a {
+        color: black !important;
+        text-decoration: underline !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Curriculum Vitae & Publications</h1>
+    <p>Academic background, research experience, and scholarly contributions in marine ecology and biodiversity.</p>
+  </header>
+
+  <nav aria-label="breadcrumb" style="margin: 16px 0; font-size: 0.9rem; color: #0071e3;">
+    <a href="index_v5.html" style="text-decoration: none; color: #0071e3;">Home</a> &gt; CV & Publications
+  </nav>
+
+  <div class="personal-info">
+    <h2 style="margin-top: 0; border: none; color: #1c1c1e;">Dominic Eriksson</h2>
+    <p><strong>Born:</strong> Austria, 9th May, 1989</p>
+    <p><strong>Current Position:</strong> Postdoctoral Researcher</p>
+    <p><strong>Institution:</strong> ETH Zürich, Switzerland</p>
+  </div>
+
+  <section>
+    <h2>Education</h2>
+    
+    <div class="cv-entry">
+      <div class="cv-year">2021 - 2026</div>
+      <div class="cv-details">
+        <div class="title">Ph.D., Marine macroecology</div>
+        <p>ETH Zürich, Switzerland | <a href="https://up.ethz.ch" target="_blank">up.ethz.ch</a></p>
+      </div>
+    </div>
+
+    <div class="cv-entry">
+      <div class="cv-year">2020</div>
+      <div class="cv-details">
+        <div class="title">M.Sc., Marine biology</div>
+        <p>University of Algarve, Portugal | <a href="https://marinebiology.pt" target="_blank">marinebiology.pt</a></p>
+      </div>
+    </div>
+
+    <div class="cv-entry">
+      <div class="cv-year">2015</div>
+      <div class="cv-details">
+        <div class="title">B.Sc., Biology</div>
+        <p>University of Vienna, Austria | <a href="https://www.univie.ac.at" target="_blank">univie.ac.at</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Professional Experience</h2>
+
+    <div class="cv-entry">
+      <div class="cv-year">2026 - Present</div>
+      <div class="cv-details">
+        <div class="title">Postdoc</div>
+        <p>ETH Zürich, Switzerland</p>
+        <p style="font-size: 0.95rem; margin-top: 4px;">Research focuses on mapping and predicting the contemporary and future global distribution of marine plankton organisms. By integrating high-resolution microscopy with advanced metagenomic survey data, the project provides a comprehensive, multi-layered assessment of marine planktonic diversity patterns across the global ocean to offer insights into shifting microbial ecosystems and biogeochemical cycles.</p>
+      </div>
+    </div>
+    
+    <div class="cv-entry">
+      <div class="cv-year">2020 - 2021</div>
+      <div class="cv-details">
+        <div class="title">Research Assistant</div>
+        <p>ETH Zürich, Switzerland</p>
+        <p style="font-size: 0.95rem; margin-top: 4px;">Participated in the Geneva Science-Policy Interface project MAPMAKER, projecting future plankton distributions using climate models and Representative Concentration Pathways. Developed an interactive map to guide international policy decisions on marine biodiversity protection. | <a href="https://mapmaker-new.ethz.ch" target="_blank">mapmaker-new.ethz.ch</a></p>
+      </div>
+    </div>
+
+    <div class="cv-entry">
+      <div class="cv-year">2020</div>
+      <div class="cv-details">
+        <div class="title">Intern</div>
+        <p>ETH Zürich, Switzerland</p>
+        <p style="font-size: 0.95rem; margin-top: 4px;">Assisted in data collection for a study linking marine nitrogen fixer diversity to nitrogen fixation rates, highlighting the role of microbial biodiversity in global nitrogen cycling.</p>
+      </div>
+    </div>
+
+    <div class="cv-entry">
+      <div class="cv-year">September 2016</div>
+      <div class="cv-details">
+        <div class="title">Workshop on marine genomics</div>
+        <p>University of Algarve, Portugal</p>
+        <p style="font-size: 0.95rem; margin-top: 4px;">Convened researchers to discuss ecological and evolutionary genomic research, covering topics like genetic diversity dynamics and high-throughput sequencing analysis for marine ecosystems.</p>
+      </div>
+    </div>
+
+    <div class="cv-entry">
+      <div class="cv-year">September 2011</div>
+      <div class="cv-details">
+        <div class="title">Volunteer</div>
+        <p>White Shark Projects, South Africa</p>
+        <p style="font-size: 0.95rem; margin-top: 4px;">Supported open-ocean fieldwork focused on the population ecology and conservation of great white sharks. Combined hands-on marine tracking and data collection toward marine conservation policies. | <a href="https://www.whitesharkprojects.co.za" target="_blank">whitesharkprojects.co.za</a></p>
+      </div>
+    </div>
+
+    <div class="cv-entry">
+      <div class="cv-year">April 2011</div>
+      <div class="cv-details">
+        <div class="title">Field Course</div>
+        <p>Hydra Institute, Italy</p>
+        <p style="font-size: 0.95rem; margin-top: 4px;">Introduction to marine biology and diving licence. | <a href="https://www.hydramarinesciences.com" target="_blank">hydramarinesciences.com</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Supervision & Committee Memberships</h2>
+    
+    <div class="cv-entry">
+      <div class="cv-year">2023 - 2024</div>
+      <div class="cv-details">
+        <div class="title">Committee Member</div>
+        <p>Institute of Biogeochemistry and Pollutant Dynamics - Congress, ETH Zurich</p>
+      </div>
+    </div>
+
+    <div class="cv-entry">
+      <div class="cv-year">2022 - 2023</div>
+      <div class="cv-details">
+        <div class="title">Master Thesis Supervision</div>
+        <p><strong>Xinhang Li</strong>, ETH Zürich (October 2022 - April 2023)</p>
+        <p><strong>Poli Giacomo</strong>, ETH Zürich (November 2022 - May 2023)</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Peer-reviewed Publications</h2>
+    
+    <div class="publication">
+      <p><strong>Eriksson, D.</strong>, Richter, J., Schickele, A., Clerk, C., Miravet-Verde, S., Ruscheweyh, H.-J., Priest, T., Bork, P., Gruber, N., Vogt, M., Sunagawa, S. (2026). Variations of the latitudinal diversity gradient of the ocean microbiome. <em>Accepted</em>.</p>
+    </div>
+
+    <div class="publication">
+      <p>Keller-Costa, T., <strong>Eriksson, D.</strong>, Gonçalves, J.M., Gomes, N.C., Lago-Lestón, A. and Costa, R. (2017). The gorgonian coral <em>Eunicella labiata</em> hosts a distinct prokaryotic consortium amenable to cultivation. <em>FEMS Microbiology Ecology</em>. <a href="https://doi.org/10.1093/femsec/fix143" target="_blank">doi:10.1093/femsec/fix143</a>.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Publications Under Review</h2>
+    
+    <div class="publication">
+      <p>Lv, T., Benedetti, F., <strong>Eriksson, D.</strong>, Vogt, M., Thomas, M. K. (2026). Phytoplankton performance in the lab predicts occurrence in the field across a global temperature gradient. <em>Under review</em>.</p>
+    </div>
+
+    <div class="publication">
+      <p><strong>Eriksson, D.</strong>, Gruber, N., Benedetti, F., Righetti, D., Paoli, L., Salazar, G., Sunagawa, S., Vogt, M. (2025). Nitrogen fixation rates increase with diazotroph richness in the global ocean. <em>Under Review</em>.</p>
+    </div>
+  </section>
+
+  <section class="conference-section">
+    <h2>Conference Contributions</h2>
+    
+    <h4>Oral Presentations / Selected Speaker</h4>
+
+    <div class="publication">
+      <p><strong>Eriksson, D.</strong> (2026). Variations in the latitudinal diversity gradients of the ocean microbiome. Ocean Sciences Meeting 2026.</p>
+    </div>
+    
+    <div class="publication">
+      <p><strong>Eriksson, D.</strong> (2025). Latitudinal diversity gradients of the ocean microbiome as a function of taxonomic resolution. IBP Congress. Selected speaker. <a href="http://hdl.handle.net/20.500.11850/794626" target="_blank">Handle Link</a>.</p>
+    </div>
+
+    <div class="publication">
+      <p><strong>Eriksson, D.</strong> (2025). Global projections of prokaryote diversity using species distribution modeling. BIOcean5D Presentation. <a href="http://hdl.handle.net/20.500.11850/794626" target="_blank">Handle Link</a>.</p>
+    </div>
+
+    <div class="publication">
+      <p><strong>Eriksson, D.</strong> (2023). Nitrogen fixation rates increase with diazotroph richness in the global ocean. Max Planck Institute of Evolutionary Biology. Selected speaker. <a href="https://doi.org/10.3929/ethz-b-000655546" target="_blank">doi:10.3929/ethz-b-000655546</a>.</p>
+    </div>
+
+    <div class="publication">
+      <p><strong>Eriksson, D.</strong> (2022). Predicting global distribution of diazotrophs using species distribution models. Sorbonne Université. Invited speaker for the FORMAL Winter Webinar Series on the Observation and Modeling of Ocean. <a href="http://hdl.handle.net/20.500.11850/594883" target="_blank">Handle Link</a>.</p>
+    </div>
+
+    <div class="publication">
+      <p><strong>Eriksson, D.</strong> (2022). Analysing global Distribution on diazotrophs. Tara Oceans Consortium Presentation. <a href="http://hdl.handle.net/20.500.11850/794626" target="_blank">Handle Link</a>.</p>
+    </div>
+
+    <h4>Poster Presentations</h4>
+
+    <div class="publication">
+      <p><strong>Eriksson, D.</strong> (2024). Nitrogen fixation increases with diazotroph richness in the global ocean. Gordon Research Conference Marine Microbes. <a href="https://doi.org/10.3929/ethz-b-000718646" target="_blank">doi:10.3929/ethz-b-000718646</a>.</p>
+    </div>
+    
+    <div class="publication">
+      <p><strong>Eriksson, D.</strong> (2023). Nitrogen fixation rates increases with diazotroph richness in the global ocean. ASLO Aquatic Sciences Meeting 2023. <a href="https://www.aslo.org/palma-2023/" target="_blank">aslo.org/palma-2023</a>.</p>
+    </div>
+
+    <div class="publication">
+      <p><strong>Eriksson, D.</strong> (2023). Nitrogen fixation increases with diazotroph diversity in the global ocean. IBP Congress. <a href="https://doi.org/10.3929/ethz-b-000594885" target="_blank">doi:10.3929/ethz-b-000594885</a>.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Resources</h2>
+    <div class="download-links">
+      <button onclick="window.print()" style="display: inline-block; margin-right: 16px; padding: 12px 20px; background-color: #0071e3; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: background 0.3s;"><i class="fas fa-download"></i> Download CV as PDF</button>
+    </div>
+  </section>
+
+</body>
+
+</html>
