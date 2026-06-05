@@ -1,0 +1,773 @@
+<!-- it is also for me to follow all my progress, talks, poster presentations. Any sceintific achievments -->
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Your Name - Homepage</title>
+
+  <!-- Google Fonts: Use "Inter" for a modern, readable font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome for icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+
+  <style>
+    /* RESET */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+        Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      background-color: #fafafa;
+      color: #1c1c1e;
+      line-height: 1.6;
+      padding: 40px 24px 40px;
+      padding-top: 120px; /* extra top for header */
+      font-size: 17px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      max-width: 960px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* HEADER */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: linear-gradient(180deg, rgba(28,28,30,0.85) 0%, rgba(28,28,30,0.5) 100%), url('Images/ocean-1845110.jpg');
+      background-size: cover;
+      background-position: center;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+      padding: 24px 0;
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #f5f5f7;
+      font-family: 'Inter', sans-serif;
+      text-shadow: 0 1px 5px rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      user-select: none;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      transition: background 0.3s ease;
+    }
+
+    /* Content Layout */
+    .content-wrapper {
+      display: flex;
+      gap: 48px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      margin-bottom: 60px;
+    }
+
+    .text-block {
+      flex: 1 1 460px;
+      font-size: 1.125rem;
+      text-align: justify;
+      color: #2c2c2e;
+    }
+
+    .text-block b {
+      color: #0071e3;
+      font-weight: 600;
+    }
+
+    .image-block {
+      flex: 1 1 280px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .image-block img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 14px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .image-block img:hover {
+      transform: scale(1.03);
+    }
+
+    /* Social Icons */
+    .social-icons {
+      margin-top: 36px;
+      display: flex;
+      gap: 28px;
+      font-size: 1.9rem;
+      justify-content: start;
+      user-select: none;
+    }
+
+    .social-icons a {
+      text-decoration: none;
+      transition: transform 0.2s ease, color 0.3s ease;
+      color: #48484a;
+    }
+
+    .social-icons a:hover {
+      color: #0071e3;
+      transform: translateY(-4px);
+    }
+
+    /* Color override for brand colors */
+    .social-icons a[href*="github.com"] i {
+      color: #333;
+    }
+
+    .social-icons a[href*="orcid.org"] i {
+      color: #5fcf80;
+    }
+
+    .social-icons a[href*="linkedin.com"] i {
+      color: #0a66c2;
+    }
+
+    .social-icons a[href*="researchgate.net"] i {
+      color: #00cc00;
+    }
+
+    /* Feature Section */
+    .features-section {
+      display: flex;
+      justify-content: space-between;
+      gap: 32px;
+      margin-top: 64px;
+      flex-wrap: nowrap; /* Keep in one line */
+    }
+
+    .feature {
+      flex: 1;
+      min-width: 0; /* Allow shrinking */
+      background: #fff;
+      padding: 24px 20px;
+      border-radius: 18px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+      transition: box-shadow 0.3s ease;
+      cursor: default;
+    }
+
+    .feature:hover {
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.14);
+    }
+
+    .icon-box {
+      width: 68px;
+      height: 68px;
+      background-color: #e6f0ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 16px;
+      margin-bottom: 24px;
+      box-shadow: 0 6px 18px rgba(0, 113, 227, 0.2);
+      color: #0071e3;
+      font-size: 28px;
+    }
+
+    .feature h3 {
+      font-size: 1.4rem;
+      margin-bottom: 12px;
+      color: #1c1c1e;
+      font-weight: 600;
+    }
+
+    .feature p {
+      color: #3a3a3c;
+      font-size: 1.05rem;
+      line-height: 1.5;
+    }
+
+    /* Updates Section */
+    .recent-updates-section {
+      margin-top: 72px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .recent-updates-section h2 {
+      font-weight: 700;
+      font-size: 1.75rem;
+      margin-bottom: 32px;
+      color: #1c1c1e;
+      border-bottom: 3px solid #0071e3;
+      padding-bottom: 6px;
+      letter-spacing: 0.06em;
+    }
+
+    .update {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 48px;
+      align-items: center;
+      flex-wrap: wrap;
+      background: white;
+      padding: 20px 24px;
+      border-radius: 16px;
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.07);
+      transition: box-shadow 0.3s ease;
+    }
+
+    .update:hover {
+      box-shadow: 0 12px 38px rgba(0, 0, 0, 0.12);
+    }
+
+    .update-text {
+      flex: 1 1 400px;
+      font-size: 1.1rem;
+      color: #2c2c2e;
+      line-height: 1.5;
+    }
+
+    .update-image {
+      flex: 0 0 250px;
+      max-height: 180px;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    .update-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 14px;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+
+    .update-image img:hover {
+      transform: scale(1.05);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .content-wrapper,
+      .update {
+        flex-direction: column;
+        gap: 28px;
+      }
+
+      .features-section {
+        gap: 16px; /* Smaller gap on mobile */
+        margin-top: 48px;
+      }
+
+      .feature {
+        padding: 20px 16px; /* Smaller padding on mobile */
+      }
+
+      .feature h3 {
+        font-size: 1.2rem; /* Smaller title on mobile */
+      }
+
+      .feature p {
+        font-size: 0.95rem; /* Smaller text on mobile */
+      }
+
+      .image-block,
+      .update-image {
+        flex: none;
+        width: 100%;
+        max-height: none;
+        box-shadow: none;
+      }
+
+      .image-block img,
+      .update-image img {
+        border-radius: 14px;
+        box-shadow: none;
+        max-height: 400px;
+      }
+
+      .social-icons {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Name - Homepage</title>
+
+  <!-- Font Awesome for icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+      background-color: white;
+      color: #333;
+      padding: 40px 40px 40px; /* We will adjust top padding below */
+      padding-top: 100px; /* extra top padding for fixed header */
+    }
+
+    /* HEADER STYLES */
+  header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-image: url('Images/ocean-1845110.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3); /* stronger shadow for better text contrast */
+    padding: 20px 0;
+    text-align: center;
+    font-size: 2em;
+    font-weight: 600;
+    color: white; /* make text white to stand out on image */
+    text-shadow: 1px 1px 5px rgba(0,0,0,0.7); /* subtle shadow behind text */
+    z-index: 999;
+    font-family: 'Cambria', serif;
+  }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .content-wrapper {
+      display: flex;
+      gap: 40px;
+      align-items: flex-start;
+    }
+
+    .text-block {
+      flex: 1;
+      font-size: 1.3em;
+      text-align: justify;
+    }
+
+    .image-block {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .image-block img {
+      max-width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+
+    .social-icons {
+      margin-top: 30px;
+      display: flex;
+      gap: 20px;
+      font-size: 1.8em;
+    }
+
+    .social-icons a {
+      text-decoration: none;
+    }
+
+    .social-icons a[href*="github.com"] i {
+      color: black;
+    }
+
+    .social-icons a[href*="orcid.org"] i {
+      color: #628505;
+    }
+
+    .social-icons a[href*="linkedin.com"] i {
+      color: #0077cc;
+    }
+
+    .social-icons a[href*="researchgate.net"] i {
+      color: #514f4f;
+    }
+
+    /* Feature Section Styles */
+    .features-section {
+      display: flex;
+      justify-content: space-between;
+      gap: 40px;
+      margin-top: 60px;
+    }
+
+    .feature {
+      flex: 1;
+      text-align: left;
+      max-width: 300px;
+    }
+
+    .icon-box {
+      width: 60px;
+      height: 60px;
+      background-color: #f0f7ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .icon-box i {
+      font-size: 24px;
+      color: black;
+    }
+
+    .feature h3 {
+      font-size: 1.5em;
+      margin-bottom: 10px;
+      color: #111827;
+    }
+
+    .feature p {
+      color: #4b5563;
+      font-size: 1.1em;
+      line-height: 1.5;
+    }
+
+    .update-image img {
+      max-width: 250px;    /* max width */
+      max-height: 180px;   /* max height */
+      width: auto;         /* keep aspect ratio */
+      height: auto;        /* keep aspect ratio */
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      object-fit: cover;   /* crop if needed */
+      display: block;
+    }
+
+  .update {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 40px;
+    align-items: center;
+    flex-wrap: nowrap;  /* keep in one row */
+  }
+
+  /* Sliding side box */
+  #sideBox {
+    position: fixed;
+    top: 100px; /* below fixed header */
+    left: -220px; /* hide offscreen */
+    width: 220px;
+    height: calc(100vh - 100px);
+    background-color: #f0f7ff;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.15);
+    padding: 20px 16px;
+    border-radius: 0 12px 12px 0;
+    box-sizing: border-box;
+    transition: left 0.3s ease;
+    z-index: 1500;
+    font-family: Cambria, serif;
+    color: #111827;
+    overflow-y: auto;
+  }
+
+  #sideBox.open {
+    left: 0;
+  }
+
+  #sideBox h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    font-weight: 600;
+    font-size: 1.3em;
+  }
+
+  /* Skills */
+  .skill {
+    margin-bottom: 18px;
+  }
+
+  .skill span {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 6px;
+    color: #0077cc;
+    font-size: 1em;
+  }
+
+  /* Skill bars */
+  .skill-bar {
+    background: #d6e4ff;
+    border-radius: 12px;
+    width: 100%;
+    height: 16px;
+    overflow: hidden;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+  }
+
+  .skill-level {
+    background-color: #0077cc;
+    height: 100%;
+    border-radius: 12px 0 0 12px;
+    transition: width 0.5s ease;
+  }
+
+  /* Toggle Button */
+  #toggleButton {
+    position: fixed;
+    top: 110px;
+    left: 0;
+    width: 40px;
+    height: 40px;
+    background-color: #0077cc;
+    border: none;
+    border-radius: 0 8px 8px 0;
+    color: white;
+    cursor: pointer;
+    z-index: 1600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25em;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+    transition: background-color 0.2s ease;
+  }
+
+  #toggleButton:hover {
+    background-color: #005fa3;
+  }
+
+
+
+  </style>
+</head>
+<body>
+
+<!-- Sliding side box -->
+<div id="sideBox" aria-label="Side Navigation Panel" role="complementary">
+  <h3>Programming Skills</h3>
+  <div class="skill">
+    <span>HTML</span>
+    <div class="skill-bar">
+      <div class="skill-level" style="width: 90%;"></div>
+    </div>
+  </div>
+  <div class="skill">
+    <span>CSS</span>
+    <div class="skill-bar">
+      <div class="skill-level" style="width: 85%;"></div>
+    </div>
+  </div>
+  <div class="skill">
+    <span>JavaScript</span>
+    <div class="skill-bar">
+      <div class="skill-level" style="width: 75%;"></div>
+    </div>
+  </div>
+  <div class="skill">
+    <span>Python</span>
+    <div class="skill-bar">
+      <div class="skill-level" style="width: 80%;"></div>
+    </div>
+  </div>
+
+  <!-- New Language Section -->
+  <h3 style="margin-top: 32px;">Languages</h3>
+  <div class="skill">
+    <span>German (Native)</span>
+    <div class="skill-bar">
+      <div class="skill-level" style="width: 100%; background-color: #2e8b57;"></div>
+    </div>
+  </div>
+  <div class="skill">
+    <span>English (C2)</span>
+    <div class="skill-bar">
+      <div class="skill-level" style="width: 95%; background-color: #4682b4;"></div>
+    </div>
+  </div>
+  <div class="skill">
+    <span>Portuguese (A2)</span>
+    <div class="skill-bar">
+      <div class="skill-level" style="width: 40%; background-color: #daa520;"></div>
+    </div>
+  </div>
+
+<div class="p-4 bg-white rounded-2xl shadow-md space-y-4">
+  <!-- Current Role -->
+  <div>
+    <h2 class="text-lg font-semibold text-gray-800">Current Role</h2>
+    <p class="text-sm text-gray-600">Associate Professor<br>Institute of Advanced Studies</p>
+  </div>
+
+  <!-- Scientific Metrics -->
+  <div>
+    <h2 class="text-lg font-semibold text-gray-800">Scientific Metrics</h2>
+    <ul class="text-sm text-gray-700 space-y-1">
+      <li>
+        <a href="https://scholar.google.com/citations?user=lt6off4AAAAJ&hl=en&oi=sra" class="text-blue-600 hover:underline" target="_blank">
+          h-index: <strong>2</strong>
+        </a>
+      </li>
+      <li>i10-index: <strong>1</strong></li>
+      <li>Total Citations: <strong>64</strong></li>
+      <li>Publications: <strong>1</strong></li>
+    </ul>
+  </div>
+
+  <!-- Altmetrics Badge -->
+  <div>
+    <h2 class="text-lg font-semibold text-gray-800">Research Visibility</h2>
+    <div class="mt-1">
+      <!-- Example Altmetric badge for a paper -->
+      <script type="text/javascript" src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script>
+      <div data-badge-popover="right" data-doi="10.1038/nature12373" data-altmetric-badge></div>
+      <p class="text-xs text-gray-500 mt-1">Altmetric score for top paper</p>
+    </div>
+  </div>
+
+  <!-- Notable Awards -->
+  <div>
+    <h2 class="text-lg font-semibold text-gray-800">Notable Awards</h2>
+    <ul class="list-disc list-inside text-sm text-gray-700">
+      <li>ERC Starting Grant (2023)</li>
+      <li>NSF CAREER Award (2021)</li>
+      <li>MIT Technology Review Innovator Under 35</li>
+    </ul>
+  </div>
+</div>
+</div>
+
+
+  <!-- Toggle button -->
+  <button id="toggleButton" aria-label="Toggle Side Box" aria-expanded="false">
+    <i class="fas fa-bars"></i>
+  </button>
+
+
+
+  <header>
+    Dominic Eriksson, Marine Ecologist
+  </header>
+
+  <!-- Main Content -->
+  <div class="container">
+    <div class="content-wrapper">
+      <div class="text-block">
+
+        <p style="font-size: rem; font-style:italic;">
+          "Exploring marine plankton diversity and ecosystem functions 
+          through modeling approaches." 
+        </p>
+
+        <p style="font-size: 0.875rem;">
+          I am a <b style="color: rgb(15, 157, 167);">Postdoctoral Researcher at ETH Zurich</b>, jointly affiliated with the Institute of Microbiology 
+          and the Institute of Biogeochemistry and Pollutant Dynamics. Building upon my PhD research within the same group, my work focuses on 
+          mapping the contemporary and future global distribution of marine plankton and understanding how this diversity drives ocean ecosystem 
+          functions and global biogeochemical cycles.
+        </p>
+        <p style="font-size: 0.875rem;">
+          To overcome the challenges of sparse and uneven ocean sampling, I utilize and advance specialized <b style="color: rgb(15, 157, 167);">Empirical Models</b> 
+          optimized for data-scarce regions. My academic background includes a <b style="color: rgb(15, 157, 167);">BSc in Ecology</b> from the University of Vienna 
+          and an <b style="color: rgb(15, 157, 167);">MSc in Marine Biology</b> from the University of Algarve, where I specialized in the taxonomic profiling of 
+          coral-associated prokaryotic communities. Having been with ETH Zurich since 2019, progressing from an intern to a PhD candidate, and now a Postdoc, 
+          I integrate long-term institutional expertise with cutting-edge ecological modeling to resolve global marine biodiversity patterns.
+        </p>
+
+        <!-- Social Icons -->
+        <div class="social-icons">
+          <a href="https://github.com/Domle" target="_blank"><i class="fab fa-github"></i></a>
+          <a href="https://orcid.org/0009-0002-3280-1059" target="_blank"><i class="fab fa-orcid"></i></a>
+          <a href="https://ch.linkedin.com/in/dominic-eriksson-78a517124" target="_blank"><i class="fab fa-linkedin"></i></a>
+          <a href="https://www.researchgate.net/profile/Dominic-Eriksson" target="_blank"><i class="fab fa-researchgate"></i></a>
+        </div>
+      </div>
+
+      <div class="image-block">
+        <img src="Images/Eriksson_Dominic.JPG" alt="Portrait" />
+      </div>
+    </div>
+
+  <!-- Feature Section -->
+  <div class="features-section">
+
+    <a href="research_highlights.html" style="text-decoration: none; color: inherit; display: block;">
+      <div class="feature">
+        <div class="icon-box">
+          <i class="fas fa-lightbulb"></i>
+        </div>
+        <h3>Research Highlights</h3>
+        <p>Summarized here are key findings and contributions from my 
+          research across marine ecology and biodiversity.</p>
+      </div>
+    </a>
+
+    <a href="cv_and_publications.html" style="text-decoration: none; color: inherit; display: block;">
+      <div class="feature">
+        <div class="icon-box">
+          <i class="fas fa-file-alt"></i>
+        </div>
+        <h3>CV & Publications</h3>
+        <p>This section contains my up-to-date curriculum vitae and a selected list of publications, reflecting ongoing contributions to marine science and ecological modeling.</p>
+      </div>
+    </a>
+
+    <a href="Data_exploration.html" style="text-decoration: none; color: inherit; display: block;">
+      <div class="feature">
+        <div class="icon-box">
+       <i class="fas fa-globe"></i>
+        </div>
+        <h3>Data exploration</h3>
+        <p>Visualize datasets used within my publications through interactive maps and exploratory tools.</p>
+      </div>
+    </a>
+  </div>
+
+
+    </div>
+    <!-- Recent Updates Section -->
+  <div class="recent-updates-section">
+    <h2>Recent Updates</h2>
+
+
+    <div class="update">
+      <div class="update-text">
+        <p>
+          Recently I joined a diversity workshop where I tutored and explained to non-scientists the importance of plankton.
+        </p>
+      </div>
+      <div class="update-image">
+        <img src="Images/Plankton_Diversity_Workshop.jpeg" alt="Diversity Workshop" />
+      </div>
+    </div>
+    <!-- You can add more updates here, just copy the .update block -->
+  </div>
+
+  </div>
+
+  <script>
+    const sideBox = document.getElementById('sideBox');
+    const toggleButton = document.getElementById('toggleButton');
+
+    toggleButton.addEventListener('click', () => {
+      const isOpen = sideBox.classList.toggle('open');
+      toggleButton.setAttribute('aria-expanded', isOpen);
+    });
+  </script>
+
+
+
+</body>
+</html>
