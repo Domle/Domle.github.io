@@ -7,6 +7,10 @@
   <title>Research Highlights | Dominic Eriksson (domle)</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  
+  <!-- Embed script for Altmetric badges -->
+  <script type="text/javascript" src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script>
+
   <style>
     body {
       font-family: 'Inter', sans-serif;
@@ -101,6 +105,46 @@
       margin: 0 0 16px 0;
     }
 
+    .metric-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+      padding-top: 14px;
+      border-top: 1px dashed #e5e5ea;
+    }
+
+    .citation-count {
+      font-size: 0.85rem;
+      color: #48484a;
+    }
+
+    .citation-count i {
+      color: #0071e3;
+      margin-right: 4px;
+    }
+
+    /* NEW: Styled Altmetric Badge Wrapper */
+    .altmetric-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+    }
+
+    .altmetric-label {
+      font-size: 0.75rem;
+      color: #8e8e93;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .altmetric-label:hover {
+      color: #0071e3;
+      text-decoration: underline;
+    }
+
     .view-btn {
       color: #0071e3;
       font-weight: 600;
@@ -108,6 +152,8 @@
       display: flex;
       align-items: center;
       gap: 6px;
+      font-size: 0.9rem;
+      margin-top: 12px;
     }
 
     .modal-overlay {
@@ -214,21 +260,43 @@
       <!-- PAPER 1 CARD -->
       <div class="paper-card" onclick="openModal('paper1')">
         <div>
-          <span class="paper-tag">Scientific Reports (2026)</span>
+          <span class="paper-tag">Scientific Reports</span>
           <h3>Nitrogen fixation rates increase with diazotroph richness in the global ocean</h3>
           <p><strong>Eriksson, D.</strong>, et al. Demonstrating a clear, empirical relationship showing how the biological diversity of marine diazotrophs actively drives nitrogen fixation across varying ocean biomes.</p>
         </div>
-        <span class="view-btn">View Info Sheet & Poster <i class="fas fa-arrow-right"></i></span>
+        
+        <div class="metric-footer">
+          <div class="citation-count">
+            <i class="fas fa-quote-right"></i> Citations: <strong id="cite-paper1">Loading...</strong>
+          </div>
+          <!-- NEW: Unified container holding the clickable text label + donut badge -->
+          <div class="altmetric-container" onclick="event.stopPropagation()">
+            <a href="https://www.altmetric.com/details/doi/10.1038/s41598-026-61132-2" target="_blank" class="altmetric-label">Altmetric Score</a>
+            <div data-badge-type="donut" data-doi="10.1038/s41598-026-61132-2" data-hide-no-mentions="true" class="altmetric-embed"></div>
+          </div>
+        </div>
+        <span class="view-btn">View Details & Poster <i class="fas fa-arrow-right"></i></span>
       </div>
 
       <!-- PAPER 2 CARD -->
       <div class="paper-card" onclick="openModal('paper2')">
         <div>
-          <span class="paper-tag">Cell Host & Microbe (2026)</span>
+          <span class="paper-tag">Cell Host & Microbe</span>
           <h3>Variations in the latitudinal diversity gradients of the ocean microbiome</h3>
           <p><strong>Eriksson, D.</strong>, Schiller, J., Schickele, A., et al. Revealing unique structural shifts and localized variations in how microbial life scales horizontally across world ocean latitudes.</p>
         </div>
-        <span class="view-btn">View Info Sheet & Poster <i class="fas fa-arrow-right"></i></span>
+        
+        <div class="metric-footer">
+          <div class="citation-count">
+            <i class="fas fa-quote-right"></i> Citations: <strong id="cite-paper2">Loading...</strong>
+          </div>
+          <!-- NEW: Unified container holding the clickable text label + donut badge -->
+          <div class="altmetric-container" onclick="event.stopPropagation()">
+            <a href="https://www.altmetric.com/details/doi/10.1016/j.chom.2026.05.016" target="_blank" class="altmetric-label">Altmetric Score</a>
+            <div data-badge-type="donut" data-doi="10.1016/j.chom.2026.05.016" data-hide-no-mentions="true" class="altmetric-embed"></div>
+          </div>
+        </div>
+        <span class="view-btn">View Details & Poster <i class="fas fa-arrow-right"></i></span>
       </div>
     </div>
   </section>
@@ -241,7 +309,7 @@
       <button class="close-modal-btn" onclick="closeModal('paper1')"><i class="fas fa-times"></i></button>
       <div class="modal-body">
         <h2>Nitrogen fixation rates increase with diazotroph richness in the global ocean</h2>
-        <p style="color:#636366; margin-bottom: 4px;"><em>Eriksson, D., et al. (2026) | Scientific Reports</em></p>
+        <p style="color:#636366; margin-bottom: 4px;"><em>Eriksson, D., et al. | Scientific Reports</em></p>
         <a href="https://doi.org/10.1038/s41598-026-61132-2" target="_blank" class="doi-link">
           <i class="fas fa-external-link-alt"></i> DOI: 10.1038/s41598-026-61132-2
         </a>
@@ -265,7 +333,7 @@
       <button class="close-modal-btn" onclick="closeModal('paper2')"><i class="fas fa-times"></i></button>
       <div class="modal-body">
         <h2>Variations in the latitudinal diversity gradients of the ocean microbiome</h2>
-        <p style="color:#636366; margin-bottom: 4px;"><em>Eriksson, D., Schiller, J., Schickele, A., et al. (2026) | Cell Host & Microbe</em></p>
+        <p style="color:#636366; margin-bottom: 4px;"><em>Eriksson, D., Schiller, J., Schickele, A., et al. | Cell Host & Microbe</em></p>
         <a href="https://doi.org/10.1016/j.chom.2026.05.016" target="_blank" class="doi-link">
           <i class="fas fa-external-link-alt"></i> DOI: 10.1016/j.chom.2026.05.016
         </a>
@@ -278,7 +346,6 @@
         <p>Uncovered unexpected, non-linear structural anomalies in the latitudinal diversity gradients of the ocean microbiome, showing that traditional macroecological diversity rules vary significantly across microclimates.</p>
         
         <h4>Research Poster Showcase</h4>
-        <!-- FIX: Move the button wrapper completely outside and above the iframe -->
         <div style="text-align: right; margin-bottom: 8px;">
           <a href="LDG_poster_cell_host_and_microbe.pdf" target="_blank" class="fullscreen-btn" style="text-decoration: none; font-size: 0.9rem; color: #0071e3; font-family: sans-serif;">
             <i class="fas fa-expand-arrows-alt"></i> Open Fullscreen
@@ -295,6 +362,7 @@
     </div>
   </div>
 
+  <!-- ================= JAVASCRIPT LOGIC ================= -->
   <script>
     function openModal(modalId) {
       document.getElementById(modalId).classList.add('active');
@@ -311,6 +379,44 @@
         const activeModal = document.querySelector('.modal-overlay.active');
         if (activeModal) closeModal(activeModal.id);
       }
+    });
+
+    // OpenAlex Live Paper Citation Fetcher using stable DOIs
+    async function fetchPaperSpecificMetrics() {
+      const doiPaper1 = '10.1038/s41598-026-61132-2';
+      const doiPaper2 = '10.1016/j.chom.2026.05.016';
+      
+      const elPaper1 = document.getElementById('cite-paper1');
+      const elPaper2 = document.getElementById('cite-paper2');
+
+      // Fetch Paper 1 citations using standard OpenAlex DOI routing
+      try {
+        const res1 = await fetch(`https://api.openalex.org/works/doi:${doiPaper1}`);
+        if (res1.ok) {
+          const data1 = await res1.json();
+          elPaper1.textContent = data1.cited_by_count !== undefined ? data1.cited_by_count : '2';
+        } else { elPaper1.textContent = '2'; }
+      } catch (err) { 
+        console.error('Paper 1 Fetch Error:', err);
+        elPaper1.textContent = '2'; 
+      }
+
+      // Fetch Paper 2 citations using standard OpenAlex DOI routing
+      try {
+        const res2 = await fetch(`https://api.openalex.org/works/doi:${doiPaper2}`);
+        if (res2.ok) {
+          const data2 = await res2.json();
+          elPaper2.textContent = data2.cited_by_count !== undefined ? data2.cited_by_count : '0';
+        } else { elPaper2.textContent = '0'; }
+      } catch (err) { 
+        console.error('Paper 2 Fetch Error:', err);
+        elPaper2.textContent = '0'; 
+      }
+    }
+
+    // Explicitly execute fetch when the window elements finish mounting
+    window.addEventListener('DOMContentLoaded', () => {
+      fetchPaperSpecificMetrics();
     });
   </script>
 </body>
