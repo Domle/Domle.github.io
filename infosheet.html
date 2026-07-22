@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research Highlight Info Sheet</title>
+    <style>
+        :root {
+            --primary-color: #1e293b;
+            --secondary-color: #0f766e;
+            --text-color: #334155;
+            --light-bg: #f8fafc;
+            --border-color: #e2e8f0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 40px;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .tag {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 4px 12px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin: 0 0 10px 0;
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+
+        .meta-subtitle {
+            font-size: 1.1rem;
+            color: #64748b;
+            margin: 0;
+        }
+
+        section {
+            margin-bottom: 35px;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            font-size: 1.4rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .card {
+            background-color: var(--light-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 20px;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: var(--secondary-color);
+            font-size: 1.1rem;
+        }
+
+        ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        .asset-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .asset-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: var(--light-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+
+        .asset-name {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .asset-link {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .asset-link:hover {
+            text-decoration: underline;
+        }
+
+        blockquote {
+            margin: 0;
+            padding: 15px 20px;
+            background-color: var(--light-bg);
+            border-left: 4px solid var(--secondary-color);
+            font-style: italic;
+            border-radius: 0 6px 6px 0;
+        }
+
+        /* Print Optimization */
+        @media print {
+            body {
+                padding: 0;
+                font-size: 11pt;
+            }
+            .container {
+                max-width: 100%;
+            }
+            .card {
+                background: none !important;
+                border: 1px solid #cbd5e1 !important;
+                page-break-inside: avoid;
+            }
+            .asset-item {
+                background: none !important;
+                border: 1px solid #cbd5e1 !important;
+                page-break-inside: avoid;
+            }
+            .asset-link {
+                color: #000000 !important;
+                text-decoration: underline;
+            }
+            .tag {
+                background: #000000 !important;
+                color: #ffffff !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <span class="tag">Research Highlight</span>
+        <h1>Species Distribution Modeling Framework</h1>
+        <p class="meta-subtitle">Open-Science Pipeline & Reproducible Eco-Data Assets</p>
+    </header>
+
+    <section>
+        <h2>Project Overview</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>Core Focus</h3>
+                <p>Development and deployment of end-to-end, open-science computational pipelines designed specifically for optimizing species distribution models (SDMs).</p>
+            </div>
+            <div class="card">
+                <h3>Philosophy</h3>
+                <p>Complete execution transparency across all structural levels of ecological research—bridging data sheets, raw codebases, and peer-reviewed literature.</p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Impact Statements</h2>
+        <ul>
+            <li><strong>Open-Science Integration:</strong> Successfully coupled a peer-reviewed publication with public execution assets, reinforcing computational transparency and maximizing data reuse value within the ecological community.</li>
+            <li><strong>Predictive Frameworks:</strong> Built robust, easily reproducible distribution models optimized to handle complex multi-variant environmental datasets smoothly.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Digital Assets & Repositories</h2>
+        <div class="asset-list">
+            <div class="asset-item">
+                <div>
+                    <span class="asset-name">Peer-Reviewed Manuscript</span><br>
+                    <small style="color: #64748b;">Scientific Reports (Nature Portfolio)</small>
+                </div>
+                <a href="https://doi.org/10.1038/s41598-026-61132-2" class="asset-link" target="_blank">DOI: 10.1038/s41598-026-61132-2</a>
+            </div>
+            <div class="asset-item">
+                <div>
+                    <span class="asset-name">Open-Source Codebase & Pipelines</span><br>
+                    <small style="color: #64748b;">GitHub Repository (Domle/Notion)</small>
+                </div>
+                <a href="https://github.com/Domle/Notion.git" class="asset-link" target="_blank">View Code Repository</a>
+            </div>
+            <div class="asset-item">
+                <div>
+                    <span class="asset-name">Curated Research Dataset</span><br>
+                    <small style="color: #64748b;">ETH Zurich Research Collection</small>
+                </div>
+                <a href="https://doi.org/10.3929/ethz-b-000635803" class="asset-link" target="_blank">DOI: 10.3929/ethz-b-000635803</a>
+            </div>
+        </div>
+    </section>
+</div>
+
+</body>
+</html>
