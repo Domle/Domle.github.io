@@ -389,27 +389,27 @@
   <div id="sideBox" aria-label="Side Navigation Panel" role="complementary">
     <h3>Programming Skills</h3>
     <div class="skill">
-      <span>HTML</span>
+      <span>HTML/CSS</span>
       <div class="skill-bar">
-        <div class="skill-level" style="width: 90%;"></div>
+        <div class="skill-level" style="width: 40%; background-color: #4682b4;"></div>
       </div>
     </div>
     <div class="skill">
-      <span>CSS</span>
+      <span>R</span>
       <div class="skill-bar">
-        <div class="skill-level" style="width: 85%;"></div>
-      </div>
-    </div>
-    <div class="skill">
-      <span>JavaScript</span>
-      <div class="skill-bar">
-        <div class="skill-level" style="width: 75%;"></div>
+        <div class="skill-level" style="width: 100%; background-color: #4682b4;"></div>
       </div>
     </div>
     <div class="skill">
       <span>Python</span>
       <div class="skill-bar">
-        <div class="skill-level" style="width: 80%;"></div>
+        <div class="skill-level" style="width: 30%; background-color: #4682b4;"></div>
+      </div>
+    </div>
+    <div class="skill">
+      <span>Git, Github</span>
+      <div class="skill-bar">
+        <div class="skill-level" style="width: 60%; background-color: #4682b4;"></div>
       </div>
     </div>
 
@@ -417,23 +417,23 @@
     <div class="skill">
       <span>German (Native)</span>
       <div class="skill-bar">
-        <div class="skill-level" style="width: 100%; background-color: #2e8b57;"></div>
+        <div class="skill-level" style="width: 100%; background-color: #4682b4;"></div>
       </div>
     </div>
     <div class="skill">
       <span>English (C2)</span>
       <div class="skill-bar">
-        <div class="skill-level" style="width: 95%; background-color: #4682b4;"></div>
+        <div class="skill-level" style="width: 100%; background-color: #4682b4;"></div>
       </div>
     </div>
     <div class="skill">
       <span>Portuguese (A2)</span>
       <div class="skill-bar">
-        <div class="skill-level" style="width: 40%; background-color: #daa520;"></div>
+        <div class="skill-level" style="width: 20%; background-color: #4682b4;"></div>
       </div>
     </div>
 
-    <div class="metrics-container">
+    <!-- <div class="metrics-container">
       <div class="metrics-title">Scientific Metrics</div>
       <ul class="metrics-list">
         <li>
@@ -444,8 +444,51 @@
         <li>i10-index: <strong>1</strong></li>
         <li>Total Citations: <strong>64</strong></li>
         <li>Publications: <strong>1</strong></li>
-      </ul>
+      </ul> -->
 
+<div class="metrics-container">
+  <div class="metrics-title">Scientific Metrics</div>
+  <ul class="metrics-list">
+    <li>h-index: <strong id="oa-hindex">Loading...</strong></li>
+    <li>i10-index: <strong id="oa-i10index">Loading...</strong></li>
+    <li>Total Citations: <strong id="oa-citations">Loading...</strong></li>
+    <li>Publications: <strong>4</strong></li>
+  </ul>
+</div>
+
+<script>
+  async function fetchOpenAlexMetrics() {
+    // Dominic Eriksson's OpenAlex Author ID
+    const openAlexId = 'A5088235282'; 
+    
+    const hIndexEl = document.getElementById('oa-hindex');
+    const i10IndexEl = document.getElementById('oa-i10index');
+    const citationsEl = document.getElementById('oa-citations');
+
+    try {
+      const response = await fetch(`https://api.openalex.org/authors/${openAlexId}`);
+      if (!response.ok) throw new Error('OpenAlex API error');
+      
+      const data = await response.json();
+      
+      // Update fields with live open-access data
+      hIndexEl.textContent = data.summary_stats.h_index ?? '2';
+      i10IndexEl.textContent = data.summary_stats.i10_index ?? '1';
+      citationsEl.textContent = data.cited_by_count ?? '83';
+      
+    } catch (error) {
+      console.error('Error fetching metrics:', error);
+      // Fallback defaults so your sidebar never looks empty or broken
+      hIndexEl.textContent = '2';
+      i10IndexEl.textContent = '1';
+      citationsEl.textContent = '83'; 
+    }
+  }
+
+  // Run the fetch when the sidebar loads
+  fetchOpenAlexMetrics();
+</script>
+      
       <div class="metrics-title">Research Visibility</div>
       <div style="margin-top: 8px;">
         <script type="text/javascript" src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script>
