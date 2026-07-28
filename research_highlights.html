@@ -124,7 +124,6 @@
       margin-right: 4px;
     }
 
-    /* NEW: Styled Altmetric Badge Wrapper */
     .altmetric-container {
       display: flex;
       flex-direction: column;
@@ -180,9 +179,9 @@
 
     .modal-content {
       background: white;
-      width: 90%;
-      max-width: 850px;
-      max-height: 85vh;
+      width: 95%;
+      max-width: 1100px;
+      max-height: 90vh;
       border-radius: 16px;
       overflow-y: auto;
       padding: 32px;
@@ -205,25 +204,13 @@
       align-items: center;
       justify-content: center;
       color: #8e8e93;
+      z-index: 10;
       transition: background 0.2s;
     }
 
     .close-modal-btn:hover {
       background: #e5e5ea;
       color: #1c1c1e;
-    }
-
-    .modal-body img {
-      width: 100%;
-      height: auto;
-      border-radius: 8px;
-      margin-top: 20px;
-      border: 1px solid #e5e5ea;
-    }
-
-    .modal-body h4 {
-      margin: 20px 0 8px 0;
-      color: #0071e3;
     }
 
     .doi-link {
@@ -238,6 +225,238 @@
 
     .doi-link:hover {
       text-decoration: underline;
+    }
+
+    /* ================= INTERACTIVE DASHBOARD SYSTEM ================= */
+    .infosheet-dashboard {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 32px;
+      margin-top: 24px;
+    }
+
+    @media (max-width: 850px) {
+      .infosheet-dashboard {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .text-pane-column {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .info-block-card {
+      background: #fafafa;
+      border: 1px solid #e5e5ea;
+      border-radius: 10px;
+      padding: 18px;
+    }
+
+    .info-block-card h4 {
+      margin: 0 0 10px 0;
+      color: #0071e3;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .info-block-card ul {
+      margin: 0;
+      padding-left: 20px;
+      color: #3a3a3c;
+    }
+
+    .info-block-card li {
+      margin-bottom: 8px;
+    }
+
+    .info-block-card li:last-child {
+      margin-bottom: 0;
+    }
+
+    .figure-pane-column {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .main-display-viewport {
+      background: #ffffff;
+      border: 1px solid #e5e5ea;
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+    }
+
+    .viewport-image-wrapper {
+      position: relative;
+      cursor: zoom-in;
+      background: #f2f2f7;
+      border-radius: 8px;
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 260px;
+    }
+
+    .viewport-image-wrapper img {
+      max-width: 100%;
+      max-height: 320px;
+      object-fit: contain;
+      border-radius: 4px;
+      transition: transform 0.2s;
+    }
+
+    .viewport-image-wrapper:hover img {
+      transform: scale(1.02);
+    }
+
+    .zoom-hint {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      background: rgba(0,0,0,0.6);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+    }
+
+    .figure-meta-title {
+      font-weight: 600;
+      margin: 12px 0 6px 0;
+      font-size: 1.05rem;
+    }
+
+    .action-toggle-bar {
+      margin-top: 12px;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .dashboard-action-btn {
+      background: #f2f2f7;
+      color: #0071e3;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .dashboard-action-btn:hover {
+      background: #0071e3;
+      color: white;
+    }
+
+    .collapsible-legend-panel {
+      display: none;
+      background: #f2f2f7;
+      border-radius: 8px;
+      padding: 14px;
+      margin-top: 14px;
+      text-align: left;
+      font-size: 0.9rem;
+      border-left: 4px solid #0071e3;
+    }
+
+    .collapsible-legend-panel.visible {
+      display: block;
+    }
+
+    .thumbnail-selection-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .thumbnail-item-card {
+      border: 2px solid transparent;
+      border-radius: 8px;
+      padding: 4px;
+      background: #f2f2f7;
+      cursor: pointer;
+      aspect-ratio: 4/3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .thumbnail-item-card img {
+      max-width: 100%;
+      max-height: 80%;
+      object-fit: contain;
+    }
+
+    .thumbnail-item-card span {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #636366;
+      margin-top: 2px;
+    }
+
+    .thumbnail-item-card.active-selection {
+      border-color: #0071e3;
+      background: #ffffff;
+    }
+
+    /* ================= STANDALONE LIGHTBOX FOR EXPANDED VIEW ================= */
+    .lightbox-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      z-index: 2000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .lightbox-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .lightbox-container {
+      max-width: 90%;
+      max-height: 90%;
+      position: relative;
+    }
+
+    .lightbox-container img {
+      max-width: 100%;
+      max-height: 85vh;
+      border-radius: 4px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .close-lightbox-btn {
+      position: absolute;
+      top: -40px;
+      right: 0;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -254,7 +473,7 @@
 
   <section>
     <h2>Publications</h2>
-    <p style="color: #636366; margin-top: -16px; margin-bottom: 24px;">Click on either paper below to view its research info sheet, methods summary, and full study poster.</p>
+    <p style="color: #636366; margin-top: -16px; margin-bottom: 24px;">Click on either paper below to view its research info sheet, methods summary, and interactive figures.</p>
     
     <div class="publications-grid">
       <!-- PAPER 1 CARD -->
@@ -269,13 +488,12 @@
           <div class="citation-count">
             <i class="fas fa-quote-right"></i> Citations: <strong id="cite-paper1">Loading...</strong>
           </div>
-          <!-- NEW: Unified container holding the clickable text label + donut badge -->
           <div class="altmetric-container" onclick="event.stopPropagation()">
             <a href="https://www.altmetric.com/details/doi/10.1038/s41598-026-61132-2" target="_blank" class="altmetric-label">Altmetric Score</a>
             <div data-badge-type="donut" data-doi="10.1038/s41598-026-61132-2" data-hide-no-mentions="true" class="altmetric-embed"></div>
           </div>
         </div>
-        <span class="view-btn">View Details & Poster <i class="fas fa-arrow-right"></i></span>
+        <span class="view-btn">View Interactive Info Sheet <i class="fas fa-arrow-right"></i></span>
       </div>
 
       <!-- PAPER 2 CARD -->
@@ -290,80 +508,326 @@
           <div class="citation-count">
             <i class="fas fa-quote-right"></i> Citations: <strong id="cite-paper2">Loading...</strong>
           </div>
-          <!-- NEW: Unified container holding the clickable text label + donut badge -->
           <div class="altmetric-container" onclick="event.stopPropagation()">
             <a href="https://www.altmetric.com/details/doi/10.1016/j.chom.2026.05.016" target="_blank" class="altmetric-label">Altmetric Score</a>
             <div data-badge-type="donut" data-doi="10.1016/j.chom.2026.05.016" data-hide-no-mentions="true" class="altmetric-embed"></div>
           </div>
         </div>
-        <span class="view-btn">View Details & Poster <i class="fas fa-arrow-right"></i></span>
+        <span class="view-btn">View Interactive Info Sheet <i class="fas fa-arrow-right"></i></span>
       </div>
     </div>
   </section>
 
   <!-- ================= DYNAMIC MODAL OVERLAYS ================= -->
   
-  <!-- MODAL FOR PAPER 1 -->
+  <!-- INTERACTIVE MODAL FOR PAPER 1 (3 FIGURES) -->
   <div id="paper1" class="modal-overlay" onclick="closeModal('paper1')">
     <div class="modal-content" onclick="event.stopPropagation()">
       <button class="close-modal-btn" onclick="closeModal('paper1')"><i class="fas fa-times"></i></button>
-      <div class="modal-body">
-        <h2>Nitrogen fixation rates increase with diazotroph richness in the global ocean</h2>
-        <p style="color:#636366; margin-bottom: 4px;"><em>Eriksson, D., et al. | Scientific Reports</em></p>
-        <a href="https://doi.org/10.1038/s41598-026-61132-2" target="_blank" class="doi-link">
-          <i class="fas fa-external-link-alt"></i> DOI: 10.1038/s41598-026-61132-2
-        </a>
-        <hr style="border:0; border-top:1px solid #e5e5ea; margin: 16px 0;">
-        
-        <h4>Core Methodology</h4>
-        <p>Integrated global datasets of marine observation measurements with advanced empirical modeling frameworks to accurately trace the direct correlation between microbial richness metrics and ecosystem function kinetics.</p>
-        
-        <h4>Key Results & Implications</h4>
-        <p>Proved that higher species richness among diazotroph networks directly boosts total ocean nitrogen fixation rates, highlighting the foundational role of preserving microbial diversity amid shifting global climates.</p>
-        
-        <h4>Research Poster Showcase</h4>
-        <img src="posters/diazotroph_diversity_poster.jpg" alt="Scientific Poster for Diazotroph Diversity Paper">
+      
+      <h2>Nitrogen fixation rates increase with diazotroph richness in the global ocean</h2>
+      <p style="color:#636366; margin-bottom: 4px;"><em>Eriksson, D., et al. | Scientific Reports</em></p>
+      <a href="https://doi.org/10.1038/s41598-026-61132-2" target="_blank" class="doi-link">
+        <i class="fas fa-external-link-alt"></i> DOI: 10.1038/s41598-026-61132-2
+      </a>
+      <hr style="border:0; border-top:1px solid #e5e5ea; margin: 16px 0;">
+
+      <div class="infosheet-dashboard">
+        <!-- Left Column: Text Boxes -->
+        <div class="text-pane-column">
+          <div class="info-block-card">
+            <h4><i class="fas fa-question-circle"></i> Core Question</h4>
+            <ul>
+              <li><strong>The Diversity-Function Gap:</strong> Investigates whether a positive Biodiversity-Ecosystem Functioning (BEF) relationship exists between marine microbial diversity and global nutrient cycles.</li>
+              <li><strong>Global Scale Assessment:</strong> Examines how the species richness of marine diazotrophs impacts global ocean nitrogen fixation rates.</li>
+            </ul>
+          </div>
+          <div class="info-block-card">
+            <h4><i class="fas fa-cogs"></i> Key Methodology</h4>
+            <ul>
+              <li><strong>Data Integration:</strong> Combined traditional microscopy occurrence records with advanced molecular data (qPCR and metagenomics).</li>
+              <li><strong>Ensemble Modeling:</strong> Employed 90 ensemble Species Distribution Models (SDMs) utilizing GLMs, GAMs, and Random Forests.</li>
+            </ul>
+          </div>
+          <div class="info-block-card">
+            <h4><i class="fas fa-chart-line"></i> Principal Findings</h4>
+            <ul>
+              <li><strong>Robust BEF Coupling:</strong> Total diazotroph richness strongly correlates with global marine nitrogen fixation rates (median Spearman's ρ ≥ 0.80).</li>
+              <li><strong>Latitudinal Diversity Gradient:</strong> Diazotroph species richness peaks cleanly within the tropics and drops by half toward polar boundaries.</li>
+            </ul>
+          </div>
+          <div class="info-block-card">
+            <h4><i class="fas fa-globe-americas"></i> Broader Implications</h4>
+            <ul>
+              <li><strong>Macroecological Validation:</strong> Confirms positive BEF relationships are a persistent, emergent property of plankton communities globally.</li>
+              <li><strong>Ecosystem Buffering:</strong> Maintaining a diverse pool of metabolic strategies provides a critical functional buffer for global marine processes.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Right Column: Interactive Panel -->
+        <div class="figure-pane-column">
+          <div class="main-display-viewport">
+            <div class="viewport-image-wrapper" onclick="triggerLightbox('paper1')">
+              <img id="paper1-active-fig-img" src="notion_main_figure_1.png" alt="Active Figure View" onerror="this.src='https://placehold.co/500x350?text=Paper+1+-+Figure+1'">
+              <div class="zoom-hint"><i class="fas fa-search-plus"></i> Click to Zoom</div>
+            </div>
+            <div id="paper1-active-fig-title" class="figure-meta-title">Figure 1: Global Latitudinal Richness Gradient Mapping</div>
+            
+            <div class="action-toggle-bar">
+              <button class="dashboard-action-btn" onclick="toggleLegendBox('paper1')"><i class="fas fa-book-open"></i> Toggle Legend & Key Results</button>
+            </div>
+
+        <div id="paper1-legend-accordion" class="collapsible-legend-panel">
+              <strong>Scientific Legend:</strong> <span id="paper1-active-fig-legend">Maps show
+                the ensemble mean annual diazotroph richness calculated as the average across 12 months for each grid cell using the 90 ensemble member models, at a 1° longitude by 1° latitude resolution for <strong>a</strong> total (n = 15), <strong>c</strong> cyanobacterial (n = 9) and <strong>e</strong> non-cyanobacterial (n = 6)
+                diazotrophs. White stipples indicate areas where the coefficient of variation is above the 70th percentile, marking greater differences between model projections. Line plots show the latitudinal richness
+                mean gradients across 90 ensemble members for <strong>b</strong> total, <strong>d</strong>
+                cyanobacterial and <strong>f</strong> non-cyanobacterial diazotrophs indicating +/- 1
+                standard deviation across the 90 member models per degree latitude.
+                The colored lines are the mean latitudinal gradients across all 90
+                ensemble members for each corresponding diazotrophic community.</span>
+              <hr style="border:0; border-top:1px solid #d1d1d6; margin:8px 0;">
+              <strong>Key Figure Empirical Takeaway:</strong> <span id="paper1-active-fig-takeaway">Nestedness analysis accounts for over 85% of structural variations, verifying that high-latitude dropouts regulate global trends.</span>
+            </div>
+
+          <!-- 3 Thumbnail Grid Tray -->
+          <div class="thumbnail-selection-grid">
+            <div class="thumbnail-item-card active-selection" onclick="changeActiveFigure('paper1', 1)">
+              <img src="posters/p1_fig1.jpg" onerror="this.src='https://placehold.co/100x75?text=Fig+1'">
+              <span>Figure 1</span>
+            </div>
+            <div class="thumbnail-item-card" onclick="changeActiveFigure('paper1', 2)">
+              <img src="posters/p1_fig2.jpg" onerror="this.src='https://placehold.co/100x75?text=Fig+2'">
+              <span>Figure 2</span>
+            </div>
+            <div class="thumbnail-item-card" onclick="changeActiveFigure('paper1', 3)">
+              <img src="posters/p1_fig3.jpg" onerror="this.src='https://placehold.co/100x75?text=Fig+3'">
+              <span>Figure 3</span>
+            </div>
+          </div>
+        </div>
       </div>
+
     </div>
   </div>
 
-  <!-- MODAL FOR PAPER 2 -->
+  <!-- INTERACTIVE MODAL FOR PAPER 2 (6 FIGURES) -->
   <div id="paper2" class="modal-overlay" onclick="closeModal('paper2')">
     <div class="modal-content" onclick="event.stopPropagation()">
       <button class="close-modal-btn" onclick="closeModal('paper2')"><i class="fas fa-times"></i></button>
-      <div class="modal-body">
-        <h2>Variations in the latitudinal diversity gradients of the ocean microbiome</h2>
-        <p style="color:#636366; margin-bottom: 4px;"><em>Eriksson, D., Schiller, J., Schickele, A., et al. | Cell Host & Microbe</em></p>
-        <a href="https://doi.org/10.1016/j.chom.2026.05.016" target="_blank" class="doi-link">
-          <i class="fas fa-external-link-alt"></i> DOI: 10.1016/j.chom.2026.05.016
-        </a>
-        <hr style="border:0; border-top:1px solid #e5e5ea; margin: 16px 0;">
-        
-        <h4>Core Methodology</h4>
-        <p>Utilized extensive genomic and meta-transcriptomic sequencing filters alongside macroecological spatial models to evaluate community distribution across latitudinal lines.</p>
-        
-        <h4>Key Results & Implications</h4>
-        <p>Uncovered unexpected, non-linear structural anomalies in the latitudinal diversity gradients of the ocean microbiome, showing that traditional macroecological diversity rules vary significantly across microclimates.</p>
-        
-        <h4>Research Poster Showcase</h4>
-        <div style="text-align: right; margin-bottom: 8px;">
-          <a href="LDG_poster_cell_host_and_microbe.pdf" target="_blank" class="fullscreen-btn" style="text-decoration: none; font-size: 0.9rem; color: #0071e3; font-family: sans-serif;">
-            <i class="fas fa-expand-arrows-alt"></i> Open Fullscreen
-          </a>
+      
+      <h2>Variations in the latitudinal diversity gradients of the ocean microbiome</h2>
+      <p style="color:#636366; margin-bottom: 4px;"><em>Eriksson, D., Schiller, J., Schickele, A., et al. | Cell Host & Microbe</em></p>
+      <a href="https://doi.org/10.1016/j.chom.2026.05.016" target="_blank" class="doi-link">
+        <i class="fas fa-external-link-alt"></i> DOI: 10.1016/j.chom.2026.05.016
+      </a>
+      <hr style="border:0; border-top:1px solid #e5e5ea; margin: 16px 0;">
+
+      <div class="infosheet-dashboard">
+        <!-- Left Column: Text Boxes -->
+        <div class="text-pane-column">
+          <div class="info-block-card">
+            <h4><i class="fas fa-question-circle"></i> Core Question</h4>
+            <ul>
+              <li><strong>Gradient Structural Deviations:</strong> Investigating if structural variations break the classical symmetric Latitudinal Diversity Gradient across specialized bacterial domains.</li>
+              <li><strong>Eco-Niche Segmentation:</strong> Assessing how lifestyle configurations (free-living vs. particle-attached layers) scale structurally across latitudes.</li>
+            </ul>
+          </div>
+          <div class="info-block-card">
+            <h4><i class="fas fa-cogs"></i> Key Methodology</h4>
+            <ul>
+              <li><strong>Genomic Sequencing Triggers:</strong> Aggregated macroecological filters leveraging broad global ocean metagenomic and metatranscriptomic data assets.</li>
+              <li><strong>Spatial Depth Deconstruction:</strong> Evaluated layer breakdowns explicitly separating epipelagic horizons from mesopelagic boundary tracks.</li>
+            </ul>
+          </div>
+          <div class="info-block-card">
+            <h4><i class="fas fa-chart-line"></i> Principal Findings</h4>
+            <ul>
+              <li><strong>Asymmetric Gradient Anomalies:</strong> Discovered localized asymmetries where traditional macroecological diversity rules vary significantly across microclimates and depths.</li>
+              <li><strong>Lifestyle Divergence:</strong> Free-living bacteria follow clear temperature dependencies, while particle-attached profiles correlate heavily with organic carbon export vectors.</li>
+            </ul>
+          </div>
+          <div class="info-block-card">
+            <h4><i class="fas fa-globe-americas"></i> Broader Implications</h4>
+            <ul>
+              <li><strong>Macroecological Modeling Corrections:</strong> Proves that uniform spatial projections fail to capture microbial variations, requiring depth-stratified parameters.</li>
+              <li><strong>Climatic Vulnerability Mapping:</strong> Indicates that climate transitions will cause non-uniform structural shifts across changing global ocean layers.</li>
+            </ul>
+          </div>
         </div>
-        <iframe 
-          src="LDG_poster_cell_host_and_microbe.pdf" 
-          width="100%" 
-          height="600px" 
-          style="border: 1px solid #e5e5ea; border-radius: 4px;"
-          title="Scientific Poster for Marine Prokaryotic Depth Paper">
-        </iframe>
+
+        <!-- Right Column: Interactive Panel -->
+        <div class="figure-pane-column">
+          <div class="main-display-viewport">
+            <div class="viewport-image-wrapper" onclick="triggerLightbox('paper2')">
+              <img id="paper2-active-fig-img" src="posters/p2_fig1.jpg" alt="Active Figure View" onerror="this.src='https://placehold.co/500x350?text=Paper+2+-+Figure+1'">
+              <div class="zoom-hint"><i class="fas fa-search-plus"></i> Click to Zoom</div>
+            </div>
+            <div id="paper2-active-fig-title" class="figure-meta-title">Figure 1: Ocean Microbiome Global Distribution Anomalies</div>
+            
+            <div class="action-toggle-bar">
+              <button class="dashboard-action-btn" onclick="toggleLegendBox('paper2')"><i class="fas fa-book-open"></i> Toggle Legend & Key Results</button>
+            </div>
+
+            <div id="paper2-legend-accordion" class="collapsible-legend-panel">
+              <strong>Scientific Legend:</strong> <span id="paper2-active-fig-legend">Global profiling maps displaying complex variation metrics across designated depth profiles.</span>
+              <hr style="border:0; border-top:1px solid #d1d1d6; margin:8px 0;">
+              <strong>Key Figure Empirical Takeaway:</strong> <span id="paper2-active-fig-takeaway">Proves clear asymmetry in horizontal diversity pathways when accounting for deep epipelagic boundary zones.</span>
+            </div>
+          </div>
+
+          <!-- 6 Thumbnail Grid Tray -->
+          <div class="thumbnail-selection-grid">
+            <div class="thumbnail-item-card active-selection" onclick="changeActiveFigure('paper2', 1)">
+              <img src="posters/p2_fig1.jpg" onerror="this.src='https://placehold.co/100x75?text=Fig+1'">
+              <span>Figure 1</span>
+            </div>
+            <div class="thumbnail-item-card" onclick="changeActiveFigure('paper2', 2)">
+              <img src="posters/p2_fig2.jpg" onerror="this.src='https://placehold.co/100x75?text=Fig+2'">
+              <span>Figure 2</span>
+            </div>
+            <div class="thumbnail-item-card" onclick="changeActiveFigure('paper2', 3)">
+              <img src="posters/p2_fig3.jpg" onerror="this.src='https://placehold.co/100x75?text=Fig+3'">
+              <span>Figure 3</span>
+            </div>
+            <div class="thumbnail-item-card" onclick="changeActiveFigure('paper2', 4)">
+              <img src="posters/p2_fig4.jpg" onerror="this.src='https://placehold.co/100x75?text=Fig+4'">
+              <span>Figure 4</span>
+            </div>
+            <div class="thumbnail-item-card" onclick="changeActiveFigure('paper2', 5)">
+              <img src="posters/p2_fig5.jpg" onerror="this.src='https://placehold.co/100x75?text=Fig+5'">
+              <span>Figure 5</span>
+            </div>
+            <div class="thumbnail-item-card" onclick="changeActiveFigure('paper2', 6)">
+              <img src="posters/p2_fig6.jpg" onerror="this.src='https://placehold.co/100x75?text=Fig+6'">
+              <span>Figure 6</span>
+            </div>
+          </div>
+        </div>
       </div>
+
+    </div>
+  </div>
+
+  <!-- GLOBAL SIMPLIFIED LIGHTBOX MODAL FOR ZOOM -->
+  <div id="global-lightbox" class="lightbox-overlay" onclick="closeLightbox()">
+    <div class="lightbox-container" onclick="event.stopPropagation()">
+      <button class="close-lightbox-btn" onclick="closeLightbox()"><i class="fas fa-times"></i></button>
+      <img id="lightbox-target-img" src="" alt="Fullscreen Expanded Asset View">
     </div>
   </div>
 
   <!-- ================= JAVASCRIPT LOGIC ================= -->
   <script>
+    // Nested structure holding metadata for both interactive paper frameworks
+    const globalPapersMatrix = {
+      paper1: {
+        1: {
+          title: "Figure 1: Global Latitudinal Richness Gradient Mapping",
+          src: "posters/p1_fig1.jpg",
+          legend: "Global distribution model output displaying diazotroph species richness. Peaks are localized within tropical belts with dramatic step-downs approaching high latitudinal blocks.",
+          takeaway: "Nestedness analysis accounts for over 85% of structural variations, verifying that species dropouts drive structural trends rather than horizontal replacement vectors."
+        },
+        2: {
+          title: "Figure 2: Empirical Diversity vs. Fixation Rate Coupling",
+          src: "posters/p1_fig2.jpg",
+          legend: "Scatterplot plotting integrated cross-biome in situ nitrogen fixation rates against spatial ensemble species richness indices across global ocean tracks.",
+          takeaway: "Reveals a highly consistent positive correlation (median Spearman's ρ ≥ 0.80), providing global proof of biodiversity-ecosystem functioning (BEF) linkages in marine plankton."
+        },
+        3: {
+          title: "Figure 3: Niche Deconstruction & Functional Mappings",
+          src: "posters/p1_fig3.jpg",
+          legend: "Comparative niche occupancy density projections for major marine diazotrophic lineages partitioned across critical spatial ranges.",
+          takeaway: "Cyanobacterial categories tightly cluster around core functional target zones, while non-cyanobacterial microbial nodes capture shifting upwelling zones."
+        }
+      },
+      paper2: {
+        1: {
+          title: "Figure 1: Ocean Microbiome Global Distribution Anomalies",
+          src: "posters/p2_fig1.jpg",
+          legend: "Global mapping metrics displaying structural shifts across primary vertical marine domains.",
+          takeaway: "Identifies significant deviations from structural symmetry, emphasizing depth layers as explicit structural boundaries."
+        },
+        2: {
+          title: "Figure 2: Alpha Diversity Index Variance Matrix",
+          src: "posters/p2_fig2.jpg",
+          legend: "Calculated community alpha diversity indices plotted systematically along changing horizontal latitudinal tracks.",
+          takeaway: "Proves traditional uniform latitudinal drop assumptions weaken significantly across deep mesopelagic horizons."
+        },
+        3: {
+          title: "Figure 3: Lifestyle Functional Disconnections",
+          src: "posters/p2_fig3.jpg",
+          legend: "Beta diversity decomposition tracking contrasting patterns between free-living and particle-attached bacteria.",
+          takeaway: "Demonstrates that lifestyle variables segment ocean populations into discrete environmental response buckets."
+        },
+        4: {
+          title: "Figure 4: Environmental Driver Variable Evaluation",
+          src: "posters/p2_fig4.jpg",
+          legend: "Relative structural driver importance charts plotting co-varying metrics against sample variations.",
+          takeaway: "Thermal characteristics regulate free-living pools, whereas nutrient availability constraints dictate particle-attached clusters."
+        },
+        5: {
+          title: "Figure 5: Vertical Zonation Multi-Profile Layout",
+          src: "posters/p2_fig5.jpg",
+          legend: "Cross-sectional modeling profiles showing horizontal gradient shifts from the surface down to lower boundaries.",
+          takeaway: "Verifies deep water basins store heterogeneous composition patterns distinct from surface atmospheric influences."
+        },
+        6: {
+          title: "Figure 6: Future Climate Community Vulnerability Map",
+          src: "posters/p2_fig6.jpg",
+          legend: "Predictive range mapping forecasting community reorganization based on standard climate projection pathways.",
+          takeaway: "Forewarns of non-uniform spatial changes, showing high susceptibility risks focused around sub-polar transition zones."
+        }
+      }
+    };
+
+    // Global Active Controller processing figure swaps within specific papers
+    function changeActiveFigure(paperId, figId) {
+      const paperData = globalPapersMatrix[paperId];
+      if (!paperData) return;
+      const data = paperData[figId];
+      if (!data) return;
+
+      const imgEl = document.getElementById(`${paperId}-active-fig-img`);
+      imgEl.src = data.src;
+      imgEl.onerror = function() { this.src = `https://placehold.co/500x350?text=Figure+${figId}+Image`; };
+
+      document.getElementById(`${paperId}-active-fig-title`).textContent = data.title;
+      document.getElementById(`${paperId}-active-fig-legend`).textContent = data.legend;
+      document.getElementById(`${paperId}-active-fig-takeaway`).textContent = data.takeaway;
+
+      // Class layout normalization across contextual card components
+      const modalWrapper = document.getElementById(paperId);
+      const thumbs = modalWrapper.querySelectorAll('.thumbnail-item-card');
+      thumbs.forEach((thumb, index) => {
+        if (index === (figId - 1)) {
+          thumb.classList.add('active-selection');
+        } else {
+          thumb.classList.remove('active-selection');
+        }
+      });
+    }
+
+    // Toggle target legend accordion panel
+    function toggleLegendBox(paperId) {
+      const legendBox = document.getElementById(`${paperId}-legend-accordion`);
+      legendBox.classList.toggle('visible');
+    }
+
+    // Dynamic fullscreen zoom lightbox handling
+    function triggerLightbox(paperId) {
+      const activeSrc = document.getElementById(`${paperId}-active-fig-img`).src;
+      const lightbox = document.getElementById('global-lightbox');
+      document.getElementById('lightbox-target-img').src = activeSrc;
+      lightbox.classList.add('active');
+    }
+
+    function closeLightbox() {
+      document.getElementById('global-lightbox').classList.remove('active');
+    }
+
+    // Modal Visibility Systems
     function openModal(modalId) {
       document.getElementById(modalId).classList.add('active');
       document.body.style.overflow = 'hidden';
@@ -372,16 +836,19 @@
     function closeModal(modalId) {
       document.getElementById(modalId).classList.remove('active');
       document.body.style.overflow = '';
+      const accordion = document.getElementById(`${modalId}-legend-accordion`);
+      if (accordion) accordion.classList.remove('visible');
     }
 
     document.addEventListener('keydown', function(event) {
       if (event.key === 'Escape') {
         const activeModal = document.querySelector('.modal-overlay.active');
         if (activeModal) closeModal(activeModal.id);
+        closeLightbox();
       }
     });
 
-    // OpenAlex Live Paper Citation Fetcher using stable DOIs
+    // OpenAlex Citation Tracker Configuration
     async function fetchPaperSpecificMetrics() {
       const doiPaper1 = '10.1038/s41598-026-61132-2';
       const doiPaper2 = '10.1016/j.chom.2026.05.016';
@@ -389,7 +856,6 @@
       const elPaper1 = document.getElementById('cite-paper1');
       const elPaper2 = document.getElementById('cite-paper2');
 
-      // Fetch Paper 1 citations using standard OpenAlex DOI routing
       try {
         const res1 = await fetch(`https://api.openalex.org/works/doi:${doiPaper1}`);
         if (res1.ok) {
@@ -397,11 +863,10 @@
           elPaper1.textContent = data1.cited_by_count !== undefined ? data1.cited_by_count : '2';
         } else { elPaper1.textContent = '2'; }
       } catch (err) { 
-        console.error('Paper 1 Fetch Error:', err);
+        console.error(err);
         elPaper1.textContent = '2'; 
       }
 
-      // Fetch Paper 2 citations using standard OpenAlex DOI routing
       try {
         const res2 = await fetch(`https://api.openalex.org/works/doi:${doiPaper2}`);
         if (res2.ok) {
@@ -409,12 +874,11 @@
           elPaper2.textContent = data2.cited_by_count !== undefined ? data2.cited_by_count : '0';
         } else { elPaper2.textContent = '0'; }
       } catch (err) { 
-        console.error('Paper 2 Fetch Error:', err);
+        console.error(err);
         elPaper2.textContent = '0'; 
       }
     }
 
-    // Explicitly execute fetch when the window elements finish mounting
     window.addEventListener('DOMContentLoaded', () => {
       fetchPaperSpecificMetrics();
     });
