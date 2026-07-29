@@ -711,171 +711,166 @@
     </div>
   </div>
 
-  <!-- ================= JAVASCRIPT LOGIC ================= -->
-  <script>
-    // Nested structure holding metadata for both interactive paper frameworks
-    const globalPapersMatrix = {
+     <!-- ================= JAVASCRIPT LOGIC ================= -->
+<script>
+  // Nested structure holding metadata for both interactive paper frameworks
+  const globalPapersMatrix = {
     paper1: {
-        1: {
-          title: "Figure 1: Global Latitudinal Richness Gradient Mapping",
-          src: "notion_main_figure_1.png",
-          legend: "Maps show the ensemble mean annual diazotroph richness for <strong>a</strong> total (n = 15), <strong>c</strong> cyanobacterial (n = 9) and <strong>e</strong> non-cyanobacterial (n = 6) diazotrophs. Line plots show the latitudinal richness mean gradients for <strong>b</strong> total, <strong>d</strong> cyanobacterial and <strong>f</strong> non-cyanobacterial diazotrophs.",
-          takeaway: "Demonstrates a strong latitudinal gradient in diazotroph richness with a distinct equatorial dip driven by Pacific upwelling, revealing divergent distribution patterns between cyanobacterial and non-cyanobacterial groups."
-        },
-        2: {
-          title: "Figure 2: Empirical Diversity vs. Fixation Rate Coupling",
-          src: "notion_main_figure_2.png",
-          legend: "Panels evaluate the biodiversity–ecosystem functioning relationship across three diazotroph richness groups: <strong>a</strong> total, <strong>b</strong> cyanobacterial, and <strong>c</strong> non-cyanobacterial annual normalized richness, compared against the nitrogen fixation estimate from Wang et al.<sup>24</sup> (mmol N m<sup>-2</sup> y<sup>-1</sup>). Each panel displays the hexbin density of paired 1° × 1° grid cell values. Insets provide a statistical audit of the relationship, reporting the median Spearman’s ρ and 95% confidence intervals derived from bootstrap summaries.",
-          takeaway: "Confirms a robust, environmentally independent positive correlation (median Spearman's ρ ≥ 0.80) between richness and nitrogen fixation that plateaus at high diversity levels."
-        },
-        3: {
-          title: "Figure 3: Niche Deconstruction & Functional Mappings",
-          src: "notion_main_figure_3.png",
-          legend: "<strong>a</strong> Global map of the annual beta ratio (nestedness/Jaccard). A value of > 0.5 indicates that nestedness is the major contributor underlying community changes. <strong>b</strong> Boxplots of annual beta ratio vs richness bins. <strong>c</strong> Stacked bar chart depicting average habitat suitability indices for individual diazotroph taxa (cyanobacterial in green, non-cyanobacterial in purple) arranged across nitrogen fixation strengths.",
-          takeaway: "Establishes that the global richness gradient is driven by nestedness (taxa loss) rather than turnover, with cyanobacterial and non-cyanobacterial niches functionally decoupled across fixation hotspots."
-        }
+      1: {
+        title: "Figure 1: Global Latitudinal Richness Gradient Mapping",
+        src: "notion_main_figure_1.png",
+        legend: "Maps show the ensemble mean annual diazotroph richness calculated as the average across 12 months for each grid cell using the 90 ensemble member models, at a 1° longitude by 1° latitude resolution for <strong>a</strong> total (n = 15), <strong>c</strong> cyanobacterial (n = 9) and <strong>e</strong> non-cyanobacterial (n = 6) diazotrophs. White stipples indicate areas where the coefficient of variation is above the 70th percentile, marking greater differences between model projections. Line plots show the latitudinal richness mean gradients across 90 ensemble members for <strong>b</strong> total, <strong>d</strong> cyanobacterial and <strong>f</strong> non-cyanobacterial diazotrophs indicating +/- 1 standard deviation across the 90 member models per degree latitude. The colored lines are the mean latitudinal gradients across all 90 ensemble members for each corresponding diazotrophic community.",
+        takeaway: "Demonstrates a strong latitudinal gradient in diazotroph richness with a distinct equatorial dip driven by Pacific upwelling, revealing divergent distribution patterns between cyanobacterial and non-cyanobacterial groups."
       },
-      paper2: {
-        1: {
-          title: "Figure 1: Ocean Microbiome Global Distribution Anomalies",
-          src: "posters/p2_fig1.jpg",
-          legend: "Global mapping metrics displaying structural shifts across primary vertical marine domains.",
-          takeaway: "Identifies significant deviations from structural symmetry, emphasizing depth layers as explicit structural boundaries."
-        },
-        2: {
-          title: "Figure 2: Alpha Diversity Index Variance Matrix",
-          src: "posters/p2_fig2.jpg",
-          legend: "Calculated community alpha diversity indices plotted systematically along changing horizontal latitudinal tracks.",
-          takeaway: "Proves traditional uniform latitudinal drop assumptions weaken significantly across deep mesopelagic horizons."
-        },
-        3: {
-          title: "Figure 3: Lifestyle Functional Disconnections",
-          src: "posters/p2_fig3.jpg",
-          legend: "Beta diversity decomposition tracking contrasting patterns between free-living and particle-attached bacteria.",
-          takeaway: "Demonstrates that lifestyle variables segment ocean populations into discrete environmental response buckets."
-        },
-        4: {
-          title: "Figure 4: Environmental Driver Variable Evaluation",
-          src: "posters/p2_fig4.jpg",
-          legend: "Relative structural driver importance charts plotting co-varying metrics against sample variations.",
-          takeaway: "Thermal characteristics regulate free-living pools, whereas nutrient availability constraints dictate particle-attached clusters."
-        },
-        5: {
-          title: "Figure 5: Vertical Zonation Multi-Profile Layout",
-          src: "posters/p2_fig5.jpg",
-          legend: "Cross-sectional modeling profiles showing horizontal gradient shifts from the surface down to lower boundaries.",
-          takeaway: "Verifies deep water basins store heterogeneous composition patterns distinct from surface atmospheric influences."
-        },
-        6: {
-          title: "Figure 6: Future Climate Community Vulnerability Map",
-          src: "posters/p2_fig6.jpg",
-          legend: "Predictive range mapping forecasting community reorganization based on standard climate projection pathways.",
-          takeaway: "Forewarns of non-uniform spatial changes, showing high susceptibility risks focused around sub-polar transition zones."
-        }
+      2: {
+        title: "Figure 2: Empirical Diversity vs. Fixation Rate Coupling",
+        src: "notion_main_figure_2.png",
+        legend: "Panels evaluate the biodiversity–ecosystem functioning relationship across three diazotroph richness groups: <strong>a</strong> total, <strong>b</strong> cyanobacterial, and <strong>c</strong> non-cyanobacterial annual normalized richness, compared against the nitrogen fixation estimate from Wang et al.<sup>24</sup> (mmol N m<sup>-2</sup> y<sup>-1</sup>). Each panel displays the hexbin density of paired 1° × 1° grid cell values. Insets provide a statistical audit of the relationship, reporting the median Spearman’s ρ and 95% confidence intervals derived from bootstrap summaries.",
+        takeaway: "Confirms a robust, environmentally independent positive correlation (median Spearman's ρ ≥ 0.80) between richness and nitrogen fixation that plateaus at high diversity levels."
+      },
+      3: {
+        title: "Figure 3: Niche Deconstruction & Functional Mappings",
+        src: "notion_main_figure_3.png",
+        legend: "<strong>a</strong> Global map of the annual beta ratio (nestedness/Jaccard). A value of > 0.5 indicates that nestedness is the major contributor underlying community changes. <strong>b</strong> Boxplots of annual beta ratio vs richness bins. <strong>c</strong> Stacked bar chart depicting average habitat suitability indices for individual diazotroph taxa (cyanobacterial in green, non-cyanobacterial in purple) arranged across nitrogen fixation strengths.",
+        takeaway: "Establishes that the global richness gradient is driven by nestedness (taxa loss) rather than turnover, with cyanobacterial and non-cyanobacterial niches functionally decoupled across fixation hotspots."
       }
-    };
-
-    // Open Paper Information Modal Sheet
-    function openModal(modalId) {
-      const modal = document.getElementById(modalId);
-      if (modal) {
-        modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-      }
-    }
-
-    // Close Paper Information Modal Sheet
-    function closeModal(modalId) {
-      const modal = document.getElementById(modalId);
-      if (modal) {
-        modal.classList.remove('active');
-        document.body.style.overflow = '';
+    },
+    paper2: {
+      1: {
+        title: "Figure 1: Ocean Microbiome Global Distribution Anomalies",
+        src: "posters/p2_fig1.jpg",
+        legend: "Global mapping metrics displaying structural shifts across primary vertical marine domains.",
+        takeaway: "Identifies significant deviations from structural symmetry, emphasizing depth layers as explicit structural boundaries."
+      },
+      2: {
+        title: "Figure 2: Alpha Diversity Index Variance Matrix",
+        src: "posters/p2_fig2.jpg",
+        legend: "Calculated community alpha diversity indices plotted systematically along changing horizontal latitudinal tracks.",
+        takeaway: "Proves traditional uniform latitudinal drop assumptions weaken significantly across deep mesopelagic horizons."
+      },
+      3: {
+        title: "Figure 3: Lifestyle Functional Disconnections",
+        src: "posters/p2_fig3.jpg",
+        legend: "Beta diversity decomposition tracking contrasting patterns between free-living and particle-attached bacteria.",
+        takeaway: "Demonstrates that lifestyle variables segment ocean populations into discrete environmental response buckets."
+      },
+      4: {
+        title: "Figure 4: Environmental Driver Variable Evaluation",
+        src: "posters/p2_fig4.jpg",
+        legend: "Relative structural driver importance charts plotting co-varying metrics against sample variations.",
+        takeaway: "Thermal characteristics regulate free-living pools, whereas nutrient availability constraints dictate particle-attached clusters."
+      },
+      5: {
+        title: "Figure 5: Vertical Zonation Multi-Profile Layout",
+        src: "posters/p2_fig5.jpg",
+        legend: "Cross-sectional modeling profiles showing horizontal gradient shifts from the surface down to lower boundaries.",
+        takeaway: "Verifies deep water basins store heterogeneous composition patterns distinct from surface atmospheric influences."
+      },
+      6: {
+        title: "Figure 6: Future Climate Community Vulnerability Map",
+        src: "posters/p2_fig6.jpg",
+        legend: "Predictive range mapping forecasting community reorganization based on standard climate projection pathways.",
+        takeaway: "Forewarns of non-uniform spatial changes, showing high susceptibility risks focused around sub-polar transition zones."
       }
     }
+  };
 
-    // Interactive Controller processing figure changes within dashboards
-    function changeActiveFigure(paperId, figId) {
-      const paperData = globalPapersMatrix[paperId];
-      if (!paperData || !paperData[figId]) return;
-
-      const figureDetails = paperData[figId];
-
-      // Mutate central view attributes
-      document.getElementById(`${paperId}-active-fig-img`).src = figureDetails.src;
-      document.getElementById(`${paperId}-active-fig-title`).innerHTML = figureDetails.title;
-      document.getElementById(`${paperId}-active-fig-legend`).innerHTML = figureDetails.legend;
-      document.getElementById(`${paperId}-active-fig-takeaway`).innerHTML = figureDetails.takeaway;
-
-      // Reset selection state indicator array
-      const modalContainer = document.getElementById(paperId);
-      const thumbnailCards = modalContainer.querySelectorAll('.thumbnail-item-card');
-      thumbnailCards.forEach((card, index) => {
-        if (index === (parseInt(figId) - 1)) {
-          card.classList.add('active-selection');
-        } else {
-          card.classList.remove('active-selection');
-        }
-      });
+  // Open Paper Information Modal Sheet
+  function openModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
     }
+  }
 
-    // Toggle Scientific Accordion Legend display
-    function toggleLegendBox(paperId) {
-      const legendBox = document.getElementById(`${paperId}-legend-accordion`);
-      if (legendBox) {
-        legendBox.classList.toggle('visible');
+  // Close Paper Information Modal Sheet
+  function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  }
+
+  // Interactive Controller processing figure changes within dashboards
+  function changeActiveFigure(paperId, figId) {
+    const paperData = globalPapersMatrix[paperId];
+    if (!paperData || !paperData[figId]) return;
+
+    const figureDetails = paperData[figId];
+
+    // Mutate central view attributes smoothly
+    document.getElementById(`${paperId}-active-fig-img`).src = figureDetails.src;
+    document.getElementById(`${paperId}-active-fig-title`).textContent = figureDetails.title;
+    document.getElementById(`${paperId}-active-fig-legend`).innerHTML = figureDetails.legend;
+    document.getElementById(`${paperId}-active-fig-takeaway`).innerHTML = figureDetails.takeaway;
+
+    // Update thumbnail UI active styling state frames
+    const modal = document.getElementById(paperId);
+    const thumbnails = modal.querySelectorAll('.thumbnail-item-card');
+    thumbnails.forEach((thumb, index) => {
+      if (index === (figId - 1)) {
+        thumb.classList.add('active-selection');
+      } else {
+        thumb.classList.remove('active-selection');
       }
-    }
-
-    // Trigger Fullscreen Zoom Lightbox
-    function triggerLightbox(paperId) {
-      const currentActiveImage = document.getElementById(`${paperId}-active-fig-img`);
-      const globalLightboxOverlay = document.getElementById('global-lightbox');
-      const lightboxImageTarget = document.getElementById('lightbox-target-img');
-
-      if (currentActiveImage && globalLightboxOverlay && lightboxImageTarget) {
-        lightboxImageTarget.src = currentActiveImage.src;
-        globalLightboxOverlay.classList.add('active');
-      }
-    }
-
-    // Close Fullscreen Zoom Lightbox
-    function closeLightbox() {
-      const globalLightboxOverlay = document.getElementById('global-lightbox');
-      if (globalLightboxOverlay) {
-        globalLightboxOverlay.classList.remove('active');
-      }
-    }
-
-    // Async Fetch Live Citation Indices from Crossref open registry API
-    async function fetchPaperCitationCount(doiString, targetDOMElementId) {
-      try {
-        const response = await fetch(`https://api.crossref.org/works/${encodeURIComponent(doiString)}`);
-        if (!response.ok) throw new Error('API query boundary exception.');
-        
-        const payload = await response.json();
-        const calculationMetric = payload.message['is-referenced-by-count'] ?? 0;
-        document.getElementById(targetDOMElementId).innerText = calculationMetric;
-      } catch (error) {
-        console.error(`Error querying citation indexes for tracking path: ${doiString}`, error);
-        document.getElementById(targetDOMElementId).innerText = 'N/A';
-      }
-    }
-
-    // Fire operations when elements load into the structural view
-    document.addEventListener('DOMContentLoaded', () => {
-      fetchPaperCitationCount('10.1038/s41598-026-61132-2', 'cite-paper1');
-      fetchPaperCitationCount('10.1016/j.chom.2026.05.016', 'cite-paper2');
-
-      // Bind Escape key triggers to cleanly dismiss modal layers safely
-      document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape') {
-          closeLightbox();
-          closeModal('paper1');
-          closeModal('paper2');
-        }
-      });
     });
-  </script>
-</body>
+  }
 
-</html>
+  // Toggles visibility of accordion legend drawer panels
+  function toggleLegendBox(paperId) {
+    const panel = document.getElementById(`${paperId}-legend-accordion`);
+    if (panel) {
+      panel.classList.toggle('visible');
+    }
+  }
+
+  // Activates screen-wide lightbox overlay for closer graphic inspection
+  function triggerLightbox(paperId) {
+    const activeImgSrc = document.getElementById(`${paperId}-active-fig-img`).src;
+    const lightbox = document.getElementById('global-lightbox');
+    const lightboxImg = document.getElementById('lightbox-target-img');
+    
+    if (lightbox && lightboxImg) {
+      lightboxImg.src = activeImgSrc;
+      lightbox.classList.add('active');
+    }
+  }
+
+  // Deactivates global lightbox viewframe
+  function closeLightbox() {
+    const lightbox = document.getElementById('global-lightbox');
+    if (lightbox) {
+      lightbox.classList.remove('active');
+    }
+  }
+
+    // LIVE CITATION FETCH ENGINE (OpenAlex API Integration)
+        async function loadLiveCitations() {
+          const targetPublications = [
+            { elementId: 'cite-paper1', doi: '10.1038/s41598-026-61132-2' },
+            { elementId: 'cite-paper2', doi: '10.1016/j.chom.2026.05.016' }
+          ];
+
+          for (const pub of targetPublications) {
+            try {
+              // OpenAlex handles DOIs by passing the full URL string directly into the works endpoint
+              const response = await fetch(`https://api.openalex.org/works/https://doi.org/${pub.doi}`);
+              if (!response.ok) throw new Error(`OpenAlex API Connection Failed`);
+              
+              const payload = await response.json();
+              // Extract the citation counter metric from the OpenAlex data payload
+              const totalCitations = payload.cited_by_count !== undefined ? payload.cited_by_count : 0;
+              
+              document.getElementById(pub.elementId).textContent = totalCitations;
+            } catch (error) {
+              console.warn(`Could not resolve citations for DOI ${pub.doi} via OpenAlex:`, error);
+              document.getElementById(pub.elementId).textContent = '0'; // Fallback display value
+            }
+          }
+        }
+
+        // Initialize network fetch calls as soon as page layout structures settle
+        document.addEventListener('DOMContentLoaded', loadLiveCitations);
+</script>
