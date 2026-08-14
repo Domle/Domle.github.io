@@ -5,160 +5,593 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Data Exploration - Dominic Eriksson</title>
-
+  
+  <!-- Dependencies: Globe.gl & Leaflet CSS -->
+  <script src="https://unpkg.com/globe.gl"></script>
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
     integrity="sha256-sA+e2soMuj9O6ZTuh5zx16ckZm+jxb0cl2v6H1rxbjg="
     crossorigin=""
   />
+  
   <style>
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
       background-color: #fdfdfd;
       color: #1c1c1e;
       margin: 0 auto;
-      max-width: 960px;
+      max-width: 980px;
       padding: 24px;
       line-height: 1.6;
+    }
+
+    /* Navigation Bar */
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #e5e5ea;
+    }
+
+    .nav-back-link {
+      color: #0071e3;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: opacity 0.2s;
+    }
+
+    .nav-back-link:hover {
+      opacity: 0.7;
     }
 
     h1 {
       color: #0071e3;
       text-align: center;
-      margin-bottom: 24px;
+      margin: 0 0 24px 0;
+      font-size: 2rem;
     }
 
-    #map {
-      height: 600px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 113, 227, 0.3);
-      margin-bottom: 16px;
+    /* Controls Panel */
+    .controls-panel {
+      background: #f2f2f7;
+      padding: 16px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      align-items: center;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
 
     label {
       font-weight: 600;
-      margin-right: 10px;
+      font-size: 0.85rem;
       color: #0071e3;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
     select {
-      font-size: 1rem;
-      padding: 4px 8px;
-      border-radius: 6px;
-      border: 1px solid #0071e3;
+      font-size: 0.95rem;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid #c7c7cc;
       background: white;
       color: #1c1c1e;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    select:focus {
+      border-color: #0071e3;
+    }
+
+    /* Container for dynamic plot/map views */
+    .view-container {
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      background: white;
+      border: 1px solid #e5e5ea;
+      min-height: 600px;
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    #map, #globe-container, #plotly-chart {
+      height: 600px;
+      width: 100%;
+    }
+
+    #globe-container {
+      background: #000511;
+    }
+
+    /* --- Custom Layer Control & Legend Fixes --- */
+    /* Ensure Leaflet Layer Toggle is always visible even if CDN assets fail */
+    .leaflet-control-layers-toggle {
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%23333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>') !important;
+      background-position: center !important;
+      background-repeat: no-repeat !important;
+      background-size: 20px 20px !important;
+      width: 36px !important;
+      height: 36px !important;
+      background-color: white !important;
+      border-radius: 8px !important;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2) !important;
+    }
+
+    .info.legend {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 10px 14px;
+      font-size: 0.85rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      color: #1c1c1e;
+      z-index: 1000;
+    }
+
+    .info.legend h4 {
+      margin: 0 0 8px;
+      font-size: 0.85rem;
+      color: #0071e3;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .legend-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .legend-color {
+      width: 18px;
+      height: 12px;
+      border-radius: 3px;
+      display: inline-block;
+    }
+
+    /* Metadata / Description Footer */
+    .meta-box {
+      background: #f9f9fb;
+      border-left: 4px solid #0071e3;
+      padding: 12px 16px;
+      font-size: 0.9rem;
+      color: #3a3a3c;
+      border-radius: 0 8px 8px 0;
     }
   </style>
 </head>
 
 <body>
-  <h1>Interactive Plankton Data Map</h1>
 
-  <label for="month-select">Select Month:</label>
-  <select id="month-select">
-    <option value="all">All</option>
-    <option value="1">January</option>
-    <option value="2">February</option>
-    <option value="3">March</option>
-    <option value="4">April</option>
-    <option value="5">May</option>
-    <option value="6">June</option>
-    <option value="7">July</option>
-    <option value="8">August</option>
-    <option value="9">September</option>
-    <option value="10">October</option>
-    <option value="11">November</option>
-    <option value="12">December</option>
-  </select>
+  <nav class="nav-bar">
+    <a href="index.html" class="nav-back-link">&larr; Back to Main Index</a>
+    <a href="research_highlights.html" class="nav-back-link">Research Highlights &rarr;</a>
+  </nav>
 
-  <div id="map"></div>
+  <h1>Interactive Oceanographic Data Explorer</h1>
 
+  <div class="controls-panel">
+    <div class="control-group">
+      <label for="paper-select">Paper Dataset</label>
+      <select id="paper-select">
+        <option value="paper1" selected>Nitrogen fixation rates increase with diazotroph richness in the global ocean</option>
+        <option value="paper2">Variations in the latitudinal diversity gradients of the ocean microbiome</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label for="figure-select">Figure Selection</label>
+      <select id="figure-select"></select>
+    </div>
+
+    <div class="control-group">
+      <label for="panel-select">Panel Selection</label>
+      <select id="panel-select"></select>
+    </div>
+
+    <div class="control-group" id="month-filter-group">
+      <label for="month-select">Filter Month</label>
+      <select id="month-select">
+        <option value="all">All Months</option>
+        <option value="1">January</option>
+        <option value="2">February</option>
+        <option value="3">March</option>
+        <option value="4">April</option>
+        <option value="5">May</option>
+        <option value="6">June</option>
+        <option value="7">July</option>
+        <option value="8">August</option>
+        <option value="9">September</option>
+        <option value="10">October</option>
+        <option value="11">November</option>
+        <option value="12">December</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="view-container">
+    <div id="map"></div>
+    <div id="globe-container" style="display: none;"></div>
+    <div id="plotly-chart" style="display: none;"></div>
+  </div>
+
+  <div class="meta-box" id="data-description">
+    Loading visual dataset structure...
+  </div>
+
+  <!-- Dependencies -->
   <script
     src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
     integrity="sha256-o9N1j8JEwPccdo2r2TxUMxNyP0+nqQ04t/8M6I7F2Pk="
     crossorigin=""
   ></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>
+  <script src="globe_view.js"></script>
 
   <script>
-    // Initialize map centered on equator
-    const map = L.map('map').setView([20, 0], 2);
-
-    // Add OSM base layer
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 8,
-      attribution: '&copy; OpenStreetMap contributors',
-    }).addTo(map);
-
-    let markers = L.layerGroup().addTo(map);
-    let allData = [];
-
-    // Load CSV file using PapaParse
-    Papa.parse('plankton_data.csv', {
-      download: true,
-      header: true,
-      dynamicTyping: true,
-      complete: function (results) {
-        allData = results.data;
-        plotMarkers(allData);
+    const datasetSchema = {
+      paper1: {
+        title: "Nitrogen fixation rates increase with diazotroph richness in the global ocean",
+        figures: {
+          fig1: {
+            title: "Figure 1: Latitudinal Richness & Spatial Distribution",
+            panels: {
+              panel_a: { label: "Panel A: Total Diazotroph Species Richness (3D Globe)", type: "3d-globe", file: "Data/p1_fig1_panel_a.csv", unit: "Species Richness (ASVs)" },
+              panel_b: { label: "Panel B: Non-Cyanobacterial Diazotrophs", type: "map", file: "Data/p1_fig1_panel_b.csv", unit: "Richness Index" },
+              panel_c: { label: "Panel C: Cyanobacterial Diazotrophs", type: "map", file: "Data/p1_fig1_panel_c.csv", unit: "Richness Index" },
+              panel_d: { label: "Panel D: UCYN-A Sublineages", type: "map", file: "Data/p1_fig1_panel_d.csv", unit: "Relative Abundance / Richness" },
+              panel_e: { label: "Panel E: Trichodesmium Richness", type: "map", file: "Data/p1_fig1_panel_e.csv", unit: "Richness Index" },
+              panel_f: { label: "Panel F: Modeled N2 Fixation Rates", type: "map", file: "Data/p1_fig1_panel_f.csv", unit: "nmol N / L / d" }
+            }
+          },
+          fig2: {
+            title: "Figure 2: Empirical BEF Coupling & Latitudinal Trends",
+            panels: {
+              panel_a: { label: "Panel A: Diazotroph Richness vs. N2 Fixation Rate", type: "scatterplot", file: "Data/p1_fig2_panel_a.csv", unit: "nmol N / L / d" },
+              panel_b: { label: "Panel B: Model Ensemble Correlation Distributions", type: "boxplot", file: "Data/p1_fig2_panel_b.csv", unit: "Spearman's ρ" },
+              panel_c: { label: "Panel C: Latitudinal Diversity Gradient Profile", type: "scatterplot", file: "Data/p1_fig2_panel_c.csv", unit: "Richness Index" }
+            }
+          },
+          fig3: {
+            title: "Figure 3: Ocean Biome BEF Scaling & Buffering Effects",
+            panels: {
+              panel_a: { label: "Panel A: BEF Relationship Across Ocean Biomes", type: "boxplot", file: "Data/p1_fig3_panel_a.csv", unit: "BEF Slope (β)" },
+              panel_b: { label: "Panel B: Thermal Performance & N2 Fixation", type: "scatterplot", file: "Data/p1_fig3_panel_b.csv", unit: "Fixation Rate" },
+              panel_c: { label: "Panel C: Functional Redundancy & Ecosystem Buffering", type: "boxplot", file: "Data/p1_fig3_panel_c.csv", unit: "Buffering Capacity Index" }
+            }
+          }
+        }
       },
-      error: function (err) {
-        alert('Error loading CSV: ' + err.message);
-      },
-    });
+      paper2: {
+        title: "Variations in the latitudinal diversity gradients of the ocean microbiome",
+        figures: {
+          fig1: {
+            title: "Figure 1: Global Sampling Baseline & Depth Profile",
+            panels: {
+              all: { label: "Figure 1: Global Sampling Locations & Depth Profiles", type: "map", file: "Data/p2_fig1.csv", unit: "Sample Count / Depth (m)" }
+            }
+          },
+          fig2: {
+            title: "Figure 2: Surface vs. Deep Diversity Gradients",
+            panels: {
+              panel_a: { label: "Panel A: Surface Mixed Layer (SML) Gradient", type: "scatterplot", file: "Data/p2_fig2_panel_a.csv", unit: "ASV Richness" },
+              panel_b: { label: "Panel B: Mesopelagic Layer Gradient", type: "scatterplot", file: "Data/p2_fig2_panel_b.csv", unit: "ASV Richness" }
+            }
+          },
+          fig3: {
+            title: "Figure 3: Global Ocean Microbiome Spatial Mapping",
+            panels: {
+              panel_a: { label: "Panel A: Epipelagic Microbiome Richness", type: "map", file: "Data/p2_fig3_panel_a.csv", unit: "Richness Index" },
+              panel_b: { label: "Panel B: Mesopelagic Microbiome Richness", type: "map", file: "Data/p2_fig3_panel_b.csv", unit: "Richness Index" }
+            }
+          },
+          fig4: {
+            title: "Figure 4: Latitudinal Turnover & Beta Diversity",
+            panels: {
+              panel_a: { label: "Panel A: Taxa Turnover in SML", type: "boxplot", file: "Data/p2_fig4_panel_a.csv", unit: "Dissimilarity Index" },
+              panel_b: { label: "Panel B: Taxa Turnover in Mesopelagic", type: "boxplot", file: "Data/p2_fig4_panel_b.csv", unit: "Dissimilarity Index" }
+            }
+          },
+          fig5: {
+            title: "Figure 5: Environmental Drivers & Temperature Scaling",
+            panels: {
+              panel_a: { label: "Panel A: Temperature Effects on Richness", type: "scatterplot", file: "Data/p2_fig5_panel_a.csv", unit: "Richness Index" },
+              panel_b: { label: "Panel B: Nutrient Availability Effects", type: "scatterplot", file: "Data/p2_fig5_panel_b.csv", unit: "Richness Index" }
+            }
+          },
+          fig6: {
+            title: "Figure 6: Community Structural Shifts & Regional Anomalies",
+            panels: {
+              panel_a: { label: "Panel A: Community Structural Shifts Across Latitudes", type: "boxplot", file: "Data/p2_fig6_panel_a.csv", unit: "Shift Index" },
+              panel_b: { label: "Panel B: Functional Redundancy Across Depths", type: "boxplot", file: "Data/p2_fig6_panel_b.csv", unit: "Redundancy Score" },
+              panel_c: { label: "Panel C: Localized Regional Anomaly Detection", type: "scatterplot", file: "Data/p2_fig6_panel_c.csv", unit: "Anomaly Index" }
+            }
+          }
+        }
+      }
+    };
 
-    // Function to color circles based on 'value' (example gradient)
-    function getColor(value) {
-      return value > 75
-        ? '#d73027'
-        : value > 50
-        ? '#fc8d59'
-        : value > 25
-        ? '#fee08b'
-        : '#d9ef8b';
+    let currentMap = null;
+    let mapMarkersGroup = null;
+    let legendContainer = null;
+    let currentData = [];
+    let currentUnit = "Value";
+
+    function initMap() {
+      if (currentMap) return;
+
+      currentMap = L.map('map', { center: [20, 0], zoom: 2 });
+
+      const bathymetryLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 10,
+        attribution: 'Esri, GEBCO, NOAA'
+      });
+
+      const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 8,
+        attribution: '&copy; OpenStreetMap'
+      });
+
+      const bordersLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Reference/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 10,
+        attribution: 'Boundaries &copy; Esri'
+      });
+
+      bathymetryLayer.addTo(currentMap);
+      bordersLayer.addTo(currentMap);
+
+      L.control.layers(
+        { "Bathymetry / Ocean": bathymetryLayer, "OpenStreetMap": osmLayer },
+        { "Country Borders": bordersLayer },
+        { position: 'topright' }
+      ).addTo(currentMap);
+
+      mapMarkersGroup = L.layerGroup().addTo(currentMap);
+
+      // Initialize Legend Control
+      const legendControl = L.control({ position: 'bottomright' });
+      legendControl.onAdd = function () {
+        const div = L.DomUtil.create('div', 'info legend');
+        legendContainer = div;
+        renderLegendHtml(div);
+        return div;
+      };
+      legendControl.addTo(currentMap);
     }
 
-    function plotMarkers(data) {
-      markers.clearLayers();
-      data.forEach((row) => {
-        if (
-          row.lat !== undefined &&
-          row.lon !== undefined &&
-          !isNaN(row.lat) &&
-          !isNaN(row.lon)
-        ) {
-          const circle = L.circleMarker([row.lat, row.lon], {
-            radius: 6,
-            fillColor: getColor(row.value),
-            color: '#333',
-            weight: 1,
-            opacity: 1,
-            fillOpacity: 0.8,
-          }).bindPopup(
-            `<strong>Location:</strong> (${row.lat.toFixed(2)}, ${row.lon.toFixed(
-              2
-            )})<br><strong>Month:</strong> ${row.month}<br><strong>Value:</strong> ${
-              row.value.toFixed(2)
-            }`
-          );
-          markers.addLayer(circle);
+    function renderLegendHtml(div) {
+      const target = div || legendContainer;
+      if (!target) return;
+
+      const grades = [0, 25, 50, 75];
+      const colors = ['#d9ef8b', '#fee08b', '#fc8d59', '#d73027'];
+      
+      let html = `<h4>${currentUnit}</h4>`;
+      for (let i = 0; i < grades.length; i++) {
+        const rangeText = grades[i + 1] !== undefined ? `${grades[i]} &ndash; ${grades[i + 1]}` : `${grades[i]}+`;
+        html += `
+          <div class="legend-row">
+            <span class="legend-color" style="background: ${colors[i]};"></span>
+            <span>${rangeText}</span>
+          </div>`;
+      }
+      target.innerHTML = html;
+    }
+
+    const paperSelect = document.getElementById('paper-select');
+    const figureSelect = document.getElementById('figure-select');
+    const panelSelect = document.getElementById('panel-select');
+    const monthFilterGroup = document.getElementById('month-filter-group');
+    const monthSelect = document.getElementById('month-select');
+
+    function updateFigures() {
+      const selectedPaper = paperSelect.value;
+      figureSelect.innerHTML = '';
+      const figs = datasetSchema[selectedPaper].figures;
+      for (const key in figs) {
+        const opt = document.createElement('option');
+        opt.value = key;
+        opt.textContent = figs[key].title;
+        figureSelect.appendChild(opt);
+      }
+      updatePanels();
+    }
+
+    function updatePanels() {
+      const selectedPaper = paperSelect.value;
+      const selectedFig = figureSelect.value;
+      panelSelect.innerHTML = '';
+      const panels = datasetSchema[selectedPaper].figures[selectedFig].panels;
+      for (const key in panels) {
+        const opt = document.createElement('option');
+        opt.value = key;
+        opt.textContent = panels[key].label;
+        panelSelect.appendChild(opt);
+      }
+      loadSelectedData();
+    }
+
+    function loadSelectedData() {
+      const selectedPaper = paperSelect.value;
+      const selectedFig = figureSelect.value;
+      const selectedPanel = panelSelect.value;
+      const panelConfig = datasetSchema[selectedPaper].figures[selectedFig].panels[selectedPanel];
+
+      currentUnit = panelConfig.unit || "Value";
+      document.getElementById('data-description').innerText = `Active View: ${panelConfig.label} | Source File: ${panelConfig.file}`;
+
+      if (panelConfig.type === '3d-globe') {
+        renderView('3d-globe', panelConfig.file);
+        return;
+      }
+
+      Papa.parse(panelConfig.file, {
+        download: true,
+        header: true,
+        dynamicTyping: true,
+        complete: function (results) {
+          currentData = results.data.filter(row => row && Object.keys(row).length > 1);
+          renderView(panelConfig.type, panelConfig.file);
+        },
+        error: function () {
+          renderDummyData(panelConfig.type);
         }
       });
     }
 
-    // Filter markers by month dropdown
-    const monthSelect = document.getElementById('month-select');
-    monthSelect.addEventListener('change', function () {
-      const selected = this.value;
-      if (selected === 'all') {
-        plotMarkers(allData);
+    function renderView(type, csvFile) {
+      const mapElem = document.getElementById('map');
+      const globeElem = document.getElementById('globe-container');
+      const plotlyElem = document.getElementById('plotly-chart');
+
+      mapElem.style.display = 'none';
+      globeElem.style.display = 'none';
+      plotlyElem.style.display = 'none';
+
+      if (type === '3d-globe') {
+        globeElem.style.display = 'block';
+        monthFilterGroup.style.display = 'none';
+
+        init3DGlobe('globe-container');
+        renderGlobePlanktonData(csvFile);
+
+        requestAnimationFrame(() => {
+          if (window.globeInstance) {
+            window.globeInstance.width(globeElem.clientWidth);
+            window.globeInstance.height(600);
+          }
+        });
+
+      } else if (type === 'map') {
+        mapElem.style.display = 'block';
+        monthFilterGroup.style.display = 'flex';
+        
+        initMap();
+        renderLegendHtml();
+
+        requestAnimationFrame(() => {
+          if (currentMap) {
+            currentMap.invalidateSize();
+            currentMap.setView([20, 0], 2);
+          }
+        });
+
+        plotMapMarkers(currentData);
       } else {
-        const filtered = allData.filter((d) => d.month == +selected);
-        plotMarkers(filtered);
+        plotlyElem.style.display = 'block';
+        monthFilterGroup.style.display = 'none';
+        plotPlotlyChart(currentData, type);
       }
-    });
+    }
+
+    function getColor(value) {
+      return value > 75 ? '#d73027' : value > 50 ? '#fc8d59' : value > 25 ? '#fee08b' : '#d9ef8b';
+    }
+
+    function plotMapMarkers(data) {
+      if (!mapMarkersGroup) return;
+      mapMarkersGroup.clearLayers();
+      const selectedMonth = monthSelect.value;
+
+      data.forEach((row) => {
+        const lat = row.lat ?? row.latitude ?? row.y;
+        const lon = row.lon ?? row.lng ?? row.longitude ?? row.x;
+        const val = row.value ?? row.val ?? row.z ?? row.richness;
+
+        if (lat !== undefined && lon !== undefined && !isNaN(lat) && !isNaN(lon)) {
+          if (selectedMonth === 'all' || row.month == +selectedMonth) {
+            const circle = L.circleMarker([lat, lon], {
+              radius: 6,
+              fillColor: getColor(val || 50),
+              color: '#333',
+              weight: 1,
+              opacity: 1,
+              fillOpacity: 0.8,
+            }).bindPopup(
+              `<strong>Lat/Lon:</strong> (${lat.toFixed(2)}, ${lon.toFixed(2)})<br>` +
+              `<strong>Month:</strong> ${row.month || 'All / Year-round'}<br>` +
+              `<strong>${currentUnit}:</strong> ${val !== undefined ? val.toFixed(2) : 'N/A'}`
+            );
+            mapMarkersGroup.addLayer(circle);
+          }
+        }
+      });
+    }
+
+    function plotPlotlyChart(data, chartType) {
+      if (chartType === 'scatterplot') {
+        const xValues = data.map(d => d.x ?? d.latitude ?? d.lat ?? Math.random() * 90 - 45);
+        const yValues = data.map(d => d.y ?? d.value ?? d.rate ?? Math.random() * 100);
+
+        Plotly.newPlot('plotly-chart', [{
+          x: xValues, y: yValues, mode: 'markers', type: 'scatter',
+          marker: { size: 7, color: '#0071e3', opacity: 0.7 }
+        }], {
+          title: 'Interactive Scatterplot',
+          xaxis: { title: 'Latitude / Predictor Variable' },
+          yaxis: { title: currentUnit, zeroline: false },
+          margin: { t: 50, l: 60, r: 30, b: 50 }
+        }, { responsive: true });
+      } else {
+        const xGroups = data.map(d => d.group || 'Sample Group');
+        const yValues = data.map(d => d.value !== undefined ? d.value : Math.random() * 100);
+
+        Plotly.newPlot('plotly-chart', [{
+          y: yValues, x: xGroups, type: 'box', boxpoints: 'all', jitter: 0.3, pointpos: -1.8,
+          marker: { size: 5, color: '#0071e3' }, line: { width: 1.5 }
+        }], {
+          title: 'Interactive Boxplot',
+          yaxis: { title: currentUnit, zeroline: false },
+          margin: { t: 50, l: 60, r: 30, b: 50 }
+        }, { responsive: true });
+      }
+    }
+
+    function renderDummyData(type) {
+      if (type === 'map') {
+        currentData = Array.from({ length: 40 }, () => ({
+          lat: (Math.random() - 0.5) * 120,
+          lon: (Math.random() - 0.5) * 360,
+          month: Math.floor(Math.random() * 12) + 1,
+          value: Math.random() * 100
+        }));
+        renderView('map');
+      } else {
+        const dummyBoxData = [];
+        ['SML Surface', 'Mesopelagic Zone'].forEach(grp => {
+          for (let i = 0; i < 30; i++) {
+            dummyBoxData.push({ group: grp, value: Math.random() * 50 + (grp === 'SML Surface' ? 30 : 10) });
+          }
+        });
+        currentData = dummyBoxData;
+        renderView(type);
+      }
+    }
+
+    paperSelect.addEventListener('change', updateFigures);
+    figureSelect.addEventListener('change', updatePanels);
+    panelSelect.addEventListener('change', loadSelectedData);
+    monthSelect.addEventListener('change', () => plotMapMarkers(currentData));
+
+    updateFigures();
   </script>
 </body>
 

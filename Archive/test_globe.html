@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>3D Oceanography Globe</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #030712;
+      font-family: system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+    }
+
+    #globeViz {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+    }
+
+    .ui-overlay {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 9999;
+      color: #fff;
+      background: rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(8px);
+      padding: 16px 20px;
+      border-radius: 8px;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      pointer-events: auto;
+    }
+    .ui-overlay h2 { margin: 0 0 4px 0; font-size: 1rem; color: #38bdf8; }
+    .ui-overlay p { margin: 0; font-size: 0.8rem; color: #94a3b8; }
+    #statusText { font-size: 0.75rem; color: #38bdf8; display: block; margin-top: 6px; }
+
+    .layer-control {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+      pointer-events: auto;
+    }
+    .layer-btn {
+      width: 48px;
+      height: 48px;
+      background: #0f172a;
+      border: 2px solid #38bdf8;
+      border-radius: 8px;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+      transition: all 0.2s ease;
+    }
+    .layer-btn:hover {
+      background: #38bdf8;
+      color: #0f172a;
+    }
+    
+    .layer-menu {
+      display: none;
+      position: absolute;
+      top: 58px;
+      right: 0;
+      width: 240px;
+      background: #0f172a;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      padding: 16px;
+      color: #f8fafc;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    }
+    .layer-menu.active { display: block; }
+    .layer-menu h3 {
+      margin: 0 0 12px 0;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #38bdf8;
+    }
+    .layer-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      user-select: none;
+    }
+    .layer-item input { cursor: pointer; width: 18px; height: 18px; accent-color: #0284c7; }
+  </style>
+
+  <script src="https://unpkg.com/globe.gl"></script>
+</head>
+<body>
+
+  <div class="ui-overlay">
+    <h2>3D Interactive Globe</h2>
+    <p>Click the layer icon in the top right</p>
+    <span id="statusText">Clean Base Ready</span>
+  </div>
+
+  <div class="layer-control">
+    <button class="layer-btn" id="layerToggleBtn" onclick="toggleLayerMenu(event)" title="Toggle Map Layers">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+        <polyline points="2 17 12 22 22 17"></polyline>
+        <polyline points="2 12 12 17 22 12"></polyline>
+      </svg>
+    </button>
+
+    <div class="layer-menu" id="layerMenu" onclick="event.stopPropagation()">
+      <h3>Globe Layers</h3>
+      
+      <label class="layer-item">
+        <input type="checkbox" id="chkBathymetry" onchange="toggleBathymetry(this.checked)">
+        Bathymetry & Ocean Relief
+      </label>
+
+      <label class="layer-item">
+        <input type="checkbox" id="chkLand" onchange="toggleLand(this.checked)">
+        Continent Outlines
+      </label>
+
+      <label class="layer-item">
+        <input type="checkbox" id="chkPlankton" onchange="togglePlankton(this.checked)">
+        Plankton Data Layer
+      </label>
+    </div>
+  </div>
+
+  <div id="globeViz"></div>
+
+  <script>
+    // Explicit HTTPS URLs to prevent local file:// resolution issues
+    const bathymetryTexture = 'https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg';
+    const topologyBump = 'https://unpkg.com/three-globe/example/img/earth-topology.png';
+    const darkTexture = 'https://unpkg.com/three-globe/example/img/earth-dark.jpg';
+
+    let landCachedData = null;
+    let planktonCachedData = [];
+
+    // Initialize Globe with clean baseline texture
+    const world = Globe()(document.getElementById('globeViz'))
+      .globeImageUrl(darkTexture)
+      .backgroundImageUrl('https://unpkg.com/three-globe/example/img/night-sky.png')
+      .showAtmosphere(true)
+      .atmosphereColor('#38bdf8')
+      .atmosphereAltitude(0.18);
+
+    world.controls().autoRotate = false;
+    world.pointOfView({ lat: 20, lng: 0, altitude: 2.0 });
+
+    function toggleLayerMenu(e) {
+      if (e) e.stopPropagation();
+      const menu = document.getElementById('layerMenu');
+      menu.classList.toggle('active');
+    }
+
+    document.addEventListener('click', () => {
+      document.getElementById('layerMenu').classList.remove('active');
+    });
+
+    // --- TOGGLE BATHYMETRY & RELIEF ---
+    function toggleBathymetry(active) {
+      document.getElementById('statusText').innerText = active ? 'Loading Bathymetry...' : 'Restoring Dark Base';
+      
+      world.globeImageUrl(active ? bathymetryTexture : darkTexture);
+      world.bumpImageUrl(active ? topologyBump : null);
+
+      if (active) {
+        setTimeout(() => {
+          try {
+            const globeMat = world.globeMaterial();
+            if (globeMat) globeMat.bumpScale = 6;
+            document.getElementById('statusText').innerText = 'Bathymetry & Relief Active';
+          } catch(err) {}
+        }, 400);
+      } else {
+        document.getElementById('statusText').innerText = 'Clean Base View';
+      }
+    }
+
+    // --- TOGGLE CONTINENT OUTLINES ---
+    function toggleLand(active) {
+      if (!active) {
+        world.polygonsData([]);
+        document.getElementById('statusText').innerText = 'Continent outlines hidden';
+        return;
+      }
+      
+      if (landCachedData) {
+        world.polygonsData(landCachedData);
+        document.getElementById('statusText').innerText = 'Continent outlines active';
+      } else {
+        document.getElementById('statusText').innerText = 'Fetching continent outlines...';
+        fetch('https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_land.geojson')
+          .then(res => res.json())
+          .then(land => {
+            landCachedData = land.features;
+            world.polygonsData(landCachedData)
+              .polygonCapColor(() => 'rgba(51, 65, 85, 0.4)')
+              .polygonSideColor(() => 'rgba(0,0,0,0)')
+              .polygonStrokeColor(() => '#38bdf8')
+              .polygonAltitude(0.002);
+            document.getElementById('statusText').innerText = 'Continent outlines loaded';
+          });
+      }
+    }
+
+    // --- TOGGLE PLANKTON DATA ---
+    function togglePlankton(active) {
+      if (!active) {
+        world.hexBinPointsData([]);
+        document.getElementById('statusText').innerText = 'Plankton layer hidden';
+        return;
+      }
+
+      if (planktonCachedData.length > 0) {
+        renderHexBinData();
+      } else {
+        document.getElementById('statusText').innerText = 'Loading plankton dataset...';
+        fetch('Data/p1_fig1_panel_a.csv')
+          .then(res => res.text())
+          .then(text => {
+            planktonCachedData = parseCSV(text);
+            renderHexBinData();
+            document.getElementById('statusText').innerText = `Plankton data active (${planktonCachedData.length} points)`;
+          })
+          .catch(() => {
+            document.getElementById('statusText').innerText = 'Could not locate Data/p1_fig1_panel_a.csv';
+          });
+      }
+    }
+
+    function renderHexBinData() {
+      world.hexBinPointLat(d => d.lat)
+        .hexBinPointLng(d => d.lng)
+        .hexBinPointWeight(d => d.weight)
+        .hexBinResolution(3.5)
+        .hexMargin(0.1)
+        .hexBinMerge(true)
+        .hexTopColor(d => {
+          const avg = d.sumWeight / d.points.length;
+          if (avg >= 60) return '#fde725';
+          if (avg >= 45) return '#5ec962';
+          if (avg >= 30) return '#21918c';
+          if (avg >= 15) return '#3b528b';
+          return '#440154';
+        })
+        .hexSideColor(() => 'rgba(15, 23, 42, 0.4)')
+        .hexAltitude(d => Math.max(0.005, (d.sumWeight / d.points.length) * 0.002))
+        .hexBinPointsData(planktonCachedData);
+    }
+
+    function parseCSV(csvText) {
+      const lines = csvText.trim().split(/\r?\n/);
+      if (lines.length < 2) return [];
+      const headers = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/^["']|["']$/g, ''));
+      let lngIdx = headers.findIndex(h => ['x', 'lng', 'lon', 'longitude'].includes(h));
+      let latIdx = headers.findIndex(h => ['y', 'lat', 'latitude'].includes(h));
+      let valIdx = headers.findIndex(h => ['z', 'val', 'value', 'richness', 'level'].includes(h));
+
+      if (lngIdx === -1) lngIdx = 0;
+      if (latIdx === -1) latIdx = 1;
+      if (valIdx === -1) valIdx = 2;
+
+      const points = [];
+      for (let i = 1; i < lines.length; i++) {
+        const row = lines[i].split(',').map(c => c.trim().replace(/^["']|["']$/g, ''));
+        if (row.length < 2) continue;
+        const rawVal = row[valIdx];
+        if (!rawVal || rawVal === 'NA' || rawVal === 'null') continue;
+
+        let lat = parseFloat(row[latIdx]);
+        let lng = parseFloat(row[lngIdx]);
+        let val = parseFloat(rawVal);
+
+        if (isNaN(lat) || isNaN(lng) || isNaN(val)) continue;
+        if (lng > 180) lng -= 360;
+        if (lng < -180) lng += 360;
+
+        points.push({ lat, lng, weight: val });
+      }
+      return points;
+    }
+  </script>
+</body>
+</html>

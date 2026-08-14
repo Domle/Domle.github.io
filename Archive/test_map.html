@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Data Test: Panel A</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    body { margin: 0; padding: 20px; font-family: system-ui, sans-serif; background: #fdfdfd; }
+    h2 { color: #0071e3; }
+    #map { height: 700px; width: 100%; border-radius: 8px; border: 1px solid #ccc; }
+  </style>
+</head>
+<body>
+
+  <h2>Test Render: p1_fig1_panel_a.csv</h2>
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+  <script>
+    // Initialize map centered on the Pacific
+    const map = L.map('map').setView([0, 180], 2);
+    
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 8,
+      attribution: '&copy; OpenStreetMap',
+      noWrap: false
+    }).addTo(map);
+
+    // Simple color scale mapping to the 0-75% limits from your R script
+    function getColor(value) {
+      return value > 60 ? '#fde725' : // Yellow
+             value > 45 ? '#5ec962' : // Light Green
+             value > 30 ? '#21918c' : // Teal
+             value > 15 ? '#3b528b' : // Blue
+             value > 0  ? '#440154' : // Dark Purple
+             'transparent';
+    }
+
+    // Fetch and parse the CSV
+    Papa.parse('Data/p1_fig1_panel_a.csv', {
+      download: true,
+      header: true,
+      dynamicTyping: true,
+      complete: function(results) {
+        const data = results.data;
+        
+        data.forEach(row => {
+          // Ensure valid coordinates and filter out empty ocean (0 values)
+          if (row.lat != null && row.lon != null && row.value > 0) {
+            
+            // Adjust 0-360 Pacific-centered coordinates back to standard -180 to 180 for standard map tiles
+            const lng = row.lon > 180 ? row.lon - 360 : row.lon;
+
+            L.circleMarker([row.lat, lng], {
+              radius: 4,
+              fillColor: getColor(row.value),
+              color: 'none',
+              fillOpacity: 0.75
+            })
+            .bindPopup(`<strong>Lat/Lon:</strong> ${row.lat}, ${row.lon}<br><strong>Richness:</strong> ${row.value.toFixed(2)}%`)
+            .addTo(map);
+          }
+        });
+      },
+      error: function(err) {
+        console.error("Error loading CSV:", err);
+        document.getElementById('map').innerHTML = `<p style="padding:20px; color:red;">Failed to load CSV. Ensure you are running a local server (e.g., Live Server) and the path is correct.</p>`;
+      }
+    });
+  </script>
+</body>
+</html>
