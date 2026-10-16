@@ -143,10 +143,42 @@
       box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
       transition: box-shadow 0.3s ease;
       cursor: pointer;
+      position: relative;
     }
 
     .feature:hover {
       box-shadow: 0 20px 48px rgba(0, 0, 0, 0.14);
+    }
+
+    /* Disabled / Under Construction Card Styling */
+    .feature.disabled {
+      cursor: not-allowed;
+      opacity: 0.75;
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+    }
+
+    .feature.disabled:hover {
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08); /* Disables hover lift */
+    }
+
+    .feature.disabled .icon-box {
+      background-color: #e2e8f0;
+      color: #64748b;
+      box-shadow: none;
+    }
+
+    .coming-soon-badge {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #0071e3;
+      background: #e6f0ff;
+      padding: 4px 10px;
+      border-radius: 6px;
     }
 
     .icon-box {
@@ -516,15 +548,15 @@
         </div>
       </a>
 
-      <a href="Data_exploration.html" style="text-decoration: none; color: inherit; display: block;">
-        <div class="feature">
-          <div class="icon-box">
-            <i class="fas fa-globe"></i>
-          </div>
-          <h3>Data exploration</h3>
-          <p>Visualize datasets used within my publications through interactive maps and exploratory tools.</p>
+      <!-- Unclickable / Under Construction Feature Card -->
+      <div class="feature disabled" title="Interactive exploration dashboard currently in active development">
+        <div class="icon-box">
+          <i class="fas fa-globe"></i>
         </div>
-      </a>
+        <h3>Data exploration</h3>
+        <p>Interactive maps and exploratory 3D visualization tools for datasets from my publications.</p>
+        <span class="coming-soon-badge">Coming Soon</span>
+      </div>
     </div>
 
     <div class="recent-updates-section">
