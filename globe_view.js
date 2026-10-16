@@ -1,133 +1,203 @@
-// globe_view.js - Modular 3D Globe Rendering Logic
+/* ==========================================================================
+   globe_view.js
+   3D Globe Engine for 1x1 Degree SDMs with Dynamic Layer Controls
+   ========================================================================== */
 
-let worldInstance = null;
-let planktonDataCache = [];
+let globeInstance = null;
+
+// Reliable texture CDN URLs for seamless, infinite layer toggling
+const DARK_BASE_TEXTURE = 'https://unpkg.com/three-globe/example/img/earth-dark.jpg';
+const SATELLITE_TEXTURE = 'https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg';
+
+let currentLayerState = {
+  satellite: false,
+  borders: true,
+  graticules: true
+};
 
 /**
- * Initializes the Globe.gl instance inside a target DOM container.
- * @param {string} containerId - The ID of the HTML element holding the globe.
+ * Initializes the Globe.gl 3D viewport with a minimalist dark base
+ * and injects interactive layer toggles into the container.
+ * @param {string} containerId - DOM ID of the container element
  */
 function init3DGlobe(containerId) {
   const container = document.getElementById(containerId);
   if (!container) return;
 
-  // Prevent multiple initializations on the same container
-  if (worldInstance) {
-    worldInstance.width(container.clientWidth);
-    worldInstance.height(container.clientHeight);
-    return;
+  if (!globeInstance) {
+    // 1. Initialize Minimalist Dark Base Globe
+    globeInstance = Globe()(container)
+      .globeImageUrl(DARK_BASE_TEXTURE)
+      .backgroundColor('#000511')
+      .showAtmosphere(true)
+      .atmosphereColor('#0071e3')
+      .atmosphereAltitude(0.12)
+      .showGraticules(currentLayerState.graticules)
+      .pointOfView({ lat: 15, lng: 0, altitude: 2.3 });
+
+    window.globeInstance = globeInstance;
+
+    // 2. Fetch and render vector continental outlines
+    fetchContinentalBorders();
+
+    // 3. Inject clickable layer controls overlay into container
+    injectGlobeLayerControls(container);
   }
-
-  const darkTexture = 'https://unpkg.com/three-globe/example/img/earth-dark.jpg';
-
-  worldInstance = Globe()(container)
-    .globeImageUrl(darkTexture)
-    .backgroundImageUrl('https://unpkg.com/three-globe/example/img/night-sky.png')
-    .showAtmosphere(true)
-    .atmosphereColor('#38bdf8')
-    .atmosphereAltitude(0.18);
-
-  worldInstance.controls().autoRotate = false;
-  worldInstance.pointOfView({ lat: 20, lng: 0, altitude: 2.0 });
 }
 
 /**
- * Parses CSV text or fetches a file path to render hex bins on the globe.
- * @param {string} csvSource - CSV text string or URL path to CSV.
+ * Fetches GeoJSON country boundaries and renders subtle vector coastlines
  */
-function renderGlobePlanktonData(csvSource) {
-  if (!worldInstance) return;
+function fetchContinentalBorders() {
+  fetch('https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_admin_0_countries.geojson')
+    .then(res => res.json())
+    .then(countries => {
+      window.countryGeoJsonData = countries.features;
+      updateContinentalBorders();
+    })
+    .catch(err => console.log('Notice: Could not load country outlines:', err));
+}
 
-  if (csvSource.endsWith('.csv') || csvSource.startsWith('Data/')) {
-    fetch(csvSource)
-      .then(res => res.text())
-      .then(csvText => processAndDrawGlobeData(csvText))
-      .catch(() => generateGlobeDummyData());
+/**
+ * Updates vector continental outline layers on the globe surface
+ */
+function updateContinentalBorders() {
+  if (!globeInstance || !window.countryGeoJsonData) return;
+
+  if (currentLayerState.borders) {
+    globeInstance
+      .polygonsData(window.countryGeoJsonData)
+      .polygonCapColor(() => 'rgba(0, 0, 0, 0)')
+      .polygonSideColor(() => 'rgba(0, 0, 0, 0)')
+      .polygonStrokeColor(() => 'rgba(255, 255, 255, 0.45)')
+      .polygonAltitude(0.003);
   } else {
-    processAndDrawGlobeData(csvSource);
+    globeInstance.polygonsData([]);
   }
 }
 
-function processAndDrawGlobeData(csvText) {
-  planktonDataCache = parseGlobeCSV(csvText);
-  if (planktonDataCache.length === 0) {
-    generateGlobeDummyData();
-    return;
-  }
+/**
+ * Injects floating layer toggle controls on top of the 3D globe viewport
+ * @param {HTMLElement} container - The globe container element
+ */
+function injectGlobeLayerControls(container) {
+  if (document.getElementById('globe-layer-controls')) return;
 
-  worldInstance
-    .hexBinPointLat(d => d.lat)
-    .hexBinPointLng(d => d.lng)
-    .hexBinPointWeight(d => d.weight)
-    .hexBinResolution(4.2)
-    .hexMargin(0)
-    .hexBinMerge(true)
-    .hexTopColor(d => getContinuousViridisColor(d.sumWeight / d.points.length, 0, 75))
-    .hexSideColor(d => getContinuousViridisColor(d.sumWeight / d.points.length, 0, 75))
-    .hexAltitude(d => Math.max(0.001, ((d.sumWeight / d.points.length) / 100) * 0.0015))
-    .hexBinPointsData(planktonDataCache);
+  const controlBox = document.createElement('div');
+  controlBox.id = 'globe-layer-controls';
+  controlBox.style.cssText = `
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: rgba(10, 25, 47, 0.9);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    padding: 12px 16px;
+    border-radius: 10px;
+    color: #ffffff;
+    font-size: 0.82rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+    z-index: 100;
+    pointer-events: auto;
+    font-family: system-ui, -apple-system, sans-serif;
+  `;
+
+  controlBox.innerHTML = `
+    <div style="font-weight: 600; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">Globe Layers</div>
+    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; cursor: pointer; text-transform: none; color: #f1f5f9; font-weight: normal;">
+      <input type="checkbox" id="toggle-satellite" style="cursor: pointer;"> Satellite Topography
+    </label>
+    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; cursor: pointer; text-transform: none; color: #f1f5f9; font-weight: normal;">
+      <input type="checkbox" id="toggle-borders" checked style="cursor: pointer;"> Continental Outlines
+    </label>
+    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; text-transform: none; color: #f1f5f9; font-weight: normal;">
+      <input type="checkbox" id="toggle-graticules" checked style="cursor: pointer;"> Lat/Lon Grid Lines
+    </label>
+  `;
+
+  container.appendChild(controlBox);
+
+  const satCheckbox = document.getElementById('toggle-satellite');
+  const borderCheckbox = document.getElementById('toggle-borders');
+  const graticuleCheckbox = document.getElementById('toggle-graticules');
+
+  satCheckbox.addEventListener('change', (e) => {
+    currentLayerState.satellite = e.target.checked;
+    updateGlobeTexture();
+  });
+
+  borderCheckbox.addEventListener('change', (e) => {
+    currentLayerState.borders = e.target.checked;
+    updateContinentalBorders();
+  });
+
+  graticuleCheckbox.addEventListener('change', (e) => {
+    currentLayerState.graticules = e.target.checked;
+    if (globeInstance) {
+      globeInstance.showGraticules(currentLayerState.graticules);
+    }
+  });
 }
 
-function parseGlobeCSV(csvText) {
-  const lines = csvText.trim().split(/\r?\n/);
-  if (lines.length < 2) return [];
-  const headers = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/^["']|["']$/g, ''));
+/**
+ * Updates the globe surface texture reliably without dropping WebGL materials
+ */
+function updateGlobeTexture() {
+  if (!globeInstance) return;
 
-  let lngIdx = headers.findIndex(h => ['x', 'lng', 'lon', 'longitude'].includes(h));
-  let latIdx = headers.findIndex(h => ['y', 'lat', 'latitude'].includes(h));
-  let valIdx = headers.findIndex(h => ['z', 'val', 'value', 'richness'].includes(h));
-
-  if (lngIdx === -1) lngIdx = 0;
-  if (latIdx === -1) latIdx = 1;
-  if (valIdx === -1) valIdx = 2;
-
-  const points = [];
-  for (let i = 1; i < lines.length; i++) {
-    const row = lines[i].split(',').map(c => c.trim().replace(/^["']|["']$/g, ''));
-    if (row.length < 2) continue;
-    let lat = parseFloat(row[latIdx]), lng = parseFloat(row[lngIdx]), val = parseFloat(row[valIdx]);
-    if (isNaN(lat) || isNaN(lng) || isNaN(val)) continue;
-    if (lng > 180) lng -= 360;
-    if (lng < -180) lng += 360;
-    points.push({ lat, lng, weight: val });
-  }
-  return points;
+  const targetTexture = currentLayerState.satellite ? SATELLITE_TEXTURE : DARK_BASE_TEXTURE;
+  globeInstance.globeImageUrl(targetTexture);
 }
 
-function getContinuousViridisColor(val, minVal = 0, maxVal = 70) {
-  let t = Math.max(0, Math.min(1, (val - minVal) / (maxVal - minVal)));
-  const colors = [
-    { r: 30,  g: 136, b: 229 },
-    { r: 68,  g: 1,   b: 84  },
-    { r: 33,  g: 145, b: 140 },
-    { r: 94,  g: 201, b: 98  },
-    { r: 253, g: 231, b: 37  }
-  ];
-  const scaledT = t * (colors.length - 1);
-  const idx = Math.floor(scaledT);
-  const frac = scaledT - idx;
+/**
+ * Loads 1x1 degree SDM predictions and renders overlapping spatial density 
+ * discs across ocean basins.
+ * @param {string} dataSource - Path or HTTPS URL to the CSV dataset
+ */
+function renderGlobePlanktonData(dataSource) {
+  if (!globeInstance) return;
 
-  if (idx >= colors.length - 1) return `rgb(${colors[colors.length - 1].r}, ${colors[colors.length - 1].g}, ${colors[colors.length - 1].b})`;
+  Papa.parse(dataSource, {
+    download: true,
+    header: true,
+    dynamicTyping: true,
+    skipEmptyLines: true,
+    complete: function (results) {
+      const rawData = results.data.filter(
+        row => row && (row.lat !== undefined || row.latitude !== undefined) && (row.lon !== undefined || row.longitude !== undefined || row.lng !== undefined)
+      );
 
-  const c1 = colors[idx], c2 = colors[idx + 1];
-  return `rgb(${Math.round(c1.r + frac * (c2.r - c1.r))}, ${Math.round(c1.g + frac * (c2.g - c1.g))}, ${Math.round(c1.b + frac * (c2.b - c1.b))})`;
-}
+      const rings = rawData.map(d => {
+        const lat = d.lat ?? d.latitude;
+        const lon = d.lon ?? d.longitude ?? d.lng;
+        const val = d.value ?? d.richness ?? d.val ?? 0;
 
-function generateGlobeDummyData() {
-  const dummyPoints = Array.from({ length: 300 }, () => ({
-    lat: (Math.random() - 0.5) * 120,
-    lng: (Math.random() - 0.5) * 360,
-    weight: Math.random() * 80
-  }));
-  worldInstance
-    .hexBinPointLat(d => d.lat)
-    .hexBinPointLng(d => d.lng)
-    .hexBinPointWeight(d => d.weight)
-    .hexBinResolution(4.2)
-    .hexMargin(0)
-    .hexBinMerge(true)
-    .hexTopColor(d => getContinuousViridisColor(d.sumWeight / d.points.length, 0, 75))
-    .hexSideColor(d => getContinuousViridisColor(d.sumWeight / d.points.length, 0, 75))
-    .hexAltitude(d => Math.max(0.001, ((d.sumWeight / d.points.length) / 100) * 0.0015))
-    .hexBinPointsData(dummyPoints);
+        return {
+          lat: lat,
+          lng: lon,
+          val: val,
+          month: d.month || 'Year-round'
+        };
+      });
+
+      globeInstance
+        .ringsData(rings)
+        .ringLat(d => d.lat)
+        .ringLng(d => d.lng)
+        .ringColor(d => {
+          const val = d.val;
+          if (val > 75) return t => `rgba(215, 48, 39, ${0.85 * (1 - t)})`;  // High Richness
+          if (val > 50) return t => `rgba(252, 141, 89, ${0.85 * (1 - t)})`;  // Medium-High
+          if (val > 25) return t => `rgba(254, 224, 139, ${0.85 * (1 - t)})`; // Medium-Low
+          return t => `rgba(217, 239, 139, ${0.85 * (1 - t)})`;               // Low Richness
+        })
+        .ringMaxRadius(1.25)
+        .ringPropagationSpeed(0)
+        .ringRepeatPeriod(0)
+        .ringAltitude(0.005);
+    },
+    error: function (err) {
+      console.error(`Error loading SDM dataset from [${dataSource}]:`, err);
+    }
+  });
 }
