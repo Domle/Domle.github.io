@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CV & Publications - Dominic Eriksson</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     body {
@@ -13,7 +13,7 @@
       background-color: #fdfdfd;
       color: #1c1c1e;
       margin: 0;
-      padding: 0 24px;
+      padding: 0 24px 48px;
       line-height: 1.6;
       max-width: 960px;
       margin: auto;
@@ -68,7 +68,7 @@
     .cv-year {
       font-weight: 600;
       color: #0071e3;
-      min-width: 120px;
+      min-width: 165px;
       flex-shrink: 0;
     }
 
@@ -102,6 +102,69 @@
 
     .publication a:hover {
       text-decoration: underline;
+    }
+
+    /* Skills Grid */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .skill-card {
+      background: #f8f9fa;
+      padding: 18px 20px;
+      border-radius: 12px;
+      border: 1px solid #e5e5ea;
+    }
+
+    .skill-card h4 {
+      margin: 0 0 8px 0;
+      color: #0071e3;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .skill-card p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #3a3a3c;
+    }
+
+    /* References Grid */
+    .references-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .ref-card {
+      background: #f8f9fa;
+      padding: 18px 20px;
+      border-radius: 12px;
+      border-left: 4px solid #0071e3;
+    }
+
+    .ref-card h4 {
+      margin: 0 0 4px 0;
+      font-size: 1.1rem;
+      color: #1c1c1e;
+    }
+
+    .ref-card p {
+      margin: 0 0 4px 0;
+      font-size: 0.92rem;
+      color: #3a3a3c;
+    }
+
+    .ref-card a {
+      color: #0071e3;
+      text-decoration: none;
+      font-size: 0.92rem;
     }
 
     .download-links a {
@@ -174,7 +237,7 @@
         page-break-after: avoid;
       }
 
-      .personal-info {
+      .personal-info, .skill-card, .ref-card {
         background: none !important;
         border: 1px solid #ccc;
         page-break-inside: avoid;
@@ -223,31 +286,40 @@
     <p><strong>Born:</strong> Austria, 9th May, 1989</p>
     <p><strong>Current Position:</strong> Postdoctoral Researcher</p>
     <p><strong>Institution:</strong> ETH Zürich, Switzerland</p>
+    <p><strong>Languages:</strong> German (Native), English (C1), Portuguese (A1)</p>
   </div>
+
+  <section>
+    <h2>Summary</h2>
+    <p style="color: #3a3a3c; font-size: 1.05rem;">
+      Data-driven Postdoctoral Researcher specializing in marine macroecology and ecological modeling. I develop advanced empirical models to map global plankton distributions and predict ecosystem shifts. With extensive experience integrating complex, large-scale datasets, I translate ecological and biological data into predictive insights for environmental and climate applications.
+    </p>
+  </section>
 
   <section>
     <h2>Education</h2>
     
     <div class="cv-entry">
-      <div class="cv-year">2021 - 2026</div>
+      <div class="cv-year">April 2021 - March 2026</div>
       <div class="cv-details">
-        <div class="title">Ph.D., Marine macroecology</div>
+        <div class="title">Ph.D. in Marine Macroecology</div>
         <p>ETH Zürich, Switzerland | <a href="https://up.ethz.ch" target="_blank">up.ethz.ch</a></p>
+        <p style="font-size: 0.95rem; margin-top: 4px;">Modeled and analyzed spatiotemporal contemporary and future changes of marine planktonic communities and biogeochemical impacts.</p>
       </div>
     </div>
 
     <div class="cv-entry">
-      <div class="cv-year">2020</div>
+      <div class="cv-year">Sept 2015 - Oct 2020</div>
       <div class="cv-details">
-        <div class="title">M.Sc., Marine biology</div>
+        <div class="title">M.Sc. in Marine Biology</div>
         <p>University of Algarve, Portugal | <a href="https://marinebiology.pt" target="_blank">marinebiology.pt</a></p>
       </div>
     </div>
 
     <div class="cv-entry">
-      <div class="cv-year">2015</div>
+      <div class="cv-year">Sept 2009 - Feb 2015</div>
       <div class="cv-details">
-        <div class="title">B.Sc., Biology</div>
+        <div class="title">B.Sc. in Biology</div>
         <p>University of Vienna, Austria | <a href="https://www.univie.ac.at" target="_blank">univie.ac.at</a></p>
       </div>
     </div>
@@ -257,11 +329,20 @@
     <h2>Professional Experience</h2>
 
     <div class="cv-entry">
-      <div class="cv-year">March 2026 - July 2026</div>
+      <div class="cv-year">March 2026 - June 2026</div>
       <div class="cv-details">
-        <div class="title">Postdoc</div>
+        <div class="title">Short-term Postdoctoral Researcher</div>
         <p>ETH Zürich, Switzerland</p>
-        <p style="font-size: 0.95rem; margin-top: 4px;">Research focuses on mapping and predicting the contemporary and future global distribution of marine plankton organisms. By integrating high-resolution microscopy with advanced metagenomic survey data, the project provides a comprehensive, multi-layered assessment of marine planktonic diversity patterns across the global ocean to offer insights into shifting microbial ecosystems and biogeochemical cycles.</p>
+        <p style="font-size: 0.95rem; margin-top: 4px;">Global Ecosystem Projections: Analyzed present and future marine plankton distributions by integrating microscopy-based observations with high-resolution metagenomic data.</p>
+      </div>
+    </div>
+
+    <div class="cv-entry">
+      <div class="cv-year">April 2021 - March 2026</div>
+      <div class="cv-details">
+        <div class="title">Ph.D. Researcher</div>
+        <p>ETH Zürich, Switzerland</p>
+        <p style="font-size: 0.95rem; margin-top: 4px;">Modeled and analyzed spatiotemporal contemporary and future changes of marine planktonic communities and biogeochemical impacts.</p>
       </div>
     </div>
     
@@ -270,7 +351,7 @@
       <div class="cv-details">
         <div class="title">Research Assistant</div>
         <p>ETH Zürich, Switzerland</p>
-        <p style="font-size: 0.95rem; margin-top: 4px;">Participated in the Geneva Science-Policy Interface project MAPMAKER, projecting future plankton distributions using climate models and Representative Concentration Pathways. Developed an interactive map to guide international policy decisions on marine biodiversity protection. | <a href="https://mapmaker-new.ethz.ch" target="_blank">mapmaker-new.ethz.ch</a></p>
+        <p style="font-size: 0.95rem; margin-top: 4px;">Modeled global plankton distributions across varying carbon emission scenarios until the end of the century and developed an interactive mapping web application for the Geneva Science-Policy Interface project MAPMAKER. | <a href="https://mapmaker-new.ethz.ch" target="_blank">mapmaker-new.ethz.ch</a></p>
       </div>
     </div>
 
@@ -279,16 +360,16 @@
       <div class="cv-details">
         <div class="title">Intern</div>
         <p>ETH Zürich, Switzerland</p>
-        <p style="font-size: 0.95rem; margin-top: 4px;">Assisted in data collection for a study linking marine nitrogen fixer diversity to nitrogen fixation rates, highlighting the role of microbial biodiversity in global nitrogen cycling.</p>
+        <p style="font-size: 0.95rem; margin-top: 4px;">Gathered empirical data linking marine nitrogen fixer diversity to global ocean nitrogen fixation rates.</p>
       </div>
     </div>
 
     <div class="cv-entry">
       <div class="cv-year">September 2016</div>
       <div class="cv-details">
-        <div class="title">Workshop on marine genomics</div>
+        <div class="title">Workshop on Marine Genomics</div>
         <p>University of Algarve, Portugal</p>
-        <p style="font-size: 0.95rem; margin-top: 4px;">Convened researchers to discuss ecological and evolutionary genomic research, covering topics like genetic diversity dynamics and high-throughput sequencing analysis for marine ecosystems.</p>
+        <p style="font-size: 0.95rem; margin-top: 4px;">Facilitated sessions on genetic diversity dynamics and high-throughput sequencing methods for marine ecosystems.</p>
       </div>
     </div>
 
@@ -297,7 +378,7 @@
       <div class="cv-details">
         <div class="title">Volunteer</div>
         <p>White Shark Projects, South Africa</p>
-        <p style="font-size: 0.95rem; margin-top: 4px;">Supported open-ocean fieldwork focused on the population ecology and conservation of great white sharks. Combined hands-on marine tracking and data collection toward marine conservation policies. | <a href="https://www.whitesharkprojects.co.za" target="_blank">whitesharkprojects.co.za</a></p>
+        <p style="font-size: 0.95rem; margin-top: 4px;">Conducted open-ocean marine tracking and data collection on great white sharks to support population ecology and conservation policy. | <a href="https://www.whitesharkprojects.co.za" target="_blank">whitesharkprojects.co.za</a></p>
       </div>
     </div>
 
@@ -306,7 +387,52 @@
       <div class="cv-details">
         <div class="title">Field Course</div>
         <p>Hydra Institute, Italy</p>
-        <p style="font-size: 0.95rem; margin-top: 4px;">Introduction to marine biology and diving licence. | <a href="https://www.hydramarinesciences.com" target="_blank">hydramarinesciences.com</a></p>
+        <p style="font-size: 0.95rem; margin-top: 4px;">Introduction to marine biology and scuba diving certification. | <a href="https://www.hydramarinesciences.com" target="_blank">hydramarinesciences.com</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Core Skills & Technical Competencies</h2>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <h4><i class="fas fa-chart-line"></i> Statistical Modeling</h4>
+        <p>Empirical modeling for spatiotemporal projections of global ocean ecosystems under climate change scenarios.</p>
+      </div>
+
+      <div class="skill-card">
+        <h4><i class="fas fa-square-root-alt"></i> Statistical Analysis</h4>
+        <p>Multivariate community analysis, spatial statistics, diversity metrics, and sampling bias mitigation for data-scarce regions.</p>
+      </div>
+
+      <div class="skill-card">
+        <h4><i class="fab fa-r-project"></i> R Programming</h4>
+        <p>Main software for statistical modeling, spatial raster/vector analysis, bioinformatic workflows, and visualization.</p>
+      </div>
+
+      <div class="skill-card">
+        <h4><i class="fas fa-globe-americas"></i> GIS & Spatial Analysis</h4>
+        <p>NetCDF oceanographic data manipulation, spatial regridding, spatial statistics, and global mapping.</p>
+      </div>
+
+      <div class="skill-card">
+        <h4><i class="fab fa-python"></i> Python</h4>
+        <p>Scripting, data handling, and batch automation in Linux environments.</p>
+      </div>
+
+      <div class="skill-card">
+        <h4><i class="fas fa-pen-nib"></i> Scientific Writing</h4>
+        <p>Track record of lead-author papers in high-impact journals, peer-review experience, and science-policy reporting.</p>
+      </div>
+
+      <div class="skill-card">
+        <h4><i class="fas fa-code"></i> Web Development</h4>
+        <p>Interactive web-mapping applications for science communication and science-policy tools.</p>
+      </div>
+
+      <div class="skill-card">
+        <h4><i class="fas fa-water"></i> Diving & Fieldwork</h4>
+        <p>Entry-level Scuba Diving Certificate with experience in open-ocean tracking and biological sampling.</p>
       </div>
     </div>
   </section>
@@ -349,8 +475,12 @@
   </section>
 
   <section>
-    <h2>Publications Under Review</h2>
+    <h2>Publications Under Review & Preprints</h2>
     
+    <div class="publication">
+      <p>Priest, T., Paoli, L., Davín, A., Stäubli, M., <strong>Eriksson, D.</strong>, Ruscheweyh, H.-J., Polz, M., Sunagawa, S. (2026). Subspecies are genomically discrete and ecologically cohesive units of ocean microbiome diversity. <em>bioRxiv / Preprint</em>. <a href="https://lnkd.in/eYMXwTuT" target="_blank">Preprint Link</a>.</p>
+    </div>
+
     <div class="publication">
       <p>Lyu, T., Benedetti, F., <strong>Eriksson, D.</strong>, Vogt, M., Thomas, M. K. (2026). Phytoplankton performance in the lab predicts occurrence in the field across a global temperature gradient. <em>Under review</em>.</p>
     </div>
@@ -359,18 +489,18 @@
   <section>
     <h2>Project Reports & Deliverables</h2>
     
-  <div class="publication">
-    <p>Vogt, M., Sarmento, H., Benedetti, F., Huber, P., Arboleda-Baena, C., Bader, R. R., <strong>Eriksson, D.</strong>, et al. (2023). AtlantECO Deliverable number 2.1–AtlantECO-BASE. <em>ETH Zurich</em>. <a href="https://doi.org/10.3929/ethz-b-000655633" target="_blank">doi:10.3929/ethz-b-000655633</a>.</p>
-  </div>
+    <div class="publication">
+      <p>Vogt, M., Sarmento, H., Benedetti, F., Huber, P., Arboleda-Baena, C., Bader, R. R., <strong>Eriksson, D.</strong>, et al. (2023). AtlantECO Deliverable number 2.1–AtlantECO-BASE. <em>ETH Zurich</em>. <a href="https://doi.org/10.3929/ethz-b-000655633" target="_blank">doi:10.3929/ethz-b-000655633</a>.</p>
+    </div>
   </section>
 
   <section class="conference-section">
-    <h2>Conference Contributions</h2>
+    <h2>Conference Contributions & Selected Presentations</h2>
     
     <h4>Oral Presentations / Selected Speaker</h4>
 
     <div class="publication">
-      <p><strong>Eriksson, D.</strong> (2026). Latitudinal diversity gradients of the ocean microbiome as a function of taxonomic resolution. AtlantECO Final Review Meeting. Invited speaker</p>
+      <p><strong>Eriksson, D.</strong> (2026). Latitudinal diversity gradients of the ocean microbiome as a function of taxonomic resolution. AtlantECO Final Review Meeting. Invited speaker.</p>
     </div>
 
     <div class="publication">
@@ -398,7 +528,6 @@
     <div class="publication">
       <p><strong>Eriksson, D.</strong> (2026). Variations in the latitudinal diversity gradients of the ocean microbiome. Ocean Sciences Meeting 2026.</p>
     </div>
-    
 
     <div class="publication">
       <p><strong>Eriksson, D.</strong> (2024). Nitrogen fixation increases with diazotroph richness in the global ocean. Gordon Research Conference Marine Microbes. <a href="https://doi.org/10.3929/ethz-b-000718646" target="_blank">doi:10.3929/ethz-b-000718646</a>.</p>
@@ -410,6 +539,32 @@
 
     <div class="publication">
       <p><strong>Eriksson, D.</strong> (2023). Nitrogen fixation increases with diazotroph diversity in the global ocean. IBP Congress. <a href="https://doi.org/10.3929/ethz-b-000594885" target="_blank">doi:10.3929/ethz-b-000594885</a>.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Academic References</h2>
+    <div class="references-grid">
+      <div class="ref-card">
+        <h4>Dr. Meike Vogt</h4>
+        <p>Senior Scientist, Environmental Physics Group</p>
+        <p>ETH Zürich, Switzerland</p>
+        <p><a href="mailto:meike.vogt@env.ethz.ch"><i class="fas fa-envelope"></i> meike.vogt@env.ethz.ch</a></p>
+      </div>
+
+      <div class="ref-card">
+        <h4>Prof. Dr. Shinichi Sunagawa</h4>
+        <p>Group Leader in Microbiology, Institute of Microbiology</p>
+        <p>ETH Zürich, Switzerland</p>
+        <p><a href="mailto:ssunagawa@ethz.ch"><i class="fas fa-envelope"></i> ssunagawa@ethz.ch</a></p>
+      </div>
+
+      <div class="ref-card">
+        <h4>Prof. Dr. Nicolas Gruber</h4>
+        <p>Group Leader in Environmental Sciences, Environmental Physics Group</p>
+        <p>ETH Zürich, Switzerland</p>
+        <p><a href="mailto:nicolas.gruber@env.ethz.ch"><i class="fas fa-envelope"></i> nicolas.gruber@env.ethz.ch</a></p>
+      </div>
     </div>
   </section>
 
