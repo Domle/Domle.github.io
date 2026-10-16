@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dominic Eriksson - Homepage</title>
+  <title>Dr. Dominic Eriksson - Homepage</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -21,7 +21,7 @@
       background-color: #fafafa;
       color: #333;
       padding: 40px 24px 40px;
-      padding-top: 120px; /* extra top for header */
+      padding-top: 150px;
       font-size: 17px;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
@@ -36,22 +36,40 @@
       top: 0;
       left: 0;
       width: 100%;
-      background: linear-gradient(180deg, rgba(28,28,30,0.85) 0%, rgba(28,28,30,0.5) 100%), url('Images/ocean-1845110.jpg');
+      background: linear-gradient(180deg, rgba(28,28,30,0.88) 0%, rgba(28,28,30,0.6) 100%), url('Images/ocean-1845110.jpg');
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
-      padding: 24px 0;
+      padding: 20px 16px;
       text-align: center;
-      font-size: 1.8rem;
-      font-weight: 600;
       color: #f5f5f7;
       text-shadow: 0 1px 5px rgba(0, 0, 0, 0.7);
       z-index: 1000;
       user-select: none;
+      transition: background 0.3s ease;
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      font-weight: 600;
       letter-spacing: 1.2px;
       text-transform: uppercase;
-      transition: background 0.3s ease;
+      margin-bottom: 4px;
+    }
+
+    header .header-subtitle {
+      font-size: 1.05rem;
+      font-weight: 400;
+      color: #e5e5ea;
+      margin-bottom: 2px;
+    }
+
+    header .header-location {
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: #38bdf8;
+      letter-spacing: 0.5px;
     }
 
     /* Content Layout */
@@ -80,6 +98,45 @@
       font-weight: 600;
     }
 
+    /* Contact Details Sub-block */
+    .contact-info-block {
+      margin-top: 20px;
+      padding: 16px;
+      background: #f0f7ff;
+      border-left: 4px solid #0071e3;
+      border-radius: 0 10px 10px 0;
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    .contact-info-block div {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+      color: #1c1c1e;
+    }
+
+    .contact-info-block div:last-child {
+      margin-bottom: 0;
+    }
+
+    .contact-info-block i {
+      color: #0071e3;
+      width: 18px;
+      text-align: center;
+    }
+
+    .contact-info-block a {
+      color: #0071e3;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .contact-info-block a:hover {
+      text-decoration: underline;
+    }
+
     .image-block {
       flex: 1 1 280px;
       display: flex;
@@ -101,7 +158,7 @@
 
     /* Social Icons */
     .social-icons {
-      margin-top: 36px;
+      margin-top: 28px;
       display: flex;
       gap: 28px;
       font-size: 1.9rem;
@@ -125,7 +182,7 @@
     .social-icons a[href*="linkedin.com"] i { color: #0a66c2; }
     .social-icons a[href*="researchgate.net"] i { color: #00cc00; }
 
-    /* Feature Section */
+    /* Feature Section Equal Widths Fix */
     .features-section {
       display: flex;
       justify-content: space-between;
@@ -134,9 +191,15 @@
       flex-wrap: nowrap;
     }
 
-    .feature {
-      flex: 1;
+    .features-section > a,
+    .features-section > .feature {
+      flex: 1 1 0px;
       min-width: 0;
+      display: flex;
+    }
+
+    .feature {
+      width: 100%;
       background: #fff;
       padding: 24px 20px;
       border-radius: 18px;
@@ -144,6 +207,8 @@
       transition: box-shadow 0.3s ease;
       cursor: pointer;
       position: relative;
+      display: flex;
+      flex-direction: column;
     }
 
     .feature:hover {
@@ -159,7 +224,7 @@
     }
 
     .feature.disabled:hover {
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08); /* Disables hover lift */
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
     }
 
     .feature.disabled .icon-box {
@@ -170,15 +235,13 @@
 
     .coming-soon-badge {
       display: inline-block;
-      margin-top: 10px;
+      margin-top: auto;
+      padding-top: 12px;
       font-size: 0.75rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: #0071e3;
-      background: #e6f0ff;
-      padding: 4px 10px;
-      border-radius: 6px;
     }
 
     .icon-box {
@@ -193,6 +256,7 @@
       box-shadow: 0 6px 18px rgba(0, 113, 227, 0.2);
       color: #0071e3;
       font-size: 28px;
+      flex-shrink: 0;
     }
 
     .feature h3 {
@@ -376,6 +440,10 @@
 
     /* Responsive styling */
     @media (max-width: 768px) {
+      body {
+        padding-top: 170px;
+      }
+
       .content-wrapper,
       .update {
         flex-direction: column;
@@ -496,7 +564,9 @@
   </button>
 
   <header>
-    Dominic Eriksson, Marine Ecologist
+    <h1>Dr. Dominic Eriksson</h1>
+    <div class="header-subtitle">Postdoctoral Researcher &bull; Marine Ecologist</div>
+    <div class="header-location">Zürich, Switzerland</div>
   </header>
 
   <div class="container">
@@ -508,11 +578,18 @@
         </p>
 
         <p style="font-size: 0.95rem; margin-bottom: 12px;">
-          I am a <b style="color: rgb(15, 157, 167);">Postdoctoral Researcher with a focus on marine macroecology</b>. Building upon my PhD research within the same group, my work focuses on mapping the contemporary and future global distribution of marine plankton and understanding how this diversity drives ocean ecosystem functions and global biogeochemical cycles.
+          I am a <b style="color: rgb(15, 157, 167);">Postdoctoral Researcher with a focus on marine macroecology</b> at ETH Zürich. Building upon my PhD research within the same group, my work focuses on mapping the contemporary and future global distribution of marine plankton and understanding how this diversity drives ocean ecosystem functions and global biogeochemical cycles.
         </p>
         <p style="font-size: 0.95rem;">
           To overcome the challenges of sparse and uneven ocean sampling, I utilize and advance specialized <b style="color: rgb(15, 157, 167);">Empirical Models</b> optimized for data-scarce regions. My academic background includes a <b style="color: rgb(15, 157, 167);">BSc in Ecology</b> from the University of Vienna and an <b style="color: rgb(15, 157, 167);">MSc in Marine Biology</b> from the University of Algarve, where I specialized in the taxonomic profiling of coral-associated prokaryotic communities. Having been with ETH Zurich since 2019, progressing from an intern to a PhD candidate, and now a Postdoc, I integrate long-term institutional expertise with cutting-edge ecological modeling to resolve global marine biodiversity patterns.
         </p>
+
+        <!-- Personal & Contact Info Sub-block -->
+        <div class="contact-info-block">
+          <div><i class="fas fa-envelope"></i> <strong>Work:</strong> <a href="mailto:deriksson@ethz.ch">deriksson@ethz.ch</a></div>
+          <div><i class="fas fa-envelope-open"></i> <strong>Private:</strong> <a href="mailto:dominiceriksson@yahoo.com">dominiceriksson@yahoo.com</a></div>
+          <div><i class="fas fa-flag"></i> <strong>Nationality:</strong> Austria</div>
+        </div>
 
         <div class="social-icons">
           <a href="https://github.com/Domle" target="_blank"><i class="fab fa-github"></i></a>
@@ -528,7 +605,7 @@
     </div>
 
     <div class="features-section">
-      <a href="research_highlights.html" style="text-decoration: none; color: inherit; display: block;">
+      <a href="research_highlights.html" style="text-decoration: none; color: inherit;">
         <div class="feature">
           <div class="icon-box">
             <i class="fas fa-lightbulb"></i>
@@ -538,7 +615,7 @@
         </div>
       </a>
 
-      <a href="cv_and_publications.html" style="text-decoration: none; color: inherit; display: block;">
+      <a href="cv_and_publications.html" style="text-decoration: none; color: inherit;">
         <div class="feature">
           <div class="icon-box">
             <i class="fas fa-file-alt"></i>
@@ -561,6 +638,20 @@
 
     <div class="recent-updates-section">
       <h2>Recent Updates</h2>
+
+      <div class="update">
+        <div class="update-text">
+          <p>
+            <strong>New preprint released!</strong> 🌊 I am excited to contribute as a co-author to our latest preprint led by Taylor Priest: <em>"Subspecies are genomically discrete and ecologically cohesive units of ocean microbiome diversity."</em>
+          </p>
+          <p>
+            Using a cultivation-independent framework across 1,669 ocean metagenomes, we show that genomically discrete and ecologically cohesive subspecies, differentiated by distinct gene contents and environmental niches, are a widespread fundamental level at which ecology and evolution shape marine microbial diversity.
+          </p>
+          <p>
+            👉 Read the full preprint on <a href="https://www.biorxiv.org/content/10.64898/2026.09.29.755032v1" target="_blank">bioRxiv / ResearchGate</a>!
+          </p>
+        </div>
+      </div>
     
       <div class="update">
         <div class="update-text">
