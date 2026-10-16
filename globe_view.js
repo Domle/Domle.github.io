@@ -1,7 +1,7 @@
 /* ==========================================================================
    globe_view.js
    3D Globe Engine for 1x1 Degree SDMs (0 - 100% Scale)
-   Canvas Texture Rasterizer with 1% Interval Viridis Color Gradient
+   Canvas Texture Rasterizer with Viridis Color Gradient & Injected Legend
    ========================================================================== */
 
 let globeInstance = null;
@@ -66,8 +66,8 @@ function getColorForValue(val) {
 }
 
 /**
- * Initializes the Globe.gl 3D viewport with a minimalist dark base
- * and injects interactive layer toggles into the container.
+ * Initializes the Globe.gl 3D viewport with a minimalist dark base,
+ * injects layer controls, and attaches the Viridis color legend.
  * @param {string} containerId - DOM ID of the container element
  */
 function init3DGlobe(containerId) {
@@ -88,7 +88,59 @@ function init3DGlobe(containerId) {
 
     fetchContinentalBorders();
     injectGlobeLayerControls(container);
+    injectGlobeLegend(container);
   }
+}
+
+/**
+ * Injects a floating Viridis color legend overlay into the bottom-left of the viewport
+ * @param {HTMLElement} container - The globe container element
+ */
+function injectGlobeLegend(container) {
+  if (document.getElementById('globe-legend')) return;
+
+  const legendBox = document.createElement('div');
+  legendBox.id = 'globe-legend';
+  legendBox.style.cssText = `
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(10, 25, 47, 0.9);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    padding: 10px 14px;
+    border-radius: 10px;
+    color: #ffffff;
+    font-size: 0.78rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    z-index: 100;
+    pointer-events: auto;
+    font-family: system-ui, -apple-system, sans-serif;
+    width: 210px;
+  `;
+
+  legendBox.innerHTML = `
+    <div style="font-weight: 600; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; font-size: 0.75rem;">
+      Species Presence (%)
+    </div>
+    <div style="
+      height: 10px; 
+      width: 100%; 
+      border-radius: 4px; 
+      background: linear-gradient(to right, #440154, #3b528b, #21918c, #5ec962, #fde725);
+      margin-bottom: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    "></div>
+    <div style="display: flex; justify-content: space-between; color: #cbd5e1; font-size: 0.7rem; font-weight: 500;">
+      <span>0%</span>
+      <span>25%</span>
+      <span>50%</span>
+      <span>75%</span>
+      <span>100%</span>
+    </div>
+  `;
+
+  container.appendChild(legendBox);
 }
 
 /**
@@ -113,9 +165,9 @@ function updateContinentalBorders() {
   if (currentLayerState.borders) {
     globeInstance
       .polygonsData(window.countryGeoJsonData)
-      .polygonCapColor(() => 'rgba(0, 0, 0, 0)') // Transparent land interior
+      .polygonCapColor(() => 'rgba(0, 0, 0, 0)')
       .polygonSideColor(() => 'rgba(0, 0, 0, 0)')
-      .polygonStrokeColor(() => 'rgba(255, 255, 255, 0.5)') // Crisp white coastline
+      .polygonStrokeColor(() => 'rgba(255, 255, 255, 0.5)')
       .polygonAltitude(0.005);
   } else {
     globeInstance.polygonsData([]);
@@ -124,7 +176,6 @@ function updateContinentalBorders() {
 
 /**
  * Injects floating layer toggle controls on top of the 3D globe viewport
- * @param {HTMLElement} container - The globe container element
  */
 function injectGlobeLayerControls(container) {
   if (document.getElementById('globe-layer-controls')) return;
