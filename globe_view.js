@@ -1,11 +1,13 @@
 /* ==========================================================================
    globe_view.js
-   3D Globe Engine for 1x1 Degree SDMs with Dynamic Layer Controls
+   3D Globe Engine for 1x1 Degree SDMs (0 - 100% Scale)
+   Canvas Texture Rasterizer with 1% Interval Viridis Color Gradient
    ========================================================================== */
 
 let globeInstance = null;
+let rawSdmData = [];
 
-// Reliable texture CDN URLs for seamless, infinite layer toggling
+// Base texture CDN URLs
 const DARK_BASE_TEXTURE = 'https://unpkg.com/three-globe/example/img/earth-dark.jpg';
 const SATELLITE_TEXTURE = 'https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg';
 
@@ -14,6 +16,54 @@ let currentLayerState = {
   borders: true,
   graticules: true
 };
+
+// Pre-load base textures for canvas composite rendering
+const baseImageDark = new Image();
+baseImageDark.crossOrigin = 'anonymous';
+baseImageDark.src = DARK_BASE_TEXTURE;
+baseImageDark.onload = () => updateGlobeSurfaceTexture();
+
+const baseImageSat = new Image();
+baseImageSat.crossOrigin = 'anonymous';
+baseImageSat.src = SATELLITE_TEXTURE;
+baseImageSat.onload = () => updateGlobeSurfaceTexture();
+
+/**
+ * Maps species richness percentage (0 - 100%) to a fine 1% Viridis color scale
+ */
+function getColorForValue(val) {
+  // Quantize to exact 1% discrete intervals (0%, 1%, 2%, ..., 100%)
+  const p = Math.max(0, Math.min(100, Math.round(val))) / 100;
+
+  // Key Viridis color control stops (RGB)
+  const stops = [
+    { t: 0.00, r: 68,  g: 1,   b: 84  }, // 0%   - Deep Violet (#440154)
+    { t: 0.25, r: 59,  g: 82,  b: 139 }, // 25%  - Dark Blue   (#3b528b)
+    { t: 0.50, r: 33,  g: 145, b: 140 }, // 50%  - Teal        (#21918c)
+    { t: 0.75, r: 94,  g: 201, b: 98  }, // 75%  - Green       (#5ec962)
+    { t: 1.00, r: 253, g: 231, b: 37  }  // 100% - Yellow      (#fde725)
+  ];
+
+  let lower = stops[0];
+  let upper = stops[stops.length - 1];
+
+  for (let i = 0; i < stops.length - 1; i++) {
+    if (p >= stops[i].t && p <= stops[i + 1].t) {
+      lower = stops[i];
+      upper = stops[i + 1];
+      break;
+    }
+  }
+
+  const range = upper.t - lower.t || 1;
+  const factor = (p - lower.t) / range;
+
+  const r = Math.round(lower.r + factor * (upper.r - lower.r));
+  const g = Math.round(lower.g + factor * (upper.g - lower.g));
+  const b = Math.round(lower.b + factor * (upper.b - lower.b));
+
+  return `rgba(${r}, ${g}, ${b}, 0.85)`;
+}
 
 /**
  * Initializes the Globe.gl 3D viewport with a minimalist dark base
@@ -25,7 +75,6 @@ function init3DGlobe(containerId) {
   if (!container) return;
 
   if (!globeInstance) {
-    // 1. Initialize Minimalist Dark Base Globe
     globeInstance = Globe()(container)
       .globeImageUrl(DARK_BASE_TEXTURE)
       .backgroundColor('#000511')
@@ -37,10 +86,7 @@ function init3DGlobe(containerId) {
 
     window.globeInstance = globeInstance;
 
-    // 2. Fetch and render vector continental outlines
     fetchContinentalBorders();
-
-    // 3. Inject clickable layer controls overlay into container
     injectGlobeLayerControls(container);
   }
 }
@@ -67,10 +113,10 @@ function updateContinentalBorders() {
   if (currentLayerState.borders) {
     globeInstance
       .polygonsData(window.countryGeoJsonData)
-      .polygonCapColor(() => 'rgba(0, 0, 0, 0)')
+      .polygonCapColor(() => 'rgba(0, 0, 0, 0)') // Transparent land interior
       .polygonSideColor(() => 'rgba(0, 0, 0, 0)')
-      .polygonStrokeColor(() => 'rgba(255, 255, 255, 0.45)')
-      .polygonAltitude(0.003);
+      .polygonStrokeColor(() => 'rgba(255, 255, 255, 0.5)') // Crisp white coastline
+      .polygonAltitude(0.005);
   } else {
     globeInstance.polygonsData([]);
   }
@@ -123,7 +169,7 @@ function injectGlobeLayerControls(container) {
 
   satCheckbox.addEventListener('change', (e) => {
     currentLayerState.satellite = e.target.checked;
-    updateGlobeTexture();
+    updateGlobeSurfaceTexture();
   });
 
   borderCheckbox.addEventListener('change', (e) => {
@@ -140,18 +186,55 @@ function injectGlobeLayerControls(container) {
 }
 
 /**
- * Updates the globe surface texture reliably without dropping WebGL materials
+ * Composites the base map texture and 1x1 degree SDM raster data 
+ * onto an offscreen canvas using 1% step Viridis color rendering.
  */
-function updateGlobeTexture() {
+function updateGlobeSurfaceTexture() {
   if (!globeInstance) return;
 
-  const targetTexture = currentLayerState.satellite ? SATELLITE_TEXTURE : DARK_BASE_TEXTURE;
-  globeInstance.globeImageUrl(targetTexture);
+  const canvas = document.createElement('canvas');
+  canvas.width = 2048;
+  canvas.height = 1024;
+  const ctx = canvas.getContext('2d');
+
+  // 1. Draw Background Base Texture
+  const activeImage = currentLayerState.satellite ? baseImageSat : baseImageDark;
+  
+  if (activeImage.complete && activeImage.naturalWidth !== 0) {
+    ctx.drawImage(activeImage, 0, 0, canvas.width, canvas.height);
+  } else {
+    ctx.fillStyle = '#000814';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+
+  // 2. Draw 1x1 Degree Marine SDM Cells with 1% Viridis Scale
+  if (rawSdmData && rawSdmData.length > 0) {
+    const cellW = canvas.width / 360;  // 5.688 pixels per longitude degree
+    const cellH = canvas.height / 180; // 5.688 pixels per latitude degree
+
+    rawSdmData.forEach(d => {
+      const lat = d.lat ?? d.latitude;
+      const lon = d.lon ?? d.longitude ?? d.lng;
+      const val = d.value ?? d.richness ?? d.val;
+
+      if (lat !== undefined && lon !== undefined && val !== undefined && !isNaN(val) && val !== null) {
+        const x = ((lon + 180) / 360) * canvas.width - (cellW / 2);
+        const y = ((90 - lat) / 180) * canvas.height - (cellH / 2);
+
+        ctx.fillStyle = getColorForValue(val);
+        ctx.fillRect(x, y, cellW + 0.5, cellH + 0.5); // +0.5 seam overlap
+      }
+    });
+  }
+
+  // 3. Update Globe.gl surface texture
+  const dataUrl = canvas.toDataURL('image/png');
+  globeInstance.globeImageUrl(dataUrl);
 }
 
 /**
- * Loads 1x1 degree SDM predictions and renders overlapping spatial density 
- * discs across ocean basins.
+ * Loads 1x1 degree SDM CSV predictions (0 - 100% species presence)
+ * and initiates canvas texture rasterization.
  * @param {string} dataSource - Path or HTTPS URL to the CSV dataset
  */
 function renderGlobePlanktonData(dataSource) {
@@ -163,38 +246,19 @@ function renderGlobePlanktonData(dataSource) {
     dynamicTyping: true,
     skipEmptyLines: true,
     complete: function (results) {
-      const rawData = results.data.filter(
-        row => row && (row.lat !== undefined || row.latitude !== undefined) && (row.lon !== undefined || row.longitude !== undefined || row.lng !== undefined)
+      rawSdmData = results.data.filter(
+        row => row && 
+               (row.lat !== undefined || row.latitude !== undefined) && 
+               (row.lon !== undefined || row.longitude !== undefined || row.lng !== undefined)
       );
 
-      const rings = rawData.map(d => {
-        const lat = d.lat ?? d.latitude;
-        const lon = d.lon ?? d.longitude ?? d.lng;
-        const val = d.value ?? d.richness ?? d.val ?? 0;
-
-        return {
-          lat: lat,
-          lng: lon,
-          val: val,
-          month: d.month || 'Year-round'
-        };
-      });
-
+      // Clear extraneous geometry layers and update texture
       globeInstance
-        .ringsData(rings)
-        .ringLat(d => d.lat)
-        .ringLng(d => d.lng)
-        .ringColor(d => {
-          const val = d.val;
-          if (val > 75) return t => `rgba(215, 48, 39, ${0.85 * (1 - t)})`;  // High Richness
-          if (val > 50) return t => `rgba(252, 141, 89, ${0.85 * (1 - t)})`;  // Medium-High
-          if (val > 25) return t => `rgba(254, 224, 139, ${0.85 * (1 - t)})`; // Medium-Low
-          return t => `rgba(217, 239, 139, ${0.85 * (1 - t)})`;               // Low Richness
-        })
-        .ringMaxRadius(1.25)
-        .ringPropagationSpeed(0)
-        .ringRepeatPeriod(0)
-        .ringAltitude(0.005);
+        .pointsData([])
+        .ringsData([])
+        .tilesData([]);
+
+      updateGlobeSurfaceTexture();
     },
     error: function (err) {
       console.error(`Error loading SDM dataset from [${dataSource}]:`, err);
