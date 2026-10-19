@@ -265,30 +265,45 @@
         title: "Nitrogen fixation rates increase with diazotroph richness in the global ocean",
         figures: {
           fig1: {
-            title: "Figure 1: Latitudinal Richness & Spatial Distribution",
+            title: "Figure 1: Global Diazotroph Species Richness",
             panels: {
-              panel_a: { label: "Panel A: Total Diazotroph Species Richness (3D Globe)", type: "3d-globe", file: "Data/p1_fig1_panel_a_cleaned.csv", unit: "Species Richness (ASVs)" },
-              panel_b: { label: "Panel B: Non-Cyanobacterial Diazotrophs", type: "map", file: "Data/p1_fig1_panel_b.csv", unit: "Richness Index" },
-              panel_c: { label: "Panel C: Cyanobacterial Diazotrophs", type: "map", file: "Data/p1_fig1_panel_c.csv", unit: "Richness Index" },
-              panel_d: { label: "Panel D: UCYN-A Sublineages", type: "map", file: "Data/p1_fig1_panel_d.csv", unit: "Relative Abundance / Richness" },
-              panel_e: { label: "Panel E: Trichodesmium Richness", type: "map", file: "Data/p1_fig1_panel_e.csv", unit: "Richness Index" },
-              panel_f: { label: "Panel F: Modeled N2 Fixation Rates", type: "map", file: "Data/p1_fig1_panel_f.csv", unit: "nmol N / L / d" }
-            }
-          },
-          fig2: {
-            title: "Figure 2: Empirical BEF Coupling & Latitudinal Trends",
-            panels: {
-              panel_a: { label: "Panel A: Diazotroph Richness vs. N2 Fixation Rate", type: "scatterplot", file: "Data/p1_fig2_panel_a.csv", unit: "nmol N / L / d" },
-              panel_b: { label: "Panel B: Model Ensemble Correlation Distributions", type: "boxplot", file: "Data/p1_fig2_panel_b.csv", unit: "Spearman's ρ" },
-              panel_c: { label: "Panel C: Latitudinal Diversity Gradient Profile", type: "scatterplot", file: "Data/p1_fig2_panel_c.csv", unit: "Richness Index" }
+              panel_a: { 
+                label: "Panel A: Total Diazotroph Richness (n = 15)", 
+                type: "3d-globe", 
+                file: "Data/p1_fig1_panel_a.csv", 
+                unit: "Species Presence (%)", 
+                minVal: 0, 
+                maxVal: 100 
+              },
+              panel_c: { 
+                label: "Panel C: Cyanobacterial Diazotrophs (n = 9)", 
+                type: "3d-globe", 
+                file: "Data/p1_fig1_panel_c.csv", 
+                unit: "Species Presence (%)", 
+                minVal: 0, 
+                maxVal: 100 
+              },
+              panel_e: { 
+                label: "Panel E: Non-Cyanobacterial Diazotrophs (n = 6)", 
+                type: "3d-globe", 
+                file: "Data/p1_fig1_panel_e.csv", 
+                unit: "Species Presence (%)", 
+                minVal: 0, 
+                maxVal: 100 
+              }
             }
           },
           fig3: {
-            title: "Figure 3: Ocean Biome BEF Scaling & Buffering Effects",
+            title: "Figure 3: Spatial Turnover & Community Dissimilarity",
             panels: {
-              panel_a: { label: "Panel A: BEF Relationship Across Ocean Biomes", type: "boxplot", file: "Data/p1_fig3_panel_a.csv", unit: "BEF Slope (β)" },
-              panel_b: { label: "Panel B: Thermal Performance & N2 Fixation", type: "scatterplot", file: "Data/p1_fig3_panel_b.csv", unit: "Fixation Rate" },
-              panel_c: { label: "Panel C: Functional Redundancy & Ecosystem Buffering", type: "boxplot", file: "Data/p1_fig3_panel_c.csv", unit: "Buffering Capacity Index" }
+              panel_a: { 
+                label: "Panel A: Annual Beta Ratio (Nestedness / Jaccard)", 
+                type: "3d-globe", 
+                file: "Data/p1_fig3_panel_a.csv", 
+                unit: "Beta Ratio (0.0 - 1.0)", 
+                minVal: 0, 
+                maxVal: 1 
+              }
             }
           }
         }
@@ -297,45 +312,59 @@
         title: "Variations in the latitudinal diversity gradients of the ocean microbiome",
         figures: {
           fig1: {
-            title: "Figure 1: Global Sampling Baseline & Depth Profile",
+            title: "Figure 1: Metagenomic Sampling Baseline",
             panels: {
-              all: { label: "Figure 1: Global Sampling Locations & Depth Profiles", type: "map", file: "Data/p2_fig1.csv", unit: "Sample Count / Depth (m)" }
-            }
-          },
-          fig2: {
-            title: "Figure 2: Surface vs. Deep Diversity Gradients",
-            panels: {
-              panel_a: { label: "Panel A: Surface Mixed Layer (SML) Gradient", type: "scatterplot", file: "Data/p2_fig2_panel_a.csv", unit: "ASV Richness" },
-              panel_b: { label: "Panel B: Mesopelagic Layer Gradient", type: "scatterplot", file: "Data/p2_fig2_panel_b.csv", unit: "ASV Richness" }
+              all: { 
+                label: "Global Sampling Stations: SML & Mesopelagic (MZ)", 
+                type: "map", 
+                file: "Data/p2_fig1.csv", 
+                unit: "Sampling Depth (m)" 
+              }
             }
           },
           fig3: {
-            title: "Figure 3: Global Ocean Microbiome Spatial Mapping",
+            title: "Figure 3: SML Microbiome Modeled Richness & Seasonal Variation",
             panels: {
-              panel_a: { label: "Panel A: Epipelagic Microbiome Richness", type: "map", file: "Data/p2_fig3_panel_a.csv", unit: "Richness Index" },
-              panel_b: { label: "Panel B: Mesopelagic Microbiome Richness", type: "map", file: "Data/p2_fig3_panel_b.csv", unit: "Richness Index" }
-            }
-          },
-          fig4: {
-            title: "Figure 4: Latitudinal Turnover & Beta Diversity",
-            panels: {
-              panel_a: { label: "Panel A: Taxa Turnover in SML", type: "boxplot", file: "Data/p2_fig4_panel_a.csv", unit: "Dissimilarity Index" },
-              panel_b: { label: "Panel B: Taxa Turnover in Mesopelagic", type: "boxplot", file: "Data/p2_fig4_panel_b.csv", unit: "Dissimilarity Index" }
-            }
-          },
-          fig5: {
-            title: "Figure 5: Environmental Drivers & Temperature Scaling",
-            panels: {
-              panel_a: { label: "Panel A: Temperature Effects on Richness", type: "scatterplot", file: "Data/p2_fig5_panel_a.csv", unit: "Richness Index" },
-              panel_b: { label: "Panel B: Nutrient Availability Effects", type: "scatterplot", file: "Data/p2_fig5_panel_b.csv", unit: "Richness Index" }
+              panel_a_bacteria: { 
+                label: "Panel A: Bacteria Annual Richness (SML)", 
+                type: "3d-globe", 
+                file: "Data/p2_fig3_panel_a_bacteria.csv", 
+                unit: "Modeled Species Richness", 
+                autoScale: true 
+              },
+              panel_a_archaea: { 
+                label: "Panel A: Archaea Annual Richness (SML)", 
+                type: "3d-globe", 
+                file: "Data/p2_fig3_panel_a_archaea.csv", 
+                unit: "Modeled Species Richness", 
+                autoScale: true 
+              },
+              panel_b_bacteria: { 
+                label: "Panel B: Bacteria Seasonal Variation (Dec vs. Jun)", 
+                type: "3d-globe", 
+                file: "Data/p2_fig3_panel_b_bacteria.csv", 
+                unit: "Absolute Richness Delta (|Dec - Jun|)", 
+                autoScale: true 
+              },
+              panel_b_archaea: { 
+                label: "Panel B: Archaea Seasonal Variation (Dec vs. Jun)", 
+                type: "3d-globe", 
+                file: "Data/p2_fig3_panel_b_archaea.csv", 
+                unit: "Absolute Richness Delta (|Dec - Jun|)", 
+                autoScale: true 
+              }
             }
           },
           fig6: {
-            title: "Figure 6: Community Structural Shifts & Regional Anomalies",
+            title: "Figure 6: Consensus Richness Hotspots",
             panels: {
-              panel_a: { label: "Panel A: Community Structural Shifts Across Latitudes", type: "boxplot", file: "Data/p2_fig6_panel_a.csv", unit: "Shift Index" },
-              panel_b: { label: "Panel B: Functional Redundancy Across Depths", type: "boxplot", file: "Data/p2_fig6_panel_b.csv", unit: "Redundancy Score" },
-              panel_c: { label: "Panel C: Localized Regional Anomaly Detection", type: "scatterplot", file: "Data/p2_fig6_panel_c.csv", unit: "Anomaly Index" }
+              panel_b: { 
+                label: "Panel B: Consensus Hotspot Coverage (> 75th Percentile)", 
+                type: "3d-globe", 
+                file: "Data/p2_fig6_panel_b.csv", 
+                unit: "Hotspot Class Count", 
+                autoScale: true 
+              }
             }
           }
         }
