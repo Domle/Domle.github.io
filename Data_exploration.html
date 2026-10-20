@@ -344,6 +344,7 @@
                 type: "3d-globe", 
                 file: "Data/p2_fig3_panel_b_bacteria.csv", 
                 unit: "Absolute Richness Delta (|Dec - Jun|)", 
+                colorScale: "white-red",
                 autoScale: true 
               },
               panel_b_archaea: { 
@@ -351,6 +352,7 @@
                 type: "3d-globe", 
                 file: "Data/p2_fig3_panel_b_archaea.csv", 
                 unit: "Absolute Richness Delta (|Dec - Jun|)", 
+                colorScale: "white-red",
                 autoScale: true 
               }
             }
@@ -472,32 +474,34 @@
     }
 
     function loadSelectedData() {
-      const selectedPaper = paperSelect.value;
-      const selectedFig = figureSelect.value;
-      const selectedPanel = panelSelect.value;
-      const panelConfig = datasetSchema[selectedPaper].figures[selectedFig].panels[selectedPanel];
+          const selectedPaper = paperSelect.value;
+          const selectedFig = figureSelect.value;
+          const selectedPanel = panelSelect.value;
+          const panelConfig = datasetSchema[selectedPaper].figures[selectedFig].panels[selectedPanel];
 
-      currentUnit = panelConfig.unit || "Value";
-      document.getElementById('data-description').innerText = `Active View: ${panelConfig.label} | Source File: ${panelConfig.file}`;
+          currentUnit = panelConfig.unit || "Value";
+          document.getElementById('data-description').innerText = `Active View: ${panelConfig.label} | Source File: ${panelConfig.file}`;
 
-      if (panelConfig.type === '3d-globe') {
-        renderView('3d-globe', panelConfig.file);
-        return;
-      }
+          if (panelConfig.type === '3d-globe') {
+            renderView('3d-globe', panelConfig.file);
+            // Triggers globe engine and passes panel options (colorScale, unit, autoScale)
+            renderGlobePlanktonData(panelConfig.file, panelConfig);
+            return;
+          }
 
-      Papa.parse(panelConfig.file, {
-        download: true,
-        header: true,
-        dynamicTyping: true,
-        complete: function (results) {
-          currentData = results.data.filter(row => row && Object.keys(row).length > 1);
-          renderView(panelConfig.type, panelConfig.file);
-        },
-        error: function () {
-          renderDummyData(panelConfig.type);
+          Papa.parse(panelConfig.file, {
+            download: true,
+            header: true,
+            dynamicTyping: true,
+            complete: function (results) {
+              currentData = results.data.filter(row => row && Object.keys(row).length > 1);
+              renderView(panelConfig.type, panelConfig.file);
+            },
+            error: function () {
+              renderDummyData(panelConfig.type);
+            }
+          });
         }
-      });
-    }
 
     function renderView(type, csvFile) {
       const mapElem = document.getElementById('map');

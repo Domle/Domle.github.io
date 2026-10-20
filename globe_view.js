@@ -1,7 +1,6 @@
 /* ==========================================================================
    globe_view.js
-   3D Globe Engine for 1x1 Degree SDMs
-   Canvas Texture Rasterizer with Dynamic Auto-Scaling & Trimmed Header Ingestion
+   3D Globe Engine with Dynamic Color Palette Switching (Viridis & White-Red)
    ========================================================================== */
 
 let globeInstance = null;
@@ -9,7 +8,8 @@ let rawSdmData = [];
 let currentConfig = {
   unit: 'Species Richness',
   minVal: 0,
-  maxVal: 15
+  maxVal: 15,
+  colorScale: 'viridis'
 };
 
 // Base texture CDN URLs
@@ -22,7 +22,6 @@ let currentLayerState = {
   graticules: true
 };
 
-// Pre-load base textures for offscreen canvas compositing
 const baseImageDark = new Image();
 baseImageDark.crossOrigin = 'anonymous';
 baseImageDark.src = DARK_BASE_TEXTURE;
@@ -33,26 +32,40 @@ baseImageSat.crossOrigin = 'anonymous';
 baseImageSat.src = SATELLITE_TEXTURE;
 baseImageSat.onload = () => updateGlobeSurfaceTexture();
 
+// Palette definitions (RGB control points)
+const COLOR_PALETTES = {
+  'viridis': [
+    { t: 0.00, r: 68,  g: 1,   b: 84  }, // Deep Violet
+    { t: 0.25, r: 59,  g: 82,  b: 139 }, // Dark Blue
+    { t: 0.50, r: 33,  g: 145, b: 140 }, // Teal
+    { t: 0.75, r: 94,  g: 201, b: 98  }, // Green
+    { t: 1.00, r: 253, g: 231, b: 37  }  // Yellow
+  ],
+  'white-red': [
+    { t: 0.00, r: 255, g: 255, b: 255 }, // White at zero delta
+    { t: 0.33, r: 252, g: 146, b: 114 }, // Light Coral
+    { t: 0.66, r: 222, g: 45,  b: 38  }, // Crimson
+    { t: 1.00, r: 140, g: 0,   b: 0   }  // Dark Maroon/Red
+  ]
+};
+
+// Corresponding CSS gradient definitions for the floating legend bar
+const LEGEND_GRADIENTS = {
+  'viridis': 'linear-gradient(to right, #440154, #3b528b, #21918c, #5ec962, #fde725)',
+  'white-red': 'linear-gradient(to right, #ffffff, #fc9272, #de2d26, #8c0000)'
+};
+
 /**
- * Maps input value to Viridis palette based on active dataset min/max range
+ * Interpolates color based on value and selected palette
  */
 function getColorForValue(val) {
   if (val === undefined || val === null || isNaN(val)) return 'rgba(0,0,0,0)';
 
   const min = currentConfig.minVal;
   const max = currentConfig.maxVal;
-  
-  // Normalize value dynamically across the true dataset bounds
   const normalized = Math.max(0, Math.min(1, (val - min) / (max - min || 1)));
 
-  // Key Viridis color control stops (RGB)
-  const stops = [
-    { t: 0.00, r: 68,  g: 1,   b: 84  }, // Deep Violet (#440154)
-    { t: 0.25, r: 59,  g: 82,  b: 139 }, // Dark Blue   (#3b528b)
-    { t: 0.50, r: 33,  g: 145, b: 140 }, // Teal        (#21918c)
-    { t: 0.75, r: 94,  g: 201, b: 98  }, // Green       (#5ec962)
-    { t: 1.00, r: 253, g: 231, b: 37  }  // Yellow      (#fde725)
-  ];
+  const stops = COLOR_PALETTES[currentConfig.colorScale] || COLOR_PALETTES['viridis'];
 
   let lower = stops[0];
   let upper = stops[stops.length - 1];
@@ -76,7 +89,7 @@ function getColorForValue(val) {
 }
 
 /**
- * Initializes the Globe.gl 3D viewport
+ * Initializes Globe.gl viewport
  */
 function init3DGlobe(containerId) {
   const container = document.getElementById(containerId);
@@ -100,9 +113,6 @@ function init3DGlobe(containerId) {
   }
 }
 
-/**
- * Fetches GeoJSON country boundaries for coastlines
- */
 function fetchContinentalBorders() {
   fetch('https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_admin_0_countries.geojson')
     .then(res => res.json())
@@ -128,9 +138,6 @@ function updateContinentalBorders() {
   }
 }
 
-/**
- * Injects floating layer toggle controls
- */
 function injectGlobeLayerControls(container) {
   if (document.getElementById('globe-layer-controls')) return;
 
@@ -155,14 +162,14 @@ function injectGlobeLayerControls(container) {
 
   controlBox.innerHTML = `
     <div style="font-weight: 600; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">Globe Layers</div>
-    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; cursor: pointer; text-transform: none; color: #f1f5f9; font-weight: normal;">
-      <input type="checkbox" id="toggle-satellite" style="cursor: pointer;"> Satellite Topography
+    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; cursor: pointer; color: #f1f5f9;">
+      <input type="checkbox" id="toggle-satellite"> Satellite Topography
     </label>
-    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; cursor: pointer; text-transform: none; color: #f1f5f9; font-weight: normal;">
-      <input type="checkbox" id="toggle-borders" checked style="cursor: pointer;"> Continental Outlines
+    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; cursor: pointer; color: #f1f5f9;">
+      <input type="checkbox" id="toggle-borders" checked> Continental Outlines
     </label>
-    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; text-transform: none; color: #f1f5f9; font-weight: normal;">
-      <input type="checkbox" id="toggle-graticules" checked style="cursor: pointer;"> Lat/Lon Grid Lines
+    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: #f1f5f9;">
+      <input type="checkbox" id="toggle-graticules" checked> Lat/Lon Grid Lines
     </label>
   `;
 
@@ -184,9 +191,6 @@ function injectGlobeLayerControls(container) {
   });
 }
 
-/**
- * Injects glassmorphic legend container
- */
 function injectGlobeLegend(container) {
   if (document.getElementById('globe-legend')) return;
 
@@ -215,7 +219,7 @@ function injectGlobeLegend(container) {
 }
 
 /**
- * Updates legend labels dynamically based on current dataset min/max values
+ * Updates legend ticks and dynamic gradient bar matching current palette
  */
 function updateGlobeLegendUI() {
   const legendBox = document.getElementById('globe-legend');
@@ -225,10 +229,9 @@ function updateGlobeLegendUI() {
   const max = currentConfig.maxVal;
   const step = (max - min) / 4;
 
-  const fmt = (v) => {
-    if (v >= 10) return v.toFixed(1);
-    return v.toFixed(2);
-  };
+  const fmt = (v) => v >= 10 ? v.toFixed(1) : v.toFixed(2);
+
+  const activeGradient = LEGEND_GRADIENTS[currentConfig.colorScale] || LEGEND_GRADIENTS['viridis'];
 
   legendBox.innerHTML = `
     <div style="font-weight: 600; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; font-size: 0.75rem;">
@@ -238,7 +241,7 @@ function updateGlobeLegendUI() {
       height: 10px; 
       width: 100%; 
       border-radius: 4px; 
-      background: linear-gradient(to right, #440154, #3b528b, #21918c, #5ec962, #fde725);
+      background: ${activeGradient};
       margin-bottom: 6px;
       border: 1px solid rgba(255, 255, 255, 0.2);
     "></div>
@@ -252,9 +255,6 @@ function updateGlobeLegendUI() {
   `;
 }
 
-/**
- * Composites base map texture and 1x1 degree SDM raster onto offscreen canvas
- */
 function updateGlobeSurfaceTexture() {
   if (!globeInstance) return;
 
@@ -291,15 +291,13 @@ function updateGlobeSurfaceTexture() {
 }
 
 /**
- * Ingests CSV datasets, matching 'Lon', 'Lat', and 'Value' headers (trimmed),
- * computes dynamic min/max ranges, and updates the globe texture.
- * @param {string} dataSource - Path or URL to the CSV file
- * @param {Object} options - Metadata options ({ unit })
+ * Loads CSV predictions and applies panel-specific color scales
  */
 function renderGlobePlanktonData(dataSource, options = {}) {
   if (!globeInstance) return;
 
   currentConfig.unit = options.unit || 'Species Richness';
+  currentConfig.colorScale = options.colorScale || 'viridis';
 
   Papa.parse(dataSource, {
     download: true,
@@ -307,12 +305,8 @@ function renderGlobePlanktonData(dataSource, options = {}) {
     dynamicTyping: true,
     skipEmptyLines: true,
     complete: function (results) {
-      if (!results.data || results.data.length === 0) {
-        console.warn(`[Globe Engine] Empty CSV returned from: ${dataSource}`);
-        return;
-      }
+      if (!results.data || results.data.length === 0) return;
 
-      // 1. Identify Lon, Lat, and Value columns with whitespace trimming
       const sampleRow = results.data[0];
       const rawKeys = Object.keys(sampleRow);
 
@@ -320,12 +314,8 @@ function renderGlobePlanktonData(dataSource, options = {}) {
       const lonKey = rawKeys.find(k => k.trim().toLowerCase() === 'lon' || k.trim().toLowerCase() === 'longitude' || k.trim().toLowerCase() === 'lng');
       const valKey = rawKeys.find(k => k.trim().toLowerCase() === 'value' || k.trim().toLowerCase() === 'val' || k.trim().toLowerCase() === 'richness');
 
-      if (!latKey || !lonKey || !valKey) {
-        console.error(`[Globe Engine] Header mapping failed for ${dataSource}. Found headers:`, rawKeys);
-        return;
-      }
+      if (!latKey || !lonKey || !valKey) return;
 
-      // 2. Parse and filter valid marine rows
       rawSdmData = [];
       const extractedVals = [];
 
@@ -342,26 +332,19 @@ function renderGlobePlanktonData(dataSource, options = {}) {
         }
       });
 
-      // 3. Compute dynamic min and max for auto-scaling
       if (extractedVals.length > 0) {
-        currentConfig.minVal = 0; // Baseline at 0 species
-        currentConfig.maxVal = Math.max(...extractedVals); // Max observed richness
+        currentConfig.minVal = 0;
+        currentConfig.maxVal = Math.max(...extractedVals);
       }
-
-      console.log(`[Globe Engine] Successfully parsed ${rawSdmData.length} grid cells from ${dataSource}. Max Value: ${currentConfig.maxVal}`);
 
       updateGlobeLegendUI();
 
-      // Clear extraneous geometry layers and update texture
       globeInstance
         .pointsData([])
         .ringsData([])
         .tilesData([]);
 
       updateGlobeSurfaceTexture();
-    },
-    error: function (err) {
-      console.error(`Error loading CSV dataset from [${dataSource}]:`, err);
     }
   });
 }
