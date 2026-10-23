@@ -1,6 +1,7 @@
 /* ==========================================================================
    globe_view.js
-   3D Globe Engine with Dynamic Color Palette Switching (Viridis & White-Red)
+   3D Globe Engine for SDMs & Discrete Hotspot Class Mapping
+   Supports Continuous Gradients (Viridis, White-Red) and Segmented Discrete Scales
    ========================================================================== */
 
 let globeInstance = null;
@@ -9,7 +10,9 @@ let currentConfig = {
   unit: 'Species Richness',
   minVal: 0,
   maxVal: 15,
-  colorScale: 'viridis'
+  colorScale: 'viridis',
+  isDiscrete: false,
+  distinctValues: []
 };
 
 // Base texture CDN URLs
@@ -32,7 +35,7 @@ baseImageSat.crossOrigin = 'anonymous';
 baseImageSat.src = SATELLITE_TEXTURE;
 baseImageSat.onload = () => updateGlobeSurfaceTexture();
 
-// Palette definitions (RGB control points)
+// Continuous Color Palettes (RGB Stops)
 const COLOR_PALETTES = {
   'viridis': [
     { t: 0.00, r: 68,  g: 1,   b: 84  }, // Deep Violet
@@ -42,25 +45,42 @@ const COLOR_PALETTES = {
     { t: 1.00, r: 253, g: 231, b: 37  }  // Yellow
   ],
   'white-red': [
-    { t: 0.00, r: 255, g: 255, b: 255 }, // White at zero delta
-    { t: 0.33, r: 252, g: 146, b: 114 }, // Light Coral
+    { t: 0.00, r: 255, g: 255, b: 255 }, // White
+    { t: 0.33, r: 252, g: 146, b: 114 }, // Coral
     { t: 0.66, r: 222, g: 45,  b: 38  }, // Crimson
-    { t: 1.00, r: 140, g: 0,   b: 0   }  // Dark Maroon/Red
+    { t: 1.00, r: 140, g: 0,   b: 0   }  // Dark Maroon
   ]
 };
 
-// Corresponding CSS gradient definitions for the floating legend bar
+// Distinct Categorical Colors for Integer Hotspot Counts (1 to 6+)
+const DISCRETE_SWATCH_COLORS = [
+  '#38bdf8', // 1 - Sky Blue
+  '#34d399', // 2 - Emerald Green
+  '#facc15', // 3 - Bright Yellow
+  '#fb923c', // 4 - Orange
+  '#f87171', // 5 - Coral Red
+  '#e11d48'  // 6 - Crimson
+];
+
 const LEGEND_GRADIENTS = {
   'viridis': 'linear-gradient(to right, #440154, #3b528b, #21918c, #5ec962, #fde725)',
   'white-red': 'linear-gradient(to right, #ffffff, #fc9272, #de2d26, #8c0000)'
 };
 
 /**
- * Interpolates color based on value and selected palette
+ * Maps cell values to continuous or discrete colors
  */
 function getColorForValue(val) {
-  if (val === undefined || val === null || isNaN(val)) return 'rgba(0,0,0,0)';
+  if (val === undefined || val === null || isNaN(val) || val <= 0) return 'rgba(0,0,0,0)';
 
+  // DISCRETE COLOR MAPPING (Integer Hotspot Counts)
+  if (currentConfig.isDiscrete) {
+    const intVal = Math.round(val);
+    const idx = Math.max(0, Math.min(DISCRETE_SWATCH_COLORS.length - 1, intVal - 1));
+    return DISCRETE_SWATCH_COLORS[idx];
+  }
+
+  // CONTINUOUS COLOR MAPPING
   const min = currentConfig.minVal;
   const max = currentConfig.maxVal;
   const normalized = Math.max(0, Math.min(1, (val - min) / (max - min || 1)));
@@ -88,9 +108,6 @@ function getColorForValue(val) {
   return `rgba(${r}, ${g}, ${b}, 0.85)`;
 }
 
-/**
- * Initializes Globe.gl viewport
- */
 function init3DGlobe(containerId) {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -219,18 +236,47 @@ function injectGlobeLegend(container) {
 }
 
 /**
- * Updates legend ticks and dynamic gradient bar matching current palette
+ * Renders continuous gradient bars or discrete swatches based on dataset mode
  */
 function updateGlobeLegendUI() {
   const legendBox = document.getElementById('globe-legend');
   if (!legendBox) return;
 
+  // DISCRETE LEGEND RENDER
+  if (currentConfig.isDiscrete) {
+    const activeInts = currentConfig.distinctValues && currentConfig.distinctValues.length > 0
+      ? currentConfig.distinctValues
+      : [1, 2, 3, 4, 5];
+
+    let swatchesHTML = `<div style="display: flex; gap: 4px; margin-bottom: 6px;">`;
+    let labelsHTML = `<div style="display: flex; gap: 4px; color: #cbd5e1; font-size: 0.7rem; font-weight: 500;">`;
+
+    activeInts.forEach(val => {
+      const idx = Math.max(0, Math.min(DISCRETE_SWATCH_COLORS.length - 1, val - 1));
+      const color = DISCRETE_SWATCH_COLORS[idx];
+      swatchesHTML += `<div style="flex: 1; height: 12px; background: ${color}; border-radius: 3px; border: 1px solid rgba(255,255,255,0.2);"></div>`;
+      labelsHTML += `<div style="flex: 1; text-align: center;">${val}</div>`;
+    });
+
+    swatchesHTML += `</div>`;
+    labelsHTML += `</div>`;
+
+    legendBox.innerHTML = `
+      <div style="font-weight: 600; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; font-size: 0.75rem;">
+        ${currentConfig.unit}
+      </div>
+      ${swatchesHTML}
+      ${labelsHTML}
+    `;
+    return;
+  }
+
+  // CONTINUOUS LEGEND RENDER
   const min = currentConfig.minVal;
   const max = currentConfig.maxVal;
   const step = (max - min) / 4;
 
   const fmt = (v) => v >= 10 ? v.toFixed(1) : v.toFixed(2);
-
   const activeGradient = LEGEND_GRADIENTS[currentConfig.colorScale] || LEGEND_GRADIENTS['viridis'];
 
   legendBox.innerHTML = `
@@ -290,14 +336,12 @@ function updateGlobeSurfaceTexture() {
   globeInstance.globeImageUrl(dataUrl);
 }
 
-/**
- * Loads CSV predictions and applies panel-specific color scales
- */
 function renderGlobePlanktonData(dataSource, options = {}) {
   if (!globeInstance) return;
 
   currentConfig.unit = options.unit || 'Species Richness';
   currentConfig.colorScale = options.colorScale || 'viridis';
+  currentConfig.isDiscrete = options.isDiscrete || false;
 
   Papa.parse(dataSource, {
     download: true,
@@ -333,8 +377,16 @@ function renderGlobePlanktonData(dataSource, options = {}) {
       });
 
       if (extractedVals.length > 0) {
-        currentConfig.minVal = 0;
-        currentConfig.maxVal = Math.max(...extractedVals);
+        const positiveVals = extractedVals.filter(v => v > 0);
+
+        if (currentConfig.isDiscrete) {
+          // Identify unique positive integers present in dataset (e.g. [1, 2, 3])
+          const uniqueInts = Array.from(new Set(positiveVals.map(v => Math.round(v)))).sort((a, b) => a - b);
+          currentConfig.distinctValues = uniqueInts;
+        } else {
+          currentConfig.minVal = 0;
+          currentConfig.maxVal = Math.max(...extractedVals);
+        }
       }
 
       updateGlobeLegendUI();

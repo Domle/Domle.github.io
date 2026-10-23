@@ -358,17 +358,38 @@
             }
           },
           fig6: {
-            title: "Figure 6: Consensus Richness Hotspots",
-            panels: {
-              panel_b: { 
-                label: "Panel B: Consensus Hotspot Coverage (> 75th Percentile)", 
-                type: "3d-globe", 
-                file: "Data/p2_fig6_panel_b.csv", 
-                unit: "Hotspot Class Count", 
-                autoScale: true 
-              }
-            }
-          }
+                      title: "Figure 6: Consensus Diversity Hotspots",
+                      panels: {
+                        panel_b_group1: { 
+                          label: "Panel B: Hotspot Classes - Group 1", 
+                          type: "3d-globe", 
+                          file: "Data/p2_fig6_panel_b_group1.csv", 
+                          unit: "Hotspot Class Count", 
+                          isDiscrete: true 
+                        },
+                        panel_b_group2: { 
+                          label: "Panel B: Hotspot Classes - Group 2", 
+                          type: "3d-globe", 
+                          file: "Data/p2_fig6_panel_b_group2.csv", 
+                          unit: "Hotspot Class Count", 
+                          isDiscrete: true 
+                        },
+                        panel_b_group3: { 
+                          label: "Panel B: Hotspot Classes - Group 3", 
+                          type: "3d-globe", 
+                          file: "Data/p2_fig6_panel_b_group3.csv", 
+                          unit: "Hotspot Class Count", 
+                          isDiscrete: true 
+                        },
+                        panel_b_group4: { 
+                          label: "Panel B: Hotspot Classes - Group 4", 
+                          type: "3d-globe", 
+                          file: "Data/p2_fig6_panel_b_group4.csv", 
+                          unit: "Hotspot Class Count", 
+                          isDiscrete: true 
+                        }
+                      }
+                    }
         }
       }
     };
