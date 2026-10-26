@@ -40,6 +40,50 @@
       margin: auto;
     }
 
+    /* Action Bar at the Top */
+    .top-action-bar {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin: 20px 0 32px;
+      padding: 16px;
+      background: #f0f7ff;
+      border-radius: 12px;
+      border: 1px solid #d0e3ff;
+      align-items: center;
+    }
+
+    .action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      background-color: #0071e3;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: background-color 0.25s ease, transform 0.15s ease;
+      box-shadow: 0 2px 8px rgba(0, 113, 227, 0.25);
+    }
+
+    .action-btn:hover {
+      background-color: #005bb5;
+      transform: translateY(-1px);
+    }
+
+    .action-btn-secondary {
+      background-color: #1c1c1e;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .action-btn-secondary:hover {
+      background-color: #3a3a3c;
+    }
+
     section {
       margin: 48px 0;
     }
@@ -167,27 +211,11 @@
       font-size: 0.92rem;
     }
 
-    .download-links a {
-      display: inline-block;
-      margin-right: 16px;
-      padding: 12px 20px;
-      background-color: #0071e3;
-      color: white;
-      text-decoration: none;
-      border-radius: 8px;
-      transition: background 0.3s;
-      font-weight: 600;
-    }
-
-    .download-links a:hover {
-      background-color: #005bb5;
-    }
-
     .personal-info {
       background: #f8f9fa;
       padding: 20px;
       border-radius: 12px;
-      margin-bottom: 32px;
+      margin-bottom: 24px;
     }
 
     .conference-section h4 {
@@ -217,8 +245,8 @@
         page-break-after: avoid;
       }
 
-      nav {
-        display: none;
+      nav, .top-action-bar {
+        display: none !important;
       }
 
       section {
@@ -259,10 +287,6 @@
         color: black !important;
       }
 
-      .download-links {
-        display: none;
-      }
-
       a {
         color: black !important;
         text-decoration: underline !important;
@@ -277,9 +301,20 @@
     <p>Academic background, research experience, and scholarly contributions in marine ecology and biodiversity.</p>
   </header>
 
-  <nav aria-label="breadcrumb" style="margin: 16px 0; font-size: 0.9rem; color: #0071e3;">
+  <nav aria-label="breadcrumb" style="margin: 16px 0 8px; font-size: 0.9rem; color: #0071e3;">
     <a href="index.html" style="text-decoration: none; color: #0071e3;">Home</a> &gt; CV & Publications
   </nav>
+
+  <!-- Top Action Bar with Prominent Download Options -->
+  <div class="top-action-bar">
+    <button onclick="window.print()" class="action-btn">
+      <i class="fas fa-file-pdf"></i> Download CV as PDF
+    </button>
+    
+    <button onclick="downloadPublicationCSV()" id="export-pubs-btn" class="action-btn action-btn-secondary">
+      <i class="fas fa-file-csv"></i> Export Publications & Metrics (CSV)
+    </button>
+  </div>
 
   <div class="personal-info">
     <h2 style="margin-top: 0; border: none; color: #1c1c1e;">Dominic Eriksson</h2>
@@ -478,11 +513,11 @@
     <h2>Publications Under Review & Preprints</h2>
     
     <div class="publication">
-      <p>Priest, T., Paoli, L., Davín, A., Stäubli, M., <strong>Eriksson, D.</strong>, Ruscheweyh, H.-J., Polz, M., Sunagawa, S. (2026). Subspecies are genomically discrete and ecologically cohesive units of ocean microbiome diversity. <em>bioRxiv / Preprint</em>. <a href="https://lnkd.in/eYMXwTuT" target="_blank">Preprint Link</a>.</p>
+      <p>Priest, T., Paoli, L., Davín, A., Stäubli, M., <strong>Eriksson, D.</strong>, Ruscheweyh, H.-J., Polz, M., Sunagawa, S. (2026). Subspecies are genomically discrete and ecologically cohesive units of ocean microbiome diversity. <em>bioRxiv / Preprint</em>. <a href="https://www.biorxiv.org/content/10.64898/2026.09.29.755032v1" target="_blank">biorxiv.org/content/10.64898/2026.09.29.755032v1</a>.</p>
     </div>
 
     <div class="publication">
-      <p>Lyu, T., Benedetti, F., <strong>Eriksson, D.</strong>, Vogt, M., Thomas, M. K. (2026). Phytoplankton performance in the lab predicts occurrence in the field across a global temperature gradient. <em>Under review</em>.</p>
+      <p>Lyu, T., Benedetti, F., <strong>Eriksson, D.</strong>, Vogt, M., Thomas, M. K. (2026). Phytoplankton performance in the lab predicts occurrence in the field across a global temperature gradient. <em>bioRxiv / Preprint (Under Review)</em>. <a href="https://www.biorxiv.org/content/10.64898/2026.02.18.706362v1.abstract" target="_blank">biorxiv.org/content/10.64898/2026.02.18.706362v1.abstract</a>.</p>
     </div>
   </section>
 
@@ -491,6 +526,10 @@
     
     <div class="publication">
       <p>Vogt, M., Sarmento, H., Benedetti, F., Huber, P., Arboleda-Baena, C., Bader, R. R., <strong>Eriksson, D.</strong>, et al. (2023). AtlantECO Deliverable number 2.1–AtlantECO-BASE. <em>ETH Zurich</em>. <a href="https://doi.org/10.3929/ethz-b-000655633" target="_blank">doi:10.3929/ethz-b-000655633</a>.</p>
+    </div>
+
+    <div class="publication">
+      <p>Vogt, M., et al., <strong>Eriksson, D.</strong>, et al. (2026). AtlantECO Deliverable D02.7–Atlantic ecosystem status: an integrated assessment. <em>Zenodo</em>. <a href="https://doi.org/10.5281/zenodo.19593633" target="_blank">doi:10.5281/zenodo.19593633</a>.</p>
     </div>
   </section>
 
@@ -568,13 +607,135 @@
     </div>
   </section>
 
-  <section>
-    <h2>Resources</h2>
-    <div class="download-links">
-      <button onclick="window.print()" style="display: inline-block; margin-right: 16px; padding: 12px 20px; background-color: #0071e3; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: background 0.3s;"><i class="fas fa-download"></i> Download CV as PDF</button>
-    </div>
-  </section>
+<!-- Pure OpenAlex Live DOI Query & Dynamic Metric Script -->
+  <script>
+    // Master List of Publications & Preprints with Clean DOIs
+    const CURATED_PUBLICATIONS = [
+      {
+        title: "Nitrogen fixation rates increase with diazotroph richness in the global ocean",
+        year: 2026,
+        venue: "Scientific Reports",
+        role: "First Author",
+        doi: "https://doi.org/10.1038/s41598-026-61132-2",
+        doiClean: "10.1038/s41598-026-61132-2"
+      },
+      {
+        title: "Variations of the latitudinal diversity gradient of the ocean microbiome",
+        year: 2026,
+        venue: "Cell Host and Microbe",
+        role: "Co-First Author",
+        doi: "https://doi.org/10.1016/j.chom.2026.05.016",
+        doiClean: "10.1016/j.chom.2026.05.016"
+      },
+      {
+        title: "The gorgonian coral Eunicella labiata hosts a distinct prokaryotic consortium amenable to cultivation",
+        year: 2017,
+        venue: "FEMS Microbiology Ecology",
+        role: "Co-Author",
+        doi: "https://doi.org/10.1093/femsec/fix143",
+        doiClean: "10.1093/femsec/fix143"
+      },
+      {
+        title: "Subspecies are genomically discrete and ecologically cohesive units of ocean microbiome diversity",
+        year: 2026,
+        venue: "bioRxiv / Preprint",
+        role: "Co-Author",
+        doi: "https://www.biorxiv.org/content/10.64898/2026.09.29.755032v1",
+        doiClean: "10.64898/2026.09.29.755032v1"
+      },
+      {
+        title: "Phytoplankton performance in the lab predicts occurrence in the field across a global temperature gradient",
+        year: 2026,
+        venue: "bioRxiv / Preprint (Under Review)",
+        role: "Co-Author",
+        doi: "https://www.biorxiv.org/content/10.64898/2026.02.18.706362v1.abstract",
+        doiClean: "10.64898/2026.02.18.706362v1"
+      },
+      {
+        title: "AtlantECO Deliverable - D02.7 - Atlantic ecosystem status: an integrated assessment",
+        year: 2026,
+        venue: "Zenodo / Project Deliverable",
+        role: "Co-Author",
+        doi: "https://doi.org/10.5281/zenodo.19593633",
+        doiClean: "10.5281/zenodo.19593633"
+      }
+    ];
 
+    async function downloadPublicationCSV() {
+      const btn = document.getElementById('export-pubs-btn');
+      const originalHTML = btn.innerHTML;
+      btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Fetching Live OpenAlex Data...`;
+      btn.disabled = true;
+
+      try {
+        // 1. Fetch live citations for each paper DIRECTLY BY DOI
+        const updatedPubs = await Promise.all(CURATED_PUBLICATIONS.map(async (pub) => {
+          if (!pub.doiClean) return { ...pub, citations: 0 };
+          
+          try {
+            const workRes = await fetch(`https://api.openalex.org/works/https://doi.org/${pub.doiClean}?mailto=deriksson@ethz.ch`);
+            if (workRes.ok) {
+              const workData = await workRes.json();
+              return { ...pub, citations: workData.cited_by_count ?? 0 };
+            }
+          } catch (err) {
+            console.warn(`Could not query OpenAlex DOI for ${pub.doiClean}:`, err);
+          }
+          return { ...pub, citations: 0 };
+        }));
+
+        // 2. Compute Scientometric Indicators (h-index, i10-index, total citations)
+        const citationsSorted = updatedPubs.map(p => p.citations).sort((a, b) => b - a);
+        const totalCitations = citationsSorted.reduce((sum, c) => sum + c, 0);
+        const i10Index = citationsSorted.filter(c => c >= 10).length;
+        
+        let hIndex = 0;
+        for (let i = 0; i < citationsSorted.length; i++) {
+          if (citationsSorted[i] >= i + 1) {
+            hIndex = i + 1;
+          } else {
+            break;
+          }
+        }
+
+        // 3. Build CSV with exact computed live metrics
+        let csvLines = [];
+        csvLines.push(`"SCIENTIFIC METRICS SUMMARY (Source: OpenAlex API Live Query)"`);
+        csvLines.push(`"Metric","Value"`);
+        csvLines.push(`"Total Citations","${totalCitations}"`);
+        csvLines.push(`"h-index","${hIndex}"`);
+        csvLines.push(`"i10-index","${i10Index}"`);
+        csvLines.push(`"Curated Publications & Deliverables","${updatedPubs.length}"`);
+        csvLines.push(``);
+        csvLines.push(`"PUBLICATION LIST & CITATION COUNTS"`);
+        csvLines.push(`"Title","Year","Journal / Venue","Authorship Role","Citations (OpenAlex Live)","DOI / Link"`);
+
+        updatedPubs.forEach(item => {
+          const titleClean = `"${item.title.replace(/"/g, '""')}"`;
+          const venueClean = `"${item.venue.replace(/"/g, '""')}"`;
+          csvLines.push(`${titleClean},${item.year},${venueClean},"${item.role}",${item.citations},"${item.doi}"`);
+        });
+
+        // 4. Trigger File Download
+        const csvString = csvLines.join('\n');
+        const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+
+        const downloadLink = document.createElement("a");
+        downloadLink.href = url;
+        downloadLink.setAttribute("download", "Dr_Dominic_Eriksson_Publications_and_Metrics.csv");
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+
+      } catch (err) {
+        console.error('Error generating publication CSV:', err);
+      } finally {
+        btn.innerHTML = originalHTML;
+        btn.disabled = false;
+      }
+    }
+  </script>
 </body>
 
 </html>
