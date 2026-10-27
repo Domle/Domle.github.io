@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Research Highlights | Dominic Eriksson (domle)</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   
   <!-- Embed script for Altmetric badges -->
@@ -17,7 +17,7 @@
       background-color: #fdfdfd;
       color: #1c1c1e;
       margin: 0;
-      padding: 0 24px;
+      padding: 0 24px 48px;
       line-height: 1.6;
       max-width: 960px;
       margin: auto;
@@ -63,6 +63,7 @@
       margin-top: 20px;
     }
 
+    /* Lead-Author Interactive Card Styling */
     .paper-card {
       background: #ffffff;
       border: 1px solid #e5e5ea;
@@ -81,6 +82,18 @@
       border-color: #0071e3;
     }
 
+    /* Co-authored Static Summary Card Styling */
+    .coauthor-card {
+      background: #ffffff;
+      border: 1px solid #e5e5ea;
+      border-radius: 12px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+    }
+
     .paper-tag {
       display: inline-block;
       align-self: flex-start;
@@ -93,23 +106,41 @@
       margin-bottom: 12px;
     }
 
-    .paper-card h3 {
-      margin: 0 0 12px 0;
-      font-size: 1.25rem;
+    .paper-tag-preprint {
+      background: #fef3c7;
+      color: #b45309;
+    }
+
+    .paper-tag-report {
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .paper-card h3, .coauthor-card h3 {
+      margin: 0 0 8px 0;
+      font-size: 1.2rem;
       color: #1c1c1e;
     }
 
-    .paper-card p {
-      color: #636366;
+    .authors-list {
+      font-size: 0.9rem;
+      color: #0071e3;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+
+    .main-message-text {
+      color: #48484a;
       font-size: 0.95rem;
-      margin: 0 0 16px 0;
+      line-height: 1.5;
+      margin-bottom: 14px;
     }
 
     .metric-footer {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 20px;
+      margin-top: 16px;
       padding-top: 14px;
       border-top: 1px dashed #e5e5ea;
     }
@@ -155,6 +186,21 @@
       margin-top: 12px;
     }
 
+    .doi-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #0071e3;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.88rem;
+    }
+
+    .doi-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Modal Sheet Styling */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -213,21 +259,7 @@
       color: #1c1c1e;
     }
 
-    .doi-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      color: #0071e3;
-      text-decoration: none;
-      font-weight: 600;
-      margin-top: 8px;
-    }
-
-    .doi-link:hover {
-      text-decoration: underline;
-    }
-
-    /* ================= INTERACTIVE DASHBOARD SYSTEM ================= */
+    /* Dashboard Layout */
     .infosheet-dashboard {
       display: grid;
       grid-template-columns: 1.1fr 0.9fr;
@@ -273,10 +305,6 @@
       margin-bottom: 8px;
     }
 
-    .info-block-card li:last-child {
-      margin-bottom: 0;
-    }
-
     .figure-pane-column {
       display: flex;
       flex-direction: column;
@@ -288,7 +316,6 @@
       border-radius: 12px;
       padding: 16px;
       text-align: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
     }
 
     .viewport-image-wrapper {
@@ -308,11 +335,6 @@
       max-height: 320px;
       object-fit: contain;
       border-radius: 4px;
-      transition: transform 0.2s;
-    }
-
-    .viewport-image-wrapper:hover img {
-      transform: scale(1.02);
     }
 
     .zoom-hint {
@@ -348,15 +370,6 @@
       font-weight: 600;
       font-size: 0.85rem;
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: background 0.2s, color 0.2s;
-    }
-
-    .dashboard-action-btn:hover {
-      background: #0071e3;
-      color: white;
     }
 
     .collapsible-legend-panel {
@@ -413,7 +426,7 @@
       background: #ffffff;
     }
 
-    /* ================= STANDALONE LIGHTBOX FOR EXPANDED VIEW ================= */
+    /* Lightbox Overlay */
     .lightbox-overlay {
       position: fixed;
       top: 0;
@@ -445,7 +458,6 @@
       max-width: 100%;
       max-height: 85vh;
       border-radius: 4px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
 
     .close-lightbox-btn {
@@ -471,9 +483,10 @@
     <a href="index.html" style="text-decoration: none; color: #0071e3;">Home</a> &gt; Research Highlights
   </nav>
 
+  <!-- SECTION 1: LEAD-AUTHOR RESEARCH (INTERACTIVE) -->
   <section>
-    <h2>Publications</h2>
-    <p style="color: #636366; margin-top: -16px; margin-bottom: 24px;">Click on either paper below to view its research info sheet, methods summary, and interactive figures.</p>
+    <h2>Lead-Author Publications</h2>
+    <p style="color: #636366; margin-top: -16px; margin-bottom: 24px;">Click on either paper below to launch its interactive research info sheet, methods breakdown, and 3D/panel figures.</p>
     
     <div class="publications-grid">
       <!-- PAPER 1 CARD -->
@@ -481,7 +494,8 @@
         <div>
           <span class="paper-tag">Scientific Reports</span>
           <h3>Nitrogen fixation rates increase with diazotroph richness in the global ocean</h3>
-          <p><strong>Eriksson, D.</strong>, et al. Demonstrating a clear, empirical relationship showing how the biological diversity of marine diazotrophs actively drives nitrogen fixation across varying ocean biomes.</p>
+          <p class="authors-list">Eriksson, D., Gruber, N., Benedetti, F., Righetti, D., Paoli, L., Salazar, G., Sunagawa, S., Vogt, M. (2026)</p>
+          <p class="main-message-text">Demonstrating a clear, empirical relationship showing how the biological diversity of marine diazotrophs actively drives nitrogen fixation across varying ocean biomes.</p>
         </div>
         
         <div class="metric-footer">
@@ -501,7 +515,8 @@
         <div>
           <span class="paper-tag">Cell Host & Microbe</span>
           <h3>Variations in the latitudinal diversity gradients of the ocean microbiome</h3>
-          <p><strong>Eriksson, D.</strong>, Schiller, J., Schickele, A., et al. Revealing unique structural shifts and localized variations in how microbial life scales horizontally across world ocean latitudes.</p>
+          <p class="authors-list">Eriksson, D., Schiller, J., Schickele, A., Clerk, C., Miravet-Verde, S., Ruscheweyh, H.-J., Priest, T., Bork, P., Gruber, N., Vogt, M., Sunagawa, S. (2026)</p>
+          <p class="main-message-text">Revealing unique structural shifts and localized variations in how microbial life scales horizontally across world ocean latitudes.</p>
         </div>
         
         <div class="metric-footer">
@@ -518,7 +533,126 @@
     </div>
   </section>
 
-  <!-- ================= DYNAMIC MODAL OVERLAYS ================= -->
+  <!-- SECTION 2: CO-AUTHORED RESEARCH & PREPRINTS -->
+  <section>
+    <h2>Co-Authored Research & Preprints</h2>
+    <p style="color: #636366; margin-top: -16px; margin-bottom: 24px;">Key contributions to collaborative studies, global preprints, and open science oceanographic deliverables.</p>
+
+    <div class="publications-grid">
+
+      <!-- PREPRINT 1: PRIEST ET AL. -->
+      <div class="coauthor-card">
+        <div>
+          <span class="paper-tag paper-tag-preprint">bioRxiv Preprint</span>
+          <h3>Subspecies are genomically discrete and ecologically cohesive units of ocean microbiome diversity</h3>
+          <p class="authors-list">Priest, T., Paoli, L., Davín, A., Stäubli, M., Eriksson, D., Ruscheweyh, H.-J., Polz, M., Sunagawa, S. (2026)</p>
+          <p class="main-message-text">By applying a scalable, cultivation-independent genomic framework to 270 
+            species in the global ocean microbiome, researchers identified 724 genomically discrete and ecologically 
+            cohesive subspecies whose diversification is driven by core gene selection alongside variable gene 
+            content restructuring. Over half of these species contained subspecies strongly linked to distinct 
+            environmental factors like temperature, ultimately demonstrating that fine-scale subspecies, 
+            rather than broader, operationally defined species—serve as the primary, biologically meaningful 
+            units driving ecological adaptation and evolutionary divergence in marine environments.</p>
+          <a href="https://www.biorxiv.org/content/10.64898/2026.09.29.755032v1" target="_blank" class="doi-link">
+            <i class="fas fa-external-link-alt"></i> bioRxiv DOI: 10.64898/2026.09.29.755032v1
+          </a>
+        </div>
+        
+        <div class="metric-footer">
+          <div class="citation-count">
+            <i class="fas fa-quote-right"></i> Citations: <strong id="cite-priest">Loading...</strong>
+          </div>
+          <div class="altmetric-container">
+            <a href="https://www.altmetric.com/details/doi/10.64898/2026.09.29.755032v1" target="_blank" class="altmetric-label">Altmetric Score</a>
+            <div data-badge-type="donut" data-doi="10.64898/2026.09.29.755032v1" data-hide-no-mentions="true" class="altmetric-embed"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PREPRINT 2: LYU ET AL. -->
+      <div class="coauthor-card">
+        <div>
+          <span class="paper-tag paper-tag-preprint">Under Review (bioRxiv)</span>
+          <h3>Phytoplankton performance in the lab predicts occurrence in the field across a global temperature gradient</h3>
+          <p class="authors-list">Lyu, T., Benedetti, F., Eriksson, D., Vogt, M., Thomas, M. K. (2026)</p>
+          <p class="main-message-text">By comparing laboratory thermal performance curves with field-based species distribution 
+            models across 39 marine phytoplankton species, researchers evaluated how well fundamental and realized thermal
+            niches align. They uncovered a strong, near 1:1 agreement between median laboratory growth temperatures and 
+            field occurrence temperatures (R-squared=0.49), confirming that both species distribution models and 
+            simple laboratory experiments are reliable, complementary tools for predicting marine species range 
+            shifts and community changes on a warming planet.</p>
+          <a href="https://www.biorxiv.org/content/10.64898/2026.02.18.706362v1.abstract" target="_blank" class="doi-link">
+            <i class="fas fa-external-link-alt"></i> bioRxiv DOI: 10.64898/2026.02.18.706362v1
+          </a>
+        </div>
+        
+        <div class="metric-footer">
+          <div class="citation-count">
+            <i class="fas fa-quote-right"></i> Citations: <strong id="cite-lyu">Loading...</strong>
+          </div>
+          <div class="altmetric-container">
+            <a href="https://www.altmetric.com/details/doi/10.64898/2026.02.18.706362v1" target="_blank" class="altmetric-label">Altmetric Score</a>
+            <div data-badge-type="donut" data-doi="10.64898/2026.02.18.706362v1" data-hide-no-mentions="true" class="altmetric-embed"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAPER 3: KELLER-COSTA ET AL. (2017) -->
+      <div class="coauthor-card">
+        <div>
+          <span class="paper-tag">FEMS Microbiology Ecology</span>
+          <h3>The gorgonian coral Eunicella labiata hosts a distinct prokaryotic consortium amenable to cultivation</h3>
+          <p class="authors-list">Keller-Costa, T., Eriksson, D., Gonçalves, J.M., Gomes, N.C., Lago-Lestón, A., Costa, R. (2017)</p>
+          <p class="main-message-text">By applying Illumina 16S rRNA gene sequencing and a 'plate-wash' cultivation methodology 
+            to the gorgonian coral Eunicella labiata and surrounding seawater, researchers characterized the host's bacterial 
+            community structure and culturability. They uncovered a distinct, host-enriched microbiome dominated by 
+            Oceanospirillales and Rhodobacterales, and successfully cultivated a remarkable 62% of the bacterial 
+            symbionts. These findings demonstrate that E. labiata harbors a specialized microbial community while 
+            overturning the standard assumption that dominant marine coral symbionts are largely unculturable.</p>
+          <a href="https://doi.org/10.1093/femsec/fix143" target="_blank" class="doi-link">
+            <i class="fas fa-external-link-alt"></i> DOI: 10.1093/femsec/fix143
+          </a>
+        </div>
+        
+        <div class="metric-footer">
+          <div class="citation-count">
+            <i class="fas fa-quote-right"></i> Citations: <strong id="cite-keller">Loading...</strong>
+          </div>
+          <div class="altmetric-container">
+            <a href="https://www.altmetric.com/details/doi/10.1093/femsec/fix143" target="_blank" class="altmetric-label">Altmetric Score</a>
+            <div data-badge-type="donut" data-doi="10.1093/femsec/fix143" data-hide-no-mentions="true" class="altmetric-embed"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DELIVERABLE 1: ATLANTECO D02.7 -->
+      <div class="coauthor-card">
+        <div>
+          <span class="paper-tag paper-tag-report">Project Deliverable</span>
+          <h3>AtlantECO Deliverable D02.7 - Atlantic ecosystem status: an integrated assessment</h3>
+          <p class="authors-list">Vogt, M., et al., Eriksson, D., et al. (2026)</p>
+          <p class="main-message-text">Synthesizing basin-wide biological, oceanographic, and modeling data to deliver an 
+            integrated assessment of the contemporary status and ecosystem health of Atlantic pelagic communities.</p>
+          <a href="https://doi.org/10.5281/zenodo.19593633" target="_blank" class="doi-link">
+            <i class="fas fa-external-link-alt"></i> Zenodo DOI: 10.5281/zenodo.19593633
+          </a>
+        </div>
+        
+        <div class="metric-footer">
+          <div class="citation-count">
+            <i class="fas fa-quote-right"></i> Citations: <strong id="cite-d027">Loading...</strong>
+          </div>
+          <div class="altmetric-container">
+            <a href="https://www.altmetric.com/details/doi/10.5281/zenodo.19593633" target="_blank" class="altmetric-label">Altmetric Score</a>
+            <div data-badge-type="donut" data-doi="10.5281/zenodo.19593633" data-hide-no-mentions="true" class="altmetric-embed"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= DYNAMIC MODAL OVERLAYS (LEAD PAPERS) ================= -->
   
   <!-- INTERACTIVE MODAL FOR PAPER 1 (3 FIGURES) -->
   <div id="paper1" class="modal-overlay" onclick="closeModal('paper1')">
@@ -533,7 +667,6 @@
       <hr style="border:0; border-top:1px solid #e5e5ea; margin: 16px 0;">
 
       <div class="infosheet-dashboard">
-        <!-- Left Column: Text Boxes -->
         <div class="text-pane-column">
           <div class="info-block-card">
             <h4><i class="fas fa-question-circle"></i> Core Question</h4>
@@ -565,7 +698,6 @@
           </div>
         </div>
 
-        <!-- Right Column: Interactive Panel -->
         <div class="figure-pane-column">
           <div class="main-display-viewport">
             <div class="viewport-image-wrapper" onclick="triggerLightbox('paper1')">
@@ -584,7 +716,6 @@
               <strong>Key Figure Empirical Takeaway:</strong> <span id="paper1-active-fig-takeaway">Demonstrates a strong latitudinal gradient in diazotroph richness with a distinct equatorial dip driven by Pacific upwelling, revealing divergent distribution patterns between cyanobacterial and non-cyanobacterial groups.</span>
             </div>
 
-            <!-- 3 Thumbnail Grid Tray -->
             <div class="thumbnail-selection-grid">
               <div class="thumbnail-item-card active-selection" onclick="changeActiveFigure('paper1', 1)">
                 <img src="Plots/notion_main_figure_1.png" onerror="this.src='https://placehold.co/100x75?text=Fig+1'">
@@ -603,7 +734,7 @@
         </div>
       </div>
     </div>
-  </div> <!-- FIXED: This specific closing tag was missing, trapping Paper 2! -->
+  </div>
 
   <!-- INTERACTIVE MODAL FOR PAPER 2 (6 FIGURES) -->
   <div id="paper2" class="modal-overlay" onclick="closeModal('paper2')">
@@ -618,7 +749,6 @@
       <hr style="border:0; border-top:1px solid #e5e5ea; margin: 16px 0;">
 
       <div class="infosheet-dashboard">
-        <!-- Left Column: Text Boxes -->
         <div class="text-pane-column">
           <div class="info-block-card">
             <h4><i class="fas fa-question-circle"></i> Core Question</h4>
@@ -650,14 +780,13 @@
           </div>
         </div>
 
-        <!-- Right Column: Interactive Panel -->
         <div class="figure-pane-column">
           <div class="main-display-viewport">
             <div class="viewport-image-wrapper" onclick="triggerLightbox('paper2')">
               <img id="paper2-active-fig-img" src="Plots/LDG_main_figure_1.png" alt="Active Figure View" onerror="this.src='https://placehold.co/500x350?text=Paper+2+-+Figure+1'">
               <div class="zoom-hint"><i class="fas fa-search-plus"></i> Click to Zoom</div>
             </div>
-            <div id="paper2-active-fig-title" class="figure-meta-title">Figure 1: Ocean Microbiome Global Distribution Anomalies</div>
+            <div id="paper2-active-fig-title" class="figure-meta-title">Figure 1: Global dataset of prokaryotic diversity and study design</div>
             
             <div class="action-toggle-bar">
               <button class="dashboard-action-btn" onclick="toggleLegendBox('paper2')"><i class="fas fa-book-open"></i> Toggle Legend & Key Results</button>
@@ -669,7 +798,6 @@
               <strong>Key Figure Empirical Takeaway:</strong> <span id="paper2-active-fig-takeaway">Maps the global spatial and seasonal distribution of 1,595 SML and 238 MZ metagenomic samples, establishing dataset coverage and regional sampling biases.</span>
             </div>
 
-            <!-- 6 Thumbnail Grid Tray (Moved inside viewport for visual uniformity) -->
             <div class="thumbnail-selection-grid">
               <div class="thumbnail-item-card active-selection" onclick="changeActiveFigure('paper2', 1)">
                 <img src="Plots/LDG_main_figure_1.png" onerror="this.src='https://placehold.co/100x75?text=Fig+1'">
@@ -702,7 +830,7 @@
     </div>
   </div>
 
-  <!-- GLOBAL SIMPLIFIED LIGHTBOX MODAL FOR ZOOM -->
+  <!-- LIGHTBOX MODAL -->
   <div id="global-lightbox" class="lightbox-overlay" onclick="closeLightbox()">
     <div class="lightbox-container" onclick="event.stopPropagation()">
       <button class="close-lightbox-btn" onclick="closeLightbox()"><i class="fas fa-times"></i></button>
@@ -710,9 +838,9 @@
     </div>
   </div>
 
-  <!-- ================= JAVASCRIPT LOGIC ================= -->
+  <!-- JAVASCRIPT LOGIC -->
   <script>
-    // Nested structure holding metadata for both interactive paper frameworks
+    // Complete Nested Matrix Holding Figure Metadata for Interactive Modals
     const globalPapersMatrix = {
       paper1: {
         1: {
@@ -739,32 +867,38 @@
           title: "Figure 1: Global dataset of prokaryotic diversity and study design",
           src: "Plots/LDG_main_figure_1.png",
           legend: `Global map showing the distribution of metagenomic samples from the surface mixed layer (SML) and the mesopelagic zone (MZ; 200–1,000 m). Sample locations and percentage contributions are indicated for the Indian Ocean (IO), Southern Ocean (SO), North Pacific Ocean (NPO), South Pacific Ocean (SPO), North Atlantic Ocean (NAO), South Atlantic Ocean (SAO), and Arctic Ocean (AO). Marginal scatterplots illustrate sample depth distribution across the SML (n = 1,595) and MZ (n = 238). Sample counts are also shown across 5° latitude bins and seasons (left). Seasons were defined as follows: Northern Hemisphere: winter, December–February; spring, March–May; summer, June–August; autumn, September–November; Southern Hemisphere: reversed. Species-resolved taxonomic profiles were generated and used to calculate within-sample diversity (observed richness, Chao1, and Shannon index) across all prokaryotic species, as well as by taxonomic rank (from domain to genus). For each sample, 200 independent rarefactions were performed, and diversity metrics were calculated as the mean across repetitions. Within-sample diversity metrics were then extrapolated across the SML using habitat modeling.`,
-          takeaway: "Maps the global spatial and seasonal distribution of 1,595 SML and 238 MZ metagenomic samples, establishing dataset coverage and regional sampling biases."        },
+          takeaway: "Maps the global spatial and seasonal distribution of 1,595 SML and 238 MZ metagenomic samples, establishing dataset coverage and regional sampling biases."
+        },
         2: {
           title: "Figure 2: Latitudinal patterns of within-sample richness in Bacteria and Archaea across ocean depths",
           src: "Plots/LDG_main_figure_2.png",
           legend: `Observed within-sample richness for (A) Bacteria and (B) Archaea in the SML (top panels) and the MZ (bottom panels), shown across 5° latitude bins. Statistical comparisons (blue) indicate fold change (FC) and p values (Wilcoxon test) between (sub)tropical and high-latitude regions (0°–40° vs 41°–90° absolute latitude). The top-right plots show correlations between prokaryotic richness and bacterial or archaeal richness. Tables summarize fold changes between 0°–40° and 41°–90° absolute latitude for Shannon index and Chao1 diversity metrics in (A) Bacteria and (B) Archaea (Wilcoxon test; ns: p > 0.05, ***: p < 0.001).`,
-          takeaway: "Reveals a strong latitudinal diversity gradient in the surface mixed layer for both Bacteria and Archaea, whereas deep mesopelagic richness does not decline toward higher latitudes."        },
+          takeaway: "Reveals a strong latitudinal diversity gradient in the surface mixed layer for both Bacteria and Archaea, whereas deep mesopelagic richness does not decline toward higher latitudes."
+        },
         3: {
           title: "Figure 3: Modeled bacterial and archaeal richness patterns in the surface mixed layer",
           src: "Plots/LDG_main_figure_3.png",
           legend: `(A) Global maps display modeled annual richness patterns for Bacteria (top) and Archaea (bottom) in the SML. Areas of high uncertainty are marked by white stipplings (coefficient of variation > 20% across model ensemble members). Model predictive power (R²) is shown in red (lower left). White contours highlight diversity hotspots (regions above the 75th percentile of modeled richness). Latitudinal gradients are shown for the global ocean with shading indicating model uncertainty (± SD) across ensemble members and longitude and dashed red lines with annotation indicate the maximum mean diversity. (B) Global maps are colored by the magnitude of seasonal variation in richness between December and June for Bacteria (top) and Archaea (bottom), computed as the absolute change in modeled species richness between December and June. Black stippling indicates areas where fewer than 75% of ensemble members agreed on the direction of richness change. Right: Latitudinal gradients for June (pink) and December (black) with uncertainty (± SD) as shading. Blue labels mark bins with significant seasonal differences (> 50% of ensemble members, p < 0.001, Wilcoxon test); percentages indicate the fraction of significant bins.`,
-          takeaway: "Validates model predictions against empirical time-series data, confirming higher winter prokaryotic richness across coastal and open-ocean sites, with seasonal swings strongly attenuated near the equator."        },
+          takeaway: "Validates model predictions against empirical time-series data, confirming higher winter prokaryotic richness across coastal and open-ocean sites, with seasonal swings strongly attenuated near the equator."
+        },
         4: {
           title: "Figure 4: Modeled seasonal richness compared to time series observations",
           src: "Plots/LDG_main_figure_4.png",
           legend: `Comparison of June to December change in prokaryotic richness between the model and stationary time series. (A) European coastal time series are compared to corresponding modeled latitudes. Boxplots compare the symmetric percent difference in prokaryotic richness in December relative to June, text labels indicate the median. The left map shows the latitudes corresponding to the European time series studies, and the coloring indicates the symmetric percent difference in prokaryotic richness of December versus June. The right map shows the locations of the European time series studies. (B) The map indicates the sampling location of the HOT ALOHA time series (left panel). The observed seasonal change in prokaryotic richness in the HOT ALOHA time series was compared to the modeled richness change at the corresponding latitude. This comparison is summarized in the bar plot (central panel), showing the symmetric percent change in December relative to June, based on the habitat model and the time series observations. The scatter plot with loess fit (right panel) shows the month-resolved observed richness in SML samples, with text annotations indicating the median observed richness in June and December.`,
-          takeaway: "Validates model predictions against empirical time-series data, confirming higher winter prokaryotic richness across coastal and open-ocean sites, with seasonal swings strongly attenuated near the equator."        },
+          takeaway: "Validates model predictions against empirical time-series data, confirming higher winter prokaryotic richness across coastal and open-ocean sites, with seasonal swings strongly attenuated near the equator."
+        },
         5: {
           title: "Figure 5: Latitudinal diversity gradients of different taxonomic ranks and across seasonality",
           src: "Plots/LDG_main_figure_5.png",
           legend: `(A) Dendrogram showing similarity in modeled annual latitudinal richness patterns across taxa. Mean richness per 1° latitude bin was correlated (Pearson) across taxa (hclust, R stats). Four distinct clusters of latitudinal diversity gradients (LDGs) were identified. For each cluster, the LDG of the taxon with the highest mean annual richness in the SML is shown, plus the archaeal class with highest mean richness (Poseidoniia): Solid lines show mean richness per 1° latitude bin; shading indicates ± SD across ensemble members and longitude. (B) Left: Modeled mean latitudinal richness for June (pink) and December (black). Blue labels mark latitude bins with significant seasonal differences (> 50% of ensemble members, p < 0.001, Wilcoxon test); percentages indicate the fraction of significant bins. Right: Percent change in richness between winter (NH: December; SH: June) and summer (NH: June; SH: December), shown as mean ± SD across latitude bins.`,
-          takeaway: "Classifies ocean prokaryotes into four distinct latitudinal gradient clusters, showing that dominant taxa mask diverse group-specific gradients while higher winter richness remains a widespread trend."        },
+          takeaway: "Classifies ocean prokaryotes into four distinct latitudinal gradient clusters, showing that dominant taxa mask diverse group-specific gradients while higher winter richness remains a widespread trend."
+        },
         6: {
           title: "Figure 6: Richness hotspots and environmental drivers in the surface mixed layer across taxonomic groups",
           src: "Plots/LDG_main_figure_6.png",
           legend: `(A) Bubble plots show the top three environmental drivers (color-coded) of richness for modeled prokaryotic classes and domains. Bubble size shows median variance explained; horizontal bars indicate the interquartile range across ensemble members. (B) Consensus hotspot maps show, for each LDG cluster (Figure 5), the number of classes with richness hotspots per location (> 75th percentile) and the fraction of ocean area covered. (C) Spider plots depict scaled environmental characteristics (annual mean; PAR: photosynthetically active radiation; N*: excess nitrate relative to phosphate; Total POC: particulate organic carbon; AOU: apparent oxygen utilization) across diversity hotspots. Environmental variables were scaled to the range 0–1 using min-max normalization (rescale, R scales) for comparability. For example, a temperature value of 1 indicates that the richness hotspot for that taxonomic group has the highest median annual temperature compared to all other taxon-specific richness hotspots. Lines are color-coded by taxonomic groups.`,
-          takeaway: "Identifies temperature as the primary driver of prokaryotic richness alongside secondary nutrient and carbon gradients, showing that diversity hotspots map to four distinct environmental regimes."        }
+          takeaway: "Identifies temperature as the primary driver of prokaryotic richness alongside secondary nutrient and carbon gradients, showing that diversity hotspots map to four distinct environmental regimes."
+        }
       }
     };
 
@@ -839,25 +973,31 @@
       }
     }
 
-    // LIVE CITATION FETCH ENGINE (OpenAlex API Integration)
+    // LIVE CITATION FETCH ENGINE (OpenAlex API Integration for ALL 6 Works)
     async function loadLiveCitations() {
       const targetPublications = [
         { elementId: 'cite-paper1', doi: '10.1038/s41598-026-61132-2' },
-        { elementId: 'cite-paper2', doi: '10.1016/j.chom.2026.05.016' }
+        { elementId: 'cite-paper2', doi: '10.1016/j.chom.2026.05.016' },
+        { elementId: 'cite-priest', doi: '10.64898/2026.09.29.755032v1' },
+        { elementId: 'cite-lyu', doi: '10.64898/2026.02.18.706362v1' },
+        { elementId: 'cite-keller', doi: '10.1093/femsec/fix143' },
+        { elementId: 'cite-d027', doi: '10.5281/zenodo.19593633' }
       ];
 
       for (const pub of targetPublications) {
         try {
-          const response = await fetch(`https://api.openalex.org/works/https://doi.org/${pub.doi}`);
+          const response = await fetch(`https://api.openalex.org/works/https://doi.org/${pub.doi}?mailto=deriksson@ethz.ch`);
           if (!response.ok) throw new Error(`OpenAlex API Connection Failed`);
           
           const payload = await response.json();
           const totalCitations = payload.cited_by_count !== undefined ? payload.cited_by_count : 0;
           
-          document.getElementById(pub.elementId).textContent = totalCitations;
+          const el = document.getElementById(pub.elementId);
+          if (el) el.textContent = totalCitations;
         } catch (error) {
           console.warn(`Could not resolve citations for DOI ${pub.doi} via OpenAlex:`, error);
-          document.getElementById(pub.elementId).textContent = '0';
+          const el = document.getElementById(pub.elementId);
+          if (el) el.textContent = '0';
         }
       }
     }
