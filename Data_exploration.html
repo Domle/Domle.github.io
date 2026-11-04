@@ -132,7 +132,7 @@
       margin: auto !important;
     }
 
-    /* --- Custom Layer Control & Legend Fixes --- */
+    /* Custom Layer Control & Legend Fixes */
     .leaflet-control-layers-toggle {
       background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%23333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>') !important;
       background-position: center !important;
@@ -315,10 +315,12 @@
             title: "Figure 1: Metagenomic Sampling Baseline",
             panels: {
               all: { 
-                label: "Global Sampling Stations: SML & Mesopelagic (MZ)", 
-                type: "map", 
+                label: "Global Sampling Stations: Prokaryotic Richness (rarefied to 5,000)", 
+                type: "3d-globe", 
                 file: "Data/p2_fig1.csv", 
-                unit: "Sampling Depth (m)" 
+                unit: "Prokaryotic Richness (rarefied to 5,000)", 
+                colorScale: "viridis",
+                autoScale: true 
               }
             }
           },
@@ -330,6 +332,7 @@
                 type: "3d-globe", 
                 file: "Data/p2_fig3_panel_a_bacteria.csv", 
                 unit: "Modeled Species Richness", 
+                colorScale: "viridis",
                 autoScale: true 
               },
               panel_a_archaea: { 
@@ -337,6 +340,7 @@
                 type: "3d-globe", 
                 file: "Data/p2_fig3_panel_a_archaea.csv", 
                 unit: "Modeled Species Richness", 
+                colorScale: "viridis",
                 autoScale: true 
               },
               panel_b_bacteria: { 
@@ -358,38 +362,38 @@
             }
           },
           fig6: {
-                      title: "Figure 6: Consensus Diversity Hotspots",
-                      panels: {
-                        panel_b_group1: { 
-                          label: "Panel B: Hotspot Classes - Group 1", 
-                          type: "3d-globe", 
-                          file: "Data/p2_fig6_panel_b_group1.csv", 
-                          unit: "Hotspot Class Count", 
-                          isDiscrete: true 
-                        },
-                        panel_b_group2: { 
-                          label: "Panel B: Hotspot Classes - Group 2", 
-                          type: "3d-globe", 
-                          file: "Data/p2_fig6_panel_b_group2.csv", 
-                          unit: "Hotspot Class Count", 
-                          isDiscrete: true 
-                        },
-                        panel_b_group3: { 
-                          label: "Panel B: Hotspot Classes - Group 3", 
-                          type: "3d-globe", 
-                          file: "Data/p2_fig6_panel_b_group3.csv", 
-                          unit: "Hotspot Class Count", 
-                          isDiscrete: true 
-                        },
-                        panel_b_group4: { 
-                          label: "Panel B: Hotspot Classes - Group 4", 
-                          type: "3d-globe", 
-                          file: "Data/p2_fig6_panel_b_group4.csv", 
-                          unit: "Hotspot Class Count", 
-                          isDiscrete: true 
-                        }
-                      }
-                    }
+            title: "Figure 6: Consensus Diversity Hotspots",
+            panels: {
+              panel_b_group1: { 
+                label: "Panel B: Hotspot Classes - Group 1", 
+                type: "3d-globe", 
+                file: "Data/p2_fig6_panel_b_group1.csv", 
+                unit: "Hotspot Class Count", 
+                isDiscrete: true 
+              },
+              panel_b_group2: { 
+                label: "Panel B: Hotspot Classes - Group 2", 
+                type: "3d-globe", 
+                file: "Data/p2_fig6_panel_b_group2.csv", 
+                unit: "Hotspot Class Count", 
+                isDiscrete: true 
+              },
+              panel_b_group3: { 
+                label: "Panel B: Hotspot Classes - Group 3", 
+                type: "3d-globe", 
+                file: "Data/p2_fig6_panel_b_group3.csv", 
+                unit: "Hotspot Class Count", 
+                isDiscrete: true 
+              },
+              panel_b_group4: { 
+                label: "Panel B: Hotspot Classes - Group 4", 
+                type: "3d-globe", 
+                file: "Data/p2_fig6_panel_b_group4.csv", 
+                unit: "Hotspot Class Count", 
+                isDiscrete: true 
+              }
+            }
+          }
         }
       }
     };
@@ -495,34 +499,33 @@
     }
 
     function loadSelectedData() {
-          const selectedPaper = paperSelect.value;
-          const selectedFig = figureSelect.value;
-          const selectedPanel = panelSelect.value;
-          const panelConfig = datasetSchema[selectedPaper].figures[selectedFig].panels[selectedPanel];
+      const selectedPaper = paperSelect.value;
+      const selectedFig = figureSelect.value;
+      const selectedPanel = panelSelect.value;
+      const panelConfig = datasetSchema[selectedPaper].figures[selectedFig].panels[selectedPanel];
 
-          currentUnit = panelConfig.unit || "Value";
-          document.getElementById('data-description').innerText = `Active View: ${panelConfig.label} | Source File: ${panelConfig.file}`;
+      currentUnit = panelConfig.unit || "Value";
+      document.getElementById('data-description').innerText = `Active View: ${panelConfig.label} | Source File: ${panelConfig.file}`;
 
-          if (panelConfig.type === '3d-globe') {
-            renderView('3d-globe', panelConfig.file);
-            // Triggers globe engine and passes panel options (colorScale, unit, autoScale)
-            renderGlobePlanktonData(panelConfig.file, panelConfig);
-            return;
-          }
+      if (panelConfig.type === '3d-globe') {
+        renderView('3d-globe', panelConfig.file);
+        renderGlobePlanktonData(panelConfig.file, panelConfig);
+        return;
+      }
 
-          Papa.parse(panelConfig.file, {
-            download: true,
-            header: true,
-            dynamicTyping: true,
-            complete: function (results) {
-              currentData = results.data.filter(row => row && Object.keys(row).length > 1);
-              renderView(panelConfig.type, panelConfig.file);
-            },
-            error: function () {
-              renderDummyData(panelConfig.type);
-            }
-          });
+      Papa.parse(panelConfig.file, {
+        download: true,
+        header: true,
+        dynamicTyping: true,
+        complete: function (results) {
+          currentData = results.data.filter(row => row && Object.keys(row).length > 1);
+          renderView(panelConfig.type, panelConfig.file);
+        },
+        error: function () {
+          renderDummyData(panelConfig.type);
         }
+      });
+    }
 
     function renderView(type, csvFile) {
       const mapElem = document.getElementById('map');
@@ -539,7 +542,6 @@
 
         if (typeof init3DGlobe === 'function') {
           init3DGlobe('globe-container');
-          renderGlobePlanktonData(csvFile);
         }
 
         requestAnimationFrame(() => {

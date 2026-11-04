@@ -215,35 +215,6 @@
       box-shadow: 0 20px 48px rgba(0, 0, 0, 0.14);
     }
 
-    /* Disabled / Under Construction Card Styling */
-    .feature.disabled {
-      cursor: not-allowed;
-      opacity: 0.75;
-      background: #f8fafc;
-      border: 1px dashed #cbd5e1;
-    }
-
-    .feature.disabled:hover {
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
-    }
-
-    .feature.disabled .icon-box {
-      background-color: #e2e8f0;
-      color: #64748b;
-      box-shadow: none;
-    }
-
-    .coming-soon-badge {
-      display: inline-block;
-      margin-top: auto;
-      padding-top: 12px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #0071e3;
-    }
-
     .icon-box {
       width: 68px;
       height: 68px;
@@ -625,15 +596,15 @@
         </div>
       </a>
 
-      <!-- Unclickable / Under Construction Feature Card -->
-      <div class="feature disabled" title="Interactive exploration dashboard currently in active development">
-        <div class="icon-box">
-          <i class="fas fa-globe"></i>
+      <a href="data_exploration.html" style="text-decoration: none; color: inherit;">
+        <div class="feature">
+          <div class="icon-box">
+            <i class="fas fa-globe"></i>
+          </div>
+          <h3>Data Exploration</h3>
+          <p>Interactive maps and exploratory 3D visualization tools for datasets from my publications.</p>
         </div>
-        <h3>Data exploration</h3>
-        <p>Interactive maps and exploratory 3D visualization tools for datasets from my publications.</p>
-        <span class="coming-soon-badge">Coming Soon</span>
-      </div>
+      </a>
     </div>
 
     <div class="recent-updates-section">
