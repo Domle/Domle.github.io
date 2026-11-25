@@ -195,6 +195,40 @@
       flex: 1;
     }
 
+    .mpa-legend-section {
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(0, 0, 0, 0.12);
+      display: none;
+    }
+
+    .mpa-legend-section.visible {
+      display: block;
+    }
+
+    .mpa-legend-items {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.72rem;
+      color: #3a3a3c;
+    }
+
+    .mpa-legend-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mpa-swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      flex-shrink: 0;
+      border: 1.5px solid #0284c7;
+      background: rgba(56, 189, 248, 0.25);
+    }
+
   /* Sidebar Toggle Button */
     .sidebar-toggle-btn {
       position: absolute;
@@ -546,6 +580,10 @@
       <div class="map-legend-card" id="map-legend-card">
         <div class="legend-title" id="legend-unit">Species Richness</div>
         <div id="legend-body"></div>
+        <div class="mpa-legend-section" id="mpa-legend-section">
+          <div class="legend-title" id="mpa-legend-title" style="margin-bottom: 5px;">MPAs — IUCN Category</div>
+          <div class="mpa-legend-items" id="mpa-legend-items"></div>
+        </div>
       </div>
     </div>
 
@@ -613,6 +651,19 @@
               <input type="checkbox" id="chk-stations-overlay" />
               <span>Overlay Sampling Stations (Paper 2, Fig. 1)</span>
             </label>
+
+            <label class="checkbox-item">
+              <input type="checkbox" id="chk-mpa-overlay" />
+              <span id="mpa-checkbox-label">Overlay Marine Protected Areas (WDPA)</span>
+            </label>
+
+            <div class="control-group" id="mpa-style-group" style="display: none; margin-left: 25px; margin-top: 2px;">
+              <label for="mpa-color-mode">MPA Color Classification</label>
+              <select id="mpa-color-mode">
+                <option value="iucn" selected>IUCN Category (Ia–VI &amp; Uncategorized)</option>
+                <option value="notake">No-Take Status (All, Part, None)</option>
+              </select>
+            </div>
           </div>
 
           <div class="slider-row">
@@ -891,6 +942,9 @@
     let referenceStationsGroup = null;
     let cachedReferenceStations = null;
 
+    let mpaLayer = null;
+    let cachedMpaGeoJson = null;
+
     let activeRecords = [];
     let gridLookup = {};
     let activePlotMode = 'histogram';
@@ -1081,6 +1135,8 @@
       if (bordersLayer && map.hasLayer(bordersLayer)) bordersLayer.bringToFront();
       if (primaryPointsGroup) primaryPointsGroup.bringToFront();
       if (referenceStationsGroup) referenceStationsGroup.bringToFront();
+
+      if (mpaLayer && map.hasLayer(mpaLayer)) mpaLayer.bringToFront();
     }
 
     /* ==========================================================================
@@ -1153,6 +1209,151 @@
           drawStations(cachedReferenceStations);
         }
       });
+    }
+
+    function getMpaStyle(feature) {
+      const p = feature.properties || {};
+      const mode = document.getElementById('mpa-color-mode')?.value || 'iucn';
+
+      if (mode === 'notake') {
+        const nt = String(p.NO_TAKE || '').trim();
+        if (nt === 'All') {
+          return { color: '#e11d48', weight: 1.4, opacity: 0.95, fillColor: '#e11d48', fillOpacity: 0.34 };
+        }
+        if (nt === 'Part') {
+          return { color: '#ea580c', weight: 1.2, opacity: 0.9, fillColor: '#ea580c', fillOpacity: 0.26 };
+        }
+        if (nt === 'None') {
+          return { color: '#0d9488', weight: 1.1, opacity: 0.85, fillColor: '#0d9488', fillOpacity: 0.20 };
+        }
+        return { color: '#64748b', weight: 0.9, opacity: 0.75, fillColor: '#94a3b8', fillOpacity: 0.14 };
+      }
+
+      const cat = String(p.IUCN_CAT || '').trim();
+      if (cat === 'Ia' || cat === 'Ib' || cat === 'II') {
+        return { color: '#0284c7', weight: 1.3, opacity: 0.95, fillColor: '#0284c7', fillOpacity: 0.30 };
+      }
+      if (cat === 'III' || cat === 'IV') {
+        return { color: '#0d9488', weight: 1.2, opacity: 0.9, fillColor: '#0d9488', fillOpacity: 0.24 };
+      }
+      if (cat === 'V' || cat === 'VI') {
+        return { color: '#d97706', weight: 1.1, opacity: 0.88, fillColor: '#f59e0b', fillOpacity: 0.22 };
+      }
+      return { color: '#64748b', weight: 0.9, opacity: 0.75, fillColor: '#94a3b8', fillOpacity: 0.14 };
+    }
+
+    function updateMpaLegend() {
+      const mode = document.getElementById('mpa-color-mode')?.value || 'iucn';
+      const titleEl = document.getElementById('mpa-legend-title');
+      const itemsEl = document.getElementById('mpa-legend-items');
+      if (!titleEl || !itemsEl) return;
+
+      const swatchRow = (border, bg, label) => `
+        <div class="mpa-legend-row">
+          <span class="mpa-swatch" style="border-color:${border}; background:${bg};"></span>
+          <span>${label}</span>
+        </div>`;
+
+      if (mode === 'notake') {
+        titleEl.textContent = 'MPAs — No-Take Status';
+        itemsEl.innerHTML =
+          swatchRow('#e11d48', 'rgba(225, 29, 72, 0.34)', 'Full No-Take (All, n = 751)') +
+          swatchRow('#ea580c', 'rgba(234, 88, 12, 0.26)', 'Partial No-Take (Part, n = 460)') +
+          swatchRow('#0d9488', 'rgba(13, 148, 136, 0.20)', 'Take Allowed (None, n = 996)') +
+          swatchRow('#64748b', 'rgba(148, 163, 184, 0.14)', 'Not Reported (n = 14,919)');
+      } else {
+        titleEl.textContent = 'MPAs — IUCN Category';
+        itemsEl.innerHTML =
+          swatchRow('#0284c7', 'rgba(2, 132, 199, 0.30)', 'Strict Protection (Ia–II, n = 2,699)') +
+          swatchRow('#0d9488', 'rgba(13, 148, 136, 0.24)', 'Habitat / Species Mgmt (III–IV, n = 4,730)') +
+          swatchRow('#d97706', 'rgba(245, 158, 11, 0.22)', 'Sustainable Use (V–VI, n = 2,680)') +
+          swatchRow('#64748b', 'rgba(148, 163, 184, 0.14)', 'Not Reported / Assigned (n = 7,017)');
+      }
+    }
+
+    function toggleMpaOverlay(show) {
+      const legendSection = document.getElementById('mpa-legend-section');
+      const styleGroup = document.getElementById('mpa-style-group');
+      const labelEl = document.getElementById('mpa-checkbox-label');
+
+      if (!show) {
+        if (mpaLayer && map.hasLayer(mpaLayer)) map.removeLayer(mpaLayer);
+        if (legendSection) legendSection.classList.remove('visible');
+        if (styleGroup) styleGroup.style.display = 'none';
+        return;
+      }
+
+      if (styleGroup) styleGroup.style.display = 'flex';
+
+      const renderMpaGeoJson = (geojson) => {
+        if (mpaLayer) map.removeLayer(mpaLayer);
+
+        mpaLayer = L.geoJSON(geojson, {
+          renderer: L.canvas({ padding: 0.5 }),
+
+          filter: (feature) => {
+            const geomType = feature?.geometry?.type;
+            return geomType === 'Polygon' || geomType === 'MultiPolygon';
+          },
+
+          style: getMpaStyle,
+          onEachFeature: (feature, layer) => {
+            const p = feature.properties || {};
+            const name = p.NAME || 'Unnamed MPA';
+            const desig = p.DESIG || 'Marine Protected Area';
+            const iucn = p.IUCN_CAT || 'Not Reported';
+            const noTake = p.NO_TAKE || 'Not Reported';
+            const year = p.STATUS_YR && p.STATUS_YR > 0 ? p.STATUS_YR : 'N/A';
+            const iso = p.ISO3 || 'N/A';
+            const area = typeof p.AREA_KM2 === 'number'
+              ? `${p.AREA_KM2.toLocaleString(undefined, { maximumFractionDigits: 1 })} km²`
+              : 'N/A';
+
+            layer.bindPopup(`
+              <div style="font-family: Inter, sans-serif; font-size: 12.5px; line-height: 1.5; max-width: 260px;">
+                <strong style="color: #0071e3; font-size: 13px;">${name}</strong><br>
+                <span style="color: #636366;">${desig} (${iso})</span>
+                <hr style="border: none; border-top: 1px solid #e5e5ea; margin: 6px 0;">
+                <strong>IUCN Category:</strong> ${iucn}<br>
+                <strong>No-Take Status:</strong> ${noTake}<br>
+                <strong>Designated Year:</strong> ${year}<br>
+                <strong>Area:</strong> ${area}
+              </div>
+            `);
+          }
+        }).addTo(map);
+
+        if (primaryPointsGroup) primaryPointsGroup.bringToFront();
+        if (referenceStationsGroup) referenceStationsGroup.bringToFront();
+        updateMpaLegend();
+        if (legendSection) legendSection.classList.add('visible');
+      };
+
+      if (cachedMpaGeoJson) {
+        renderMpaGeoJson(cachedMpaGeoJson);
+        return;
+      }
+
+      if (labelEl) labelEl.textContent = 'Loading 17,126 MPAs (WDPA)...';
+
+      fetch('Data/wdpa_mpa_web.geojson')
+        .then(res => {
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          return res.json();
+        })
+        .then(data => {
+          cachedMpaGeoJson = data;
+          if (labelEl) labelEl.textContent = 'Overlay Marine Protected Areas (WDPA)';
+          if (document.getElementById('chk-mpa-overlay').checked) {
+            renderMpaGeoJson(cachedMpaGeoJson);
+          }
+        })
+        .catch(err => {
+          console.error('Failed to load MPA GeoJSON:', err);
+          if (labelEl) labelEl.textContent = 'Overlay Marine Protected Areas (Load Failed)';
+          document.getElementById('chk-mpa-overlay').checked = false;
+          if (styleGroup) styleGroup.style.display = 'none';
+        });
     }
 
     /* ==========================================================================
@@ -1440,6 +1641,17 @@
 
     document.getElementById('chk-stations-overlay').addEventListener('change', (e) => {
       toggleReferenceStationsOverlay(e.target.checked);
+    });
+
+    document.getElementById('chk-mpa-overlay').addEventListener('change', (e) => {
+      toggleMpaOverlay(e.target.checked);
+    });
+
+    document.getElementById('mpa-color-mode').addEventListener('change', () => {
+      if (mpaLayer) {
+        mpaLayer.setStyle(getMpaStyle);
+        updateMpaLegend();
+      }
     });
 
     // Opacity Slider
